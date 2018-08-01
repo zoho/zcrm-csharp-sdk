@@ -1,0 +1,4 @@
+﻿apiBaseUrl=https://www.zohoapis.com
+photoUrl=https://profile.zoho.com/api/v1/user/self/photo
+apiVersion=v2
+loginAuthClass=ZCRMSDK.CRM.Library.Common.ZCRMConfigUtil,ZCRMSDK

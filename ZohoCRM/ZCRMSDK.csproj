@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>Test.Sample.Library</PackageId>
+    <Authors>ram</Authors>
+    <Owners>ram</Owners>
+    <PackageReleaseNotes>Test Release</PackageReleaseNotes>
+    <Summary>Test SDK</Summary>
+    <PackageTags>test, sample, library, sdk</PackageTags>
+    <Title>Test SDK</Title>
+    <Description>test sdk</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="MySql.Data" Version="8.0.11" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+    <PackageReference Include="NuGet.Build.Packaging" Version="0.2.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\configuration.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\configuration.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CRM\Library\Common\ConfigFileHandler\" />
+  </ItemGroup>
+</Project>
