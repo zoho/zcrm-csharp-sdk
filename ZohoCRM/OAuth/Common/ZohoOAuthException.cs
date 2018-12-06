@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
-
 
 //TODO: Learn about exception and complete the class
 namespace ZCRMSDK.OAuth.Common

@@ -31,8 +31,12 @@ namespace ZCRMSDK.CRM.Library.Api.Response
                 JArray recordsArray = (JArray)ResponseJSON.GetValue(APIConstants.DATA);
                 msgJSON = (JObject)recordsArray[0];
             }
-
-            if(msgJSON.ContainsKey(APIConstants.MESSAGE))
+            if (msgJSON.ContainsKey(APIConstants.TAGS))
+            {
+                JArray recordsArray = (JArray)ResponseJSON.GetValue(APIConstants.TAGS);
+                msgJSON = (JObject)recordsArray[0];
+            }
+            if (msgJSON.ContainsKey(APIConstants.MESSAGE))
             {
                 Message = msgJSON.GetValue(APIConstants.MESSAGE).ToString();
             }

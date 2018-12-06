@@ -12,6 +12,7 @@ namespace ZCRMSDK.OAuth.Common
         internal static readonly string RESPONSE_TYPE_CODE = "code";
         internal static readonly string USER_MAIL_ID = "user_mail_id";
         internal static readonly string OAUTH_TOKENS_FILE_PATH = "oauth_tokens_file_path";
+        internal static readonly string CURRENT_USER_EMAIL = "currentUserEmail";
         internal static readonly string CLIENT_ID = "client_id";
         internal static readonly string CLIENT_SECRET = "client_secret";
         internal static readonly string REDIRECT_URL = "redirect_uri";
@@ -37,6 +38,9 @@ namespace ZCRMSDK.OAuth.Common
         internal static readonly string IAM_SCOPE = "AaaServer.profile.Read";
         internal static readonly string MYSQL_USERNAME = "mysql_username";
         internal static readonly string MYSQL_PASSWORD = "mysql_password";
+        internal static readonly string MYSQL_SERVER = "mysql_server";
+        internal static readonly string MYSQL_DATABASE = "mysql_database";
+        internal static readonly string MYSQL_PORT = "mysql_port";
         internal static readonly string DEFAULT_PERSISTENCE_HANDLER = "ZCRMSDK.OAuth.ClientApp.ZohoOAuthInMemoryPersistence, ZCRMSDK";
     }
 }

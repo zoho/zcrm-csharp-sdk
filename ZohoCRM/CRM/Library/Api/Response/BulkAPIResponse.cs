@@ -42,9 +42,22 @@ namespace ZCRMSDK.CRM.Library.Api.Response
         protected override void ProcessDataResponse()
         {
             BulkEntitiesResponse = new List<EntityResponse>();
-            if(ResponseJSON.ContainsKey(APIConstants.DATA))
+            JArray recordsArray = new JArray();
+            if (ResponseJSON.ContainsKey(APIConstants.DATA))
             {
-                JArray recordsArray = (JArray)ResponseJSON[APIConstants.DATA];
+                recordsArray = (JArray)ResponseJSON[APIConstants.DATA];
+                foreach(JObject recordJSON in recordsArray)
+                {
+                    if(recordJSON.ContainsKey(APIConstants.STATUS))
+                    {
+                        EntityResponse individualResponse = new EntityResponse(recordJSON);
+                        BulkEntitiesResponse.Add(individualResponse);
+                    }
+                }
+            }
+            else if(ResponseJSON.ContainsKey(APIConstants.TAGS))
+            {
+                recordsArray = (JArray)ResponseJSON[APIConstants.TAGS];
                 foreach(JObject recordJSON in recordsArray)
                 {
                     if(recordJSON.ContainsKey(APIConstants.STATUS))
@@ -78,20 +91,39 @@ namespace ZCRMSDK.CRM.Library.Api.Response
             private int recordCount;
             private int pageNo;
             private int perPage;
-
+            private int allowedCount;
 
             internal ResponseInfo(JObject info)
             {
-                MoreRecords = (bool)info[APIConstants.MORE_RECORDS];
-                RecordCount = Convert.ToInt32(info[APIConstants.COUNT]);
-                PageNo = Convert.ToInt32(info[APIConstants.PAGE]);
-                PerPage = Convert.ToInt32(info[APIConstants.PER_PAGE]);
+
+                if(info.ContainsKey(APIConstants.MORE_RECORDS))
+                {
+                    MoreRecords = (bool)info[APIConstants.MORE_RECORDS];
+                }
+                if (info.ContainsKey(APIConstants.COUNT))
+                {
+                    RecordCount = Convert.ToInt32(info[APIConstants.COUNT]);
+                }
+                if (info.ContainsKey(APIConstants.PAGE))
+                {
+                    PageNo = Convert.ToInt32(info[APIConstants.PAGE]);
+                }
+                if (info.ContainsKey(APIConstants.PER_PAGE))
+                {
+                    PerPage = Convert.ToInt32(info[APIConstants.PER_PAGE]);
+                }
+                if (info.ContainsKey(APIConstants.ALLOWED_COUNT))
+                {
+                    AllowedCount = Convert.ToInt32(info[APIConstants.ALLOWED_COUNT]);
+                }
+
             }
 
             public bool MoreRecords { get => moreRecords; private set => moreRecords = value; }
             public int RecordCount { get => recordCount; private set => recordCount = value; }
             public int PageNo { get => pageNo; private set => pageNo = value; }
             public int PerPage { get => perPage; private set => perPage = value; }
+            public int AllowedCount { get => allowedCount; private set => allowedCount = value; }
         }
     }
 

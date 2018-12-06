@@ -11,7 +11,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         protected Dictionary<string, string> requestQueryParams = new Dictionary<string, string>();
         protected JObject requestBody = new JObject();
 
-
         public JObject GetRequestBody() { return requestBody; }
 
         public Dictionary<string, string> GetRequestHeaders() { return requestHeaders; }
@@ -21,11 +20,5 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         public Dictionary<string, string> GetRequestQueryParams() { return requestQueryParams; }
 
         public string GetUrlPath() { return urlPath; }
-
-        //public Dictionary<string, string> GetRequestHeadersAsDict() { return CommonUtil.ConvertJObjectToDict(requestHeaders); }
-
-        //public Dictionary<string, string> GetRequestQueryParamsAsDict() { return CommonUtil.ConvertJObjectToDict(requestQueryParams); }
-
-
     }
 }

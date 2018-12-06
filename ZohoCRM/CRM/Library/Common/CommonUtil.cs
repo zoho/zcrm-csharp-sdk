@@ -16,7 +16,7 @@ namespace ZCRMSDK.CRM.Library.Common
 
         public enum PhotoSize { stamp, thumb, original, favicon, medium }
 
-        internal static Dictionary<string, string> GetConfigFileAsDict(string sectionName)
+        public static Dictionary<string, string> GetConfigFileAsDict(string sectionName)
         {
             Dictionary<string, string> retDict = new Dictionary<string, string>();
             try
@@ -56,7 +56,7 @@ namespace ZCRMSDK.CRM.Library.Common
                         if (!values[0].StartsWith("#", StringComparison.CurrentCulture))
                         {
                             string val = null;
-                            if (values.Length == 2 && values[1] != null && values[2] != "")
+                            if (values.Length == 2 && values[1] != null && values[1] != "")
                             {
                                 val = values[1];
                             }
@@ -64,7 +64,6 @@ namespace ZCRMSDK.CRM.Library.Common
                                 continue;
                             }
                             outDict.Add(values[0], val);
-
                         }
                     }
                 }
@@ -101,7 +100,8 @@ namespace ZCRMSDK.CRM.Library.Common
 
         public static void CheckIsPhotoSupported(string moduleAPIName)
         {
-            if(!APIConstants.PHOTO_SUPPORTED_MODULES.Contains(moduleAPIName))
+
+            if(APIConstants.PHOTO_NOTSUPPORTED_MODULES.Contains(moduleAPIName))
             {
                 throw new ZCRMException("Given module is not a photo supported module");
             }

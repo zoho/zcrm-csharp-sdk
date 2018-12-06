@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using ZCRMSDK.CRM.Library.Common;
 using ZCRMSDK.CRM.Library.CRMException;
+using ZCRMSDK.CRM.Library.Setup.Restclient;
 using ZCRMSDK.OAuth.Common;
 using ZCRMSDK.OAuth.Contract;
 
@@ -12,39 +11,42 @@ namespace ZCRMSDK.OAuth.Client
 {
     public class ZohoOAuth
     {
+        internal static List<string> OAUTH_CONFIG_KEYS = new List<string>{ ZohoOAuthConstants.CLIENT_ID, ZohoOAuthConstants.CLIENT_SECRET, ZohoOAuthConstants.REDIRECT_URL, ZohoOAuthConstants.ACCESS_TYPE, ZohoOAuthConstants.PERSISTENCE_HANDLER_CLASS,
+            ZohoOAuthConstants.MYSQL_USERNAME, ZohoOAuthConstants.MYSQL_PASSWORD, ZohoOAuthConstants.OAUTH_TOKENS_FILE_PATH,ZohoOAuthConstants.MYSQL_PORT,ZohoOAuthConstants.MYSQL_SERVER,ZohoOAuthConstants.MYSQL_DATABASE,ZohoOAuthConstants.SCOPES};
+        public static Dictionary<string, string> ConfigProperties { get; private set; } = new Dictionary<string, string>();
 
-        //TODO: Logger Decleration. Inspect the usage of it;
-
-        private static Dictionary<string, string> configProperties = new Dictionary<string, string>();
-
-        internal static List<string> OAUTH_CONFIG_KEYS = new List<string>{ "client_id", "client_secret", "redirect_uri", "scope", "access_type", "persistence_handler_class", "mysql_username", "mysql_password", "oauth_tokens_file_path"}; 
-        public static Dictionary<string, string> ConfigProperties { get => configProperties; private set => configProperties = value; }
-
-       
-        public static void Initialize(string domainSuffix, Stream inputStream, Dictionary<string, string> configData)
+        public static void Initialize(string domainSuffix, Dictionary<string, string> configData)
         {
             try
             {
                 SetIAMUrl(domainSuffix);
                 AddConfigurationData("oauth_configuration");
-
-                if (inputStream != null)
-                {
-                    AddConfigurationData(inputStream);
-                }
-
                 if (configData != null)
                 {
                     AddConfigurationData(configData);
+                }
+
+                List<string> MandatoryKeys = new List<string>() { ZohoOAuthConstants.CLIENT_ID, ZohoOAuthConstants.CLIENT_SECRET, ZohoOAuthConstants.PERSISTENCE_HANDLER_CLASS, ZohoOAuthConstants.REDIRECT_URL };
+                foreach (string key in MandatoryKeys)
+                {
+                    if (ConfigProperties.ContainsKey(key))
+                    {
+                        if (string.IsNullOrEmpty(ConfigProperties[key]) || string.IsNullOrWhiteSpace(ConfigProperties[key]))
+                        {
+                            throw new ZCRMException(key + " value is not set");
+                        }
+                    }else{
+                        throw new ZCRMException(key + " is Mandatory");
+                    }
+                   
                 }
 
                 ZohoOAuthParams oAuthParams = new ZohoOAuthParams()
                 {
                     ClientId = GetConfigValue(ZohoOAuthConstants.CLIENT_ID),
                     ClientSecret = GetConfigValue(ZohoOAuthConstants.CLIENT_SECRET),
-                    AccessType = GetConfigValue(ZohoOAuthConstants.ACCESS_TYPE),
-                    RedirectURL = GetConfigValue(ZohoOAuthConstants.REDIRECT_URL),
-                    Scopes = GetConfigValue(ZohoOAuthConstants.SCOPES)
+                    AccessType = GetConfigValue(ZohoOAuthConstants.ACCESS_TYPE) ?? "offline",
+                    RedirectURL = GetConfigValue(ZohoOAuthConstants.REDIRECT_URL)
                 };
 
                 ZohoOAuthClient.GetInstance(oAuthParams);
@@ -63,13 +65,13 @@ namespace ZCRMSDK.OAuth.Client
             switch (domainSuffix)
             {
                 case "eu":
-                    configProperties.Add(ZohoOAuthConstants.IAM_URL, "https://accounts.zoho.eu");
+                    ConfigProperties[ZohoOAuthConstants.IAM_URL]="https://accounts.zoho.eu";
                     break;
                 case "cn":
-                    configProperties.Add(ZohoOAuthConstants.IAM_URL, "https://accounts.zoho.com.cn");
+                    ConfigProperties[ZohoOAuthConstants.IAM_URL]= "https://accounts.zoho.com.cn";
                     break;
                 default:
-                    configProperties.Add(ZohoOAuthConstants.IAM_URL, "https://accounts.zoho.com");
+                    ConfigProperties[ZohoOAuthConstants.IAM_URL]= "https://accounts.zoho.com";
                     break;
             }
         }
@@ -94,7 +96,10 @@ namespace ZCRMSDK.OAuth.Client
             {
                 if (OAUTH_CONFIG_KEYS.Contains(keyValues.Key))
                 {
-                    ConfigProperties[keyValues.Key] = keyValues.Value;
+                    if(!string.IsNullOrEmpty(configData[keyValues.Key]) && !string.IsNullOrWhiteSpace(configData[keyValues.Key]))
+                    {
+                        ConfigProperties[keyValues.Key] = keyValues.Value;
+                    }
                 }
             }
         }
@@ -114,7 +119,11 @@ namespace ZCRMSDK.OAuth.Client
         //AddConfigurationData overloading ends!.
 
         public static string GetConfigValue(string key){
-            return configProperties[key];
+            if(ConfigProperties.ContainsKey(key))
+            {
+                return ConfigProperties[key];
+            }
+            return null;
         }
 
         public static string GetIAMUrl()

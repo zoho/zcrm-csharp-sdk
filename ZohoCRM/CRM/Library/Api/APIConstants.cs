@@ -30,11 +30,13 @@ namespace ZCRMSDK.CRM.Library.Api
         public static readonly string STATUS = "status";
         public static readonly string DETAILS = "details";
         public static readonly string DATA = "data";
+        public static readonly string TAGS = "tags";
         public static readonly string INFO = "info";
         public static readonly string PER_PAGE = "per_page";
         public static readonly string PAGE = "page";
         public static readonly string COUNT = "count";
         public static readonly string MORE_RECORDS = "more_records";
+        public static readonly string ALLOWED_COUNT = "allowed_count";
         public static readonly string LEADS = "Leads";
         public static readonly string ACCOUNTS = "Accounts";
         public static readonly string CONTACTS = "Contacts";
@@ -46,15 +48,19 @@ namespace ZCRMSDK.CRM.Library.Api
         public static readonly string INVALID_ID_MSG = "The given id seems to be invalid.";
         public static readonly string INVALID_DATA = "INVALID_DATA";
         public static readonly string API_MAX_RECORDS_MSG = "Cannot process more than 100 records at a time.";
+        public static readonly string API_MAX_TAGS_MSG = "Cannot process more than 50 tags at a time.";
+        public static readonly string API_MAX_RECORD_TAGS_MSG = "Cannot process more than 10 tags at a time.";
         public static readonly string ACTION = "action";
         public static readonly string DUPLICATE_FIELD = "duplicate_field";
         public static readonly string GMT = "GMT";
         public static readonly string MIN_LOG_LEVEL = "minLogLevel";
+        public static readonly string APIBASEURL = "apiBaseUrl";
         public static readonly string DOMAIN_SUFFIX = "domainSuffix";
         public static readonly string USER_AGENT = "ZOHOCRM C# SDK";
         public static readonly int MAX_ALLOWED_FILE_SIZE_IN_MB = 20;
         public static readonly List<string> CONVERTIBLE_MODULES = new List<string>() { "Leads", "Quotes", "SalesOrders" };
-        public static readonly List<string> PHOTO_SUPPORTED_MODULES = new List<string>() { "Leads", "Contacts" };
+        public static readonly List<string> PHOTO_NOTSUPPORTED_MODULES = new List<string>() { "Deals", "Activities", "Quotes", "Sales_Orders",
+                                "Purchase_Orders", "Invoices", "Campaigns","Price_Books","Cases","Solutions","Tasks","Events","Calls","Notes","Attachments" };
         public static readonly List<string> PROPERTIES_AS_FILEDS = new List<string>() { "se_module", "gclid" };
 
         public static readonly List<ResponseCode?> FaultyResponseCodes;
@@ -101,7 +107,7 @@ namespace ZCRMSDK.CRM.Library.Api
 
         public enum ResponseCode
         {
-            OK = 200, CREATED = 201, ACCEPTED = 202, NO_CONTENT = 204, MOVED_PERMANENTLY = 30,
+            OK = 200, CREATED = 201, ACCEPTED = 202, NO_CONTENT = 204, MOVED_PERMANENTLY = 301,
             MOVED_TEMPORARILY = 302, NOT_MODIFIED = 304, BAD_REQUEST = 400, AUTHORIZATION_ERROR = 401, FORBIDDEN = 403, NOT_FOUND = 404,
             METHOD_NOT_ALLOWED = 405, REQUEST_ENTITY_TOO_LARGE = 413, UNSUPPORTED_MEDIA_TYPE = 415,
             TOO_MANY_REQUEST = 429, INTERNAL_SERVER_ERROR = 500 

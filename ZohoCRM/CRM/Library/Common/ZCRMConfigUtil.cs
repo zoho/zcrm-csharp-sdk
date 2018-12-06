@@ -4,22 +4,24 @@ using System.Collections.Generic;
 using ZCRMSDK.CRM.Library.Setup.Restclient;
 using ZCRMSDK.OAuth.Client;
 using ZCRMSDK.CRM.Library.CRMException;
-using ZCRMSDK.OAuth.Common;
 using ZCRMSDK.CRM.Library.Api;
 using System.Reflection;
+using ZCRMSDK.OAuth.Contract;
+using ZCRMSDK.OAuth.Common;
+using System.Threading;
+using System.Diagnostics;
 
 namespace ZCRMSDK.CRM.Library.Common
 {
     public class ZCRMConfigUtil
     {
-
-        private static Dictionary<string, string> configProperties = new Dictionary<string, string>();
         private static Boolean handleAuthentication;
 
         public static Boolean HandleAuthentication { get => handleAuthentication; private set => handleAuthentication = value; }
 
-        public static Dictionary<string, string> ConfigProperties { get => configProperties; private set => configProperties = value; }
+        public static Dictionary<string, string> ConfigProperties { get; private set; } = new Dictionary<string, string>();
 
+        public static Dictionary<string, ZohoOAuthParams> LoggedUsers = new Dictionary<string, ZohoOAuthParams>();
 
         public static void InitializeMobile(bool initOAuth)
         {
@@ -51,10 +53,8 @@ namespace ZCRMSDK.CRM.Library.Common
 
             if(configStream != null)
             {
-                Stream tempStream = new MemoryStream();
-                configStream.CopyTo(tempStream);
-                AddConfigurationData(tempStream);
-                configStream.Position = 0;
+                configData = CommonUtil.GetFileAsDict(configStream);
+                configStream = null;
             }
             if(configData != null)
             {
@@ -67,27 +67,18 @@ namespace ZCRMSDK.CRM.Library.Common
                 HandleAuthentication = true;
                 try
                 {
-                    ZohoOAuth.Initialize(ConfigProperties.ContainsKey(APIConstants.DOMAIN_SUFFIX) ? (string)ConfigProperties[APIConstants.DOMAIN_SUFFIX] : null, configStream, configData);
+                    ZohoOAuth.Initialize(ConfigProperties.ContainsKey(APIConstants.DOMAIN_SUFFIX) ? (string)ConfigProperties[APIConstants.DOMAIN_SUFFIX] : null, configData);
+                    if(ConfigProperties.ContainsKey(APIConstants.DOMAIN_SUFFIX))
+                    {
+                        SetAPIBaseUrl(ConfigProperties[APIConstants.DOMAIN_SUFFIX]);
+                    }
                 }
                 catch (Exception e)
                 {
                     throw new ZCRMException(e);
                 }
             }
-            ZCRMLogger.LogInfo("C# Client Library Configuration Properties : " + CommonUtil.DictToString(configProperties));
-        }
-
-
-        private static void AddConfigurationData(Stream inputStream)
-        {
-            Dictionary<string, string> tempData = CommonUtil.GetFileAsDict(inputStream);
-            foreach(KeyValuePair<string, string> data in tempData)
-            {
-                if(!ZohoOAuth.OAUTH_CONFIG_KEYS.Contains(data.Key))
-                {
-                    ConfigProperties[data.Key] = data.Value;   
-                }
-            }
+            ZCRMLogger.LogInfo("C# Client Library Configuration Properties : " + CommonUtil.DictToString(ConfigProperties));
         }
 
         private static void AddConfigurationData(Dictionary<string, string> configDict)
@@ -96,17 +87,36 @@ namespace ZCRMSDK.CRM.Library.Common
             {
                 if (!ZohoOAuth.OAUTH_CONFIG_KEYS.Contains(data.Key))
                 {
-                    ConfigProperties[data.Key] = data.Value;
+                    if(!string.IsNullOrEmpty(configDict[data.Key]) && !string.IsNullOrWhiteSpace(configDict[data.Key]))
+                    {
+                        ConfigProperties[data.Key] = data.Value;
+                    }
                 }
             }
         }
-      
+
+        private static void SetAPIBaseUrl(string domainSuffix)
+        {
+            domainSuffix = domainSuffix ?? "com";
+            switch (domainSuffix)
+            {
+                case "eu":
+                    ConfigProperties[APIConstants.APIBASEURL] = "https://www.zohoapis.eu";
+                    break;
+                case "cn":
+                    ConfigProperties[APIConstants.APIBASEURL] = "https://www.zohoapis.com.cn";
+                    break;
+                default:
+                    ConfigProperties[APIConstants.APIBASEURL] = "https://www.zohoapis.com";
+                    break;
+            }
+        }        
 
         public static string GetAccessToken()
         {
             string userMailId = ZCRMRestClient.GetCurrentUserEmail();
 
-            if ((userMailId == null) && (ConfigProperties["currentUserEmail"] == null))
+            if ((userMailId == null) && (!(ConfigProperties.ContainsKey("currentUserEmail")) || (ConfigProperties["currentUserEmail"] == null)))
             {
                 throw new ZCRMException("Current user must be either set in ZCRMRestClient or zcrm_configuration section in zoho_configuration.config");
             }
@@ -117,34 +127,6 @@ namespace ZCRMSDK.CRM.Library.Common
             ZohoOAuthClient client = ZohoOAuthClient.GetInstance();
             return client.GetAccessToken(userMailId);
         }
-
-
-        /*  public static void UpdateConfigBaseUrl(string location){
-            string apiBaseUrl = "apiBaseUrl";
-            string accessType = GetAccessType();
-            string domain = "www";
-            if(APIConstants.ACCESS_TYPE.ContainsKey(accessType)){
-                domain = APIConstants.ACCESS_TYPE[accessType];
-            }
-            else
-            {
-                domain = APIConstants.ACCESS_TYPE["Production"];
-            }
-
-            switch (location)
-            {
-                case "eu":
-                    SetConfigValue(apiBaseUrl, "https://" + domain + ".zohoapis.eu");
-                    break;
-                case "cn":
-                    SetConfigValue(apiBaseUrl, "https://" + domain + ".zohoapis.com.cn");
-                    break;
-                default:
-                    SetConfigValue(apiBaseUrl, "https://" + domain + ".zohoapis.com");
-                    break;
-            }
-        } */
-
 
         public static void SetConfigValue(string config, string value){
             ConfigProperties.Add(config, value);
@@ -157,7 +139,6 @@ namespace ZCRMSDK.CRM.Library.Common
                 return (string)ConfigProperties[config];   
             }
             return null;
-
         }
 
         public static string GetApiBaseURL(){
@@ -175,7 +156,6 @@ namespace ZCRMSDK.CRM.Library.Common
         public static string GetPhotoUrl(){
             return GetConfigValue("photoUrl");
         }
-
     }
 
 }

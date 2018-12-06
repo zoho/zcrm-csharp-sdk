@@ -6,6 +6,12 @@ using ZCRMSDK.CRM.Library.Api.Handler;
 using ZCRMSDK.CRM.Library.CRUD;
 using ZCRMSDK.CRM.Library.Setup.MetaData;
 using System.IO;
+using ZCRMSDK.CRM.Library.CRMException;
+using ZCRMSDK.OAuth.Client;
+using ZCRMSDK.CRM.Library.Api;
+using ZCRMSDK.OAuth.Common;
+using ZCRMSDK.OAuth.Contract;
+using System;
 
 namespace ZCRMSDK.CRM.Library.Setup.Restclient
 {
@@ -13,7 +19,6 @@ namespace ZCRMSDK.CRM.Library.Setup.Restclient
     {
 
         private static readonly ThreadLocal<string> CURRENT_USER_EMAIL = new ThreadLocal<string>();
-
 
         public static readonly ThreadLocal<Dictionary<string, string>> DYNAMIC_HEADERS = new ThreadLocal<Dictionary<string, string>>();
         private static Dictionary<string, string> staticHeaders = new Dictionary<string, string>();

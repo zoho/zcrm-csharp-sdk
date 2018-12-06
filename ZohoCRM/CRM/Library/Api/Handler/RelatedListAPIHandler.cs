@@ -205,7 +205,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         }
 
 
-        public BulkAPIResponse<ZCRMAttachment> GetAllAttachmentsDetails(int page, int perPage, string modifiedSince)
+        public BulkAPIResponse<ZCRMAttachment> GetAttachments(int page, int perPage, string modifiedSince)
         {
             try{
                 requestMethod = APIConstants.RequestMethod.GET;
@@ -366,8 +366,10 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             {
                 noteJSON.Add("Note_Title", null);
             }
-            noteJSON.Add("Note_Content", note.Content);
-
+            if(note.Content!= null)
+            {
+                noteJSON.Add("Note_Content", note.Content);
+            }
             return noteJSON;
         }
 
@@ -438,11 +440,18 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     relatedDetailsJSON.Add(keyValuePairs.Key, JToken.Parse(null));
                 }
-                if (value is long)
+                else if (value is long)
                 {
-                    value = (string)value;
+                    relatedDetailsJSON.Add(keyValuePairs.Key, Convert.ToInt64(value));
                 }
-                relatedDetailsJSON.Add(keyValuePairs.Key, value.ToString());
+                else if (value is int)
+                {
+                    relatedDetailsJSON.Add(keyValuePairs.Key, Convert.ToInt32(value));
+                }
+                else{
+                    relatedDetailsJSON.Add(keyValuePairs.Key, value.ToString());
+                }
+
             }
             return relatedDetailsJSON;
         }

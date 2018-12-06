@@ -71,10 +71,10 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 module.Creatable = (bool)moduleDetails["creatable"];
                 module.Viewable = (bool)moduleDetails["viewable"];
                 module.Editable = (bool)moduleDetails["editable"];
-                module.Convertible = (bool)moduleDetails["convertable"];
+                module.Convertable = (bool)moduleDetails["convertable"];
                 module.Deletable = (bool)moduleDetails["deletable"];
                 module.CustomModule = (bool)(moduleDetails["generated_type"].ToString().Equals("custom"));
-
+                module.ApiSupported = (bool)(moduleDetails["api_supported"]);
                 JArray accessibleProfilesArray = (JArray)moduleDetails["profiles"];
                 foreach (JObject accessibleProfiles in accessibleProfilesArray)
                 {

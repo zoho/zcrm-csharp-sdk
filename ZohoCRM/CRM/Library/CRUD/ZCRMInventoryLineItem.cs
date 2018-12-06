@@ -18,7 +18,6 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private double totalAfterDiscount;
         private double taxAmount;
         private double netTotal;
-        private bool deleteFlag;
         private List<ZCRMTax> lineTax = new List<ZCRMTax>();
 
 

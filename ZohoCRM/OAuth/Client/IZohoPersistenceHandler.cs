@@ -5,7 +5,7 @@ namespace ZCRMSDK.OAuth.Client
 {
     public interface IZohoPersistenceHandler
     {
-        void SaveOAuthData(ZohoOAuthTokens zohoOAuthTokens);
+        void SaveOAuthTokens(ZohoOAuthTokens zohoOAuthTokens);
 
         ZohoOAuthTokens GetOAuthTokens(string paramString);
 

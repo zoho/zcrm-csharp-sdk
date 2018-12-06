@@ -4,6 +4,8 @@ using ZCRMSDK.OAuth.Common;
 using Newtonsoft.Json.Linq;
 using ZCRMSDK.CRM.Library.CRMException;
 using System.Net;
+using ZCRMSDK.CRM.Library.Common;
+using ZCRMSDK.CRM.Library.Setup.Restclient;
 
 namespace ZCRMSDK.OAuth.Client
 {
@@ -20,7 +22,7 @@ namespace ZCRMSDK.OAuth.Client
         }
 
         public static ZohoOAuthClient GetInstance(ZohoOAuthParams oAuthParams){
-            client = client ?? new ZohoOAuthClient(oAuthParams);
+            client = new ZohoOAuthClient(oAuthParams);
             return client;
         }
 
@@ -79,7 +81,7 @@ namespace ZCRMSDK.OAuth.Client
                 {
                     ZohoOAuthTokens tokens = GetTokensFromJSON(responseJSON);
                     tokens.UserMaiilId = GetUserMailId(tokens.AccessToken);
-                    ZohoOAuth.GetPersistenceHandlerInstance().SaveOAuthData(tokens);
+                    ZohoOAuth.GetPersistenceHandlerInstance().SaveOAuthTokens(tokens);
                     return tokens;
                 }
                 throw new ZohoOAuthException("Exception while fetching Access Token from grant token" + response);
@@ -91,13 +93,16 @@ namespace ZCRMSDK.OAuth.Client
             }
         }
 
+        public ZohoOAuthTokens GenerateAccessTokenFromRefreshToken(string refreshToken, string userMailId)
+        {
+            return RefreshAccessToken(refreshToken, userMailId);
+        }
 
         //TODO: Create ZohoOAuthException class and change the throw exception class;
         private ZohoOAuthTokens RefreshAccessToken(string refreshToken, string userMailId){
             if(refreshToken == null){
                 throw new ZohoOAuthException("Refresh token is not provided");
             }
-
             try{
                 ZohoHTTPConnector conn = GetZohoConnector(ZohoOAuth.GetRefreshTokenURL());
                 conn.AddParam(ZohoOAuthConstants.GRANT_TYPE, ZohoOAuthConstants.REFRESH_TOKEN);
@@ -108,7 +113,7 @@ namespace ZCRMSDK.OAuth.Client
                     ZohoOAuthTokens tokens = GetTokensFromJSON(responseJSON);
                     tokens.RefreshToken = refreshToken;
                     tokens.UserMaiilId = userMailId;
-                    ZohoOAuth.GetPersistenceHandlerInstance().SaveOAuthData(tokens);
+                    ZohoOAuth.GetPersistenceHandlerInstance().SaveOAuthTokens(tokens);
                     return tokens;
                 }
                 throw new ZohoOAuthException("Exception while fetching access tokens from Refresh Token" + response);

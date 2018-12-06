@@ -17,9 +17,10 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private bool customModule;
         private bool creatable;
         private bool viewable;
-        private bool convertible;
+        private bool convertable;
         private bool deletable;
         private bool editable;
+        private bool apiSupported;
         private ZCRMUser modifiedBy;
         private string modifiedTime;
 
@@ -50,7 +51,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
 
         public string PluralLabel { get => pluralLabel; set => pluralLabel = value; }
 
-        public bool Convertible { get => convertible; set => convertible = value; }
+        public bool Convertable { get => convertable; set => convertable = value; }
 
         public bool Deletable { get => deletable; set => deletable = value; }
 
@@ -67,18 +68,17 @@ namespace ZCRMSDK.CRM.Library.CRUD
         public List<string> BussinessCardFields { get => bussinessCardFields; set => bussinessCardFields = value; }
 
         public List<ZCRMLayout> Layouts { set => layouts = value; }
-       
+
         public List<ZCRMModuleRelation> RelatedLists { get => relatedLists; set => relatedLists = value; }
 
         public bool Creatable { get => creatable; set => creatable = value; }
 
         public List<ZCRMProfile> AccessibleProfiles { get => accessibleProfiles; private set => accessibleProfiles = value; }
-
-
+        public bool ApiSupported { get => apiSupported; set => apiSupported = value; }
 
         public BulkAPIResponse<ZCRMModuleRelation> GetRelatedLists()
         {
-            return ModuleAPIHandler.GetInstance(this).GetAllRelatedLists();  
+            return ModuleAPIHandler.GetInstance(this).GetAllRelatedLists();
         }
 
 
@@ -142,20 +142,23 @@ namespace ZCRMSDK.CRM.Library.CRUD
         }
 
 
-        public BulkAPIResponse<ZCRMRecord> UpdateRecords(List<long> entityIds, string fieldAPIName, object value)
+        public BulkAPIResponse<ZCRMRecord> MassUpdateRecords(List<long> entityIds, string fieldAPIName, object value)
         {
-            
-            {
                 if (entityIds == null || entityIds.Count == 0)
                 {
                     throw new ZCRMException("Entity ID list MUST NOT be null/empty for update operation");
                 }
-                return MassEntityAPIHandler.GetInstance(this).UpdateRecords(entityIds, fieldAPIName, value);
-            }
-            
+                return MassEntityAPIHandler.GetInstance(this).MassUpdateRecords(entityIds, fieldAPIName, value);
         }
 
-
+        public BulkAPIResponse<ZCRMRecord> UpdateRecords(List<ZCRMRecord> records)
+        {
+            if (records == null || records.Count == 0)
+            {
+                throw new ZCRMException("Entity ID list MUST NOT be null/empty for update operation");
+            }
+            return MassEntityAPIHandler.GetInstance(this).UpdateRecords(records);
+        }
 
         public BulkAPIResponse<ZCRMRecord> UpsertRecords(List<ZCRMRecord> records)
         {
@@ -222,7 +225,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
 
         public BulkAPIResponse<ZCRMRecord> GetRecords(long? cvId, string sortByField, CommonUtil.SortOrder? sortOrder, int page, int perPage, List<string> fields)
         {
-            return GetRecords(cvId, sortByField, sortOrder, page, perPage, null, fields);            
+            return GetRecords(cvId, sortByField, sortOrder, page, perPage, null, fields);
         }
 
 
@@ -246,7 +249,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
 
         public BulkAPIResponse<ZCRMRecord> GetApprovedRecords(long? cvId, string sortByField, CommonUtil.SortOrder? sortOrder, int page, int perPage, string modifiedSince, List<string> fields)
         {
-            return MassEntityAPIHandler.GetInstance(this).GetRecords(cvId, sortByField, sortOrder, page, perPage, modifiedSince, null, "true", fields);    
+            return MassEntityAPIHandler.GetInstance(this).GetRecords(cvId, sortByField, sortOrder, page, perPage, modifiedSince, null, "true", fields);
         }
 
         public BulkAPIResponse<ZCRMRecord> GetUnApprovedRecords(long? cvId, string sortByField, CommonUtil.SortOrder? sortOrder, int page, int perPage, string modifiedSince, List<string> fields)
@@ -271,14 +274,14 @@ namespace ZCRMSDK.CRM.Library.CRUD
         }
 
 
-        public BulkAPIResponse<ZCRMRecord> SearchByText(string value)
+        public BulkAPIResponse<ZCRMRecord> SearchByWord(string value)
         {
-            return MassEntityAPIHandler.GetInstance(this).SearchByText(value, 1, 200);
+            return MassEntityAPIHandler.GetInstance(this).SearchByWord(value, 1, 200);
         }
 
-        public BulkAPIResponse<ZCRMRecord> SearchByText(string value, int page, int perPage)
+        public BulkAPIResponse<ZCRMRecord> SearchByWord(string value, int page, int perPage)
         {
-            return MassEntityAPIHandler.GetInstance(this).SearchByText(value, page, perPage);            
+            return MassEntityAPIHandler.GetInstance(this).SearchByWord(value, page, perPage);
         }
 
 
@@ -320,6 +323,99 @@ namespace ZCRMSDK.CRM.Library.CRUD
         public void AddAccessibleProfile(ZCRMProfile profile)
         {
             AccessibleProfiles.Add(profile);
+        }
+
+        public static ZCRMTag GetTagInstance()
+        {
+            return ZCRMTag.GetInstance();
+        }
+
+        public static ZCRMTag GetTagInstance(long? tagid)
+        {
+            return ZCRMTag.GetInstance(tagid);
+        }
+        public BulkAPIResponse<ZCRMTag> GetTags()
+        {
+            if (string.IsNullOrEmpty(this.apiName))
+            {
+                throw new ZCRMException("Module Api Name MUST NOT be null/empty for GetTags operation");
+            }
+            return TagAPIHandler.GetInstance(this).GetTags();
+        }
+
+        public APIResponse GetTagCount(long? tagid)
+        {
+            if (string.IsNullOrEmpty(this.apiName))
+            {
+                throw new ZCRMException("Module Api Name MUST NOT be null/empty for GetTagCount operation");
+            }
+            if (tagid == null || tagid == 0)
+            {
+                throw new ZCRMException("Tag ID MUST NOT be null/empty for GetTagCount operation");
+            }
+            return TagAPIHandler.GetInstance(this).GetTagCount(tagid);
+        }
+
+        public BulkAPIResponse<ZCRMTag> CreateTags(List<ZCRMTag> tags)
+        {
+            if (string.IsNullOrEmpty(this.apiName))
+            {
+                throw new ZCRMException("Module Api Name MUST NOT be null/empty for CreateTags operation");
+            }
+            if (tags.Count<= 0)
+            {
+                throw new ZCRMException("Tag object list MUST NOT be null/empty for CreateTags operation");
+            }
+            return TagAPIHandler.GetInstance(this).CreateTags(tags);
+
+        }
+
+        public BulkAPIResponse<ZCRMTag> UpdateTags(List<ZCRMTag> tags)
+        {
+            if (string.IsNullOrEmpty(this.apiName))
+            {
+                throw new ZCRMException("Module Api Name MUST NOT be null/empty for UpdateTags operation");
+            }
+            if (tags.Count <= 0)
+            {
+                throw new ZCRMException("Tag object list MUST NOT be null/empty for UpdateTags operation");
+            }
+            return TagAPIHandler.GetInstance(this).UpdateTags(tags);
+
+        }
+
+        public BulkAPIResponse<ZCRMRecord> AddTagsToRecords(List<long> recordIds, List<string> tagNames)
+        {
+            if (string.IsNullOrEmpty(this.apiName))
+            {
+                throw new ZCRMException("Module Api Name MUST NOT be null/empty for Add Tags to Multiple records operation");
+            }
+            if (tagNames.Count <= 0)
+            {
+                throw new ZCRMException("Tag Name list MUST NOT be null/empty for Add Tags to Multiple records operation");
+            }
+            if (recordIds.Count <= 0)
+            {
+                throw new ZCRMException("Record ID list MUST NOT be null/empty for Add Tags to Multiple records operation");
+            }
+            return TagAPIHandler.GetInstance(this).AddTagsToRecords(recordIds, tagNames);
+        }
+
+        public BulkAPIResponse<ZCRMRecord> RemoveTagsFromRecords(List<long> recordIds, List<string> tagNames)
+        {
+            if (string.IsNullOrEmpty(this.apiName))
+            {
+                throw new ZCRMException("Module Api Name MUST NOT be null/empty for Remove Tags from Multiple records operation");
+            }
+            if (tagNames.Count <= 0)
+            {
+                throw new ZCRMException("Tag Name list MUST NOT be null/empty for Remove Tags from Multiple records operation");
+            }
+            if (recordIds.Count <= 0)
+            {
+                throw new ZCRMException("Record ID list MUST NOT be null/empty for Remove Tags from Multiple records operation");
+            }
+            return TagAPIHandler.GetInstance(this).RemoveTagsFromRecords(recordIds, tagNames);
         }
     }
 }

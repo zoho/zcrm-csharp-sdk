@@ -5,9 +5,8 @@ using System.IO;
 using ZCRMSDK.CRM.Library.CRMException;
 using ZCRMSDK.CRM.Library.Common;
 using ZCRMSDK.CRM.Library.Api;
-using ZCRMSDK.OAuth.Common;
 
-namespace ZCRMSDK
+namespace ZCRMSDK.OAuth.Common
 {
     //TODO: Add Logger to the File;
     class ZohoHTTPConnector

@@ -16,6 +16,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private bool customField;
         private bool webhook;
         private object defaultValue;
+        private string jsonType;
 
         private int? maxLength;
         private int? precision;
@@ -44,6 +45,8 @@ namespace ZCRMSDK.CRM.Library.CRUD
         public string ApiName { get => apiName; set => apiName = value; }
 
         public long Id { get => id; set => id = value; }
+
+        public string JsonType{ get => jsonType; set => jsonType = value;}
 
         public string DisplayName { get => displayName; set => displayName = value; }
 

@@ -5,6 +5,8 @@ using ZCRMSDK.OAuth.Contract;
 using ZCRMSDK.OAuth.Common;
 using ZCRMSDK.CRM.Library.CRMException;
 using System.IO;
+using ZCRMSDK.CRM.Library.Setup.Restclient;
+using ZCRMSDK.CRM.Library.Common;
 
 namespace ZCRMSDK.OAuth.ClientApp
 {
@@ -45,7 +47,6 @@ namespace ZCRMSDK.OAuth.ClientApp
                 {
                     throw new ZohoOAuthException("Given User not found in configuration");
                 }
-
                 tokens.UserMaiilId = oauthTokens["useridentifier"];
                 tokens.AccessToken = oauthTokens["accesstoken"];
                 tokens.RefreshToken = oauthTokens["refreshtoken"];
@@ -60,7 +61,7 @@ namespace ZCRMSDK.OAuth.ClientApp
 
         }
 
-        public void SaveOAuthData(ZohoOAuthTokens zohoOAuthTokens)
+        public void SaveOAuthTokens(ZohoOAuthTokens zohoOAuthTokens)
         {
             try
             {
@@ -72,28 +73,6 @@ namespace ZCRMSDK.OAuth.ClientApp
                     writer.WriteLine("refreshtoken=" + zohoOAuthTokens.RefreshToken);
                     writer.WriteLine("expirytime=" + zohoOAuthTokens.ExpiryTime);
                 }
-               
-
-
-                /*
-
-                Configuration configuration = GetTokenConfigFile();
-                configuration.Sections.Remove("tokens");
-                ConfigFileSection section = configuration.GetSection("tokens") as ConfigFileSection;
-                if (section == null)
-                {
-                    section = new ConfigFileSection();
-                    configuration.Sections.Add("tokens", section);
-                }
-                section.Settings.Add(new ConfigFileElement("useridentifier", zohoOAuthTokens.UserMaiilId));
-                section.Settings.Add(new ConfigFileElement("accesstoken", zohoOAuthTokens.AccessToken));
-                section.Settings.Add(new ConfigFileElement("refreshtoken", zohoOAuthTokens.RefreshToken));
-                section.Settings.Add(new ConfigFileElement("expirytime", zohoOAuthTokens.ExpiryTime.ToString()));
-
-                section.SectionInformation.ForceSave = true;
-                configuration.Save(ConfigurationSaveMode.Modified);
-                */
-
             }catch(Exception e) when(e is UnauthorizedAccessException || e is DirectoryNotFoundException)
             {
                 ZCRMLogger.LogError("Exception while inserting tokens to config file " + e);

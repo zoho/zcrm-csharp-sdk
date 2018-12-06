@@ -56,7 +56,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             organization.Description = (string)orgDetails["description"];
             organization.Timezone = (string)orgDetails["time_zone"];
             organization.IsoCode = (string)orgDetails["iso_code"];
-            organization.CurrencyLocale = (string)orgDetails["country_locale"];
+            organization.CurrencyLocale = (string)orgDetails["currency_locale"];
             organization.CurrencySymbol = (string)orgDetails["currency_symbol"];
             organization.Street = (string)orgDetails["street"];
             organization.State = (string)orgDetails["state"];

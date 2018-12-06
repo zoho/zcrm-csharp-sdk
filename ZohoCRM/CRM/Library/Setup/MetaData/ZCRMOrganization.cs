@@ -52,7 +52,6 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
             return new ZCRMOrganization(orgName, orgId);
         }
 
-
         public string CompanyName { get => companyName; private set => companyName = value; }
         public string Alias { get => alias; set => alias = value; }
         public long? OrgId { get => orgId; set => orgId = value; }

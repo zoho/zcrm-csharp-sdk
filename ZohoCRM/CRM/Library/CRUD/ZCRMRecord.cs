@@ -28,6 +28,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private string modifiedTime;
         private ZCRMLayout layout;
         private List<ZCRMTax> taxList = new List<ZCRMTax>();
+        private List<string> tags = new List<string>();
 
 
         private ZCRMRecord(string module, long? id)
@@ -73,6 +74,8 @@ namespace ZCRMSDK.CRM.Library.CRUD
         public List<ZCRMPriceBookPricing> PriceDetails { get => priceDetails; private set => priceDetails = value; }
 
         public List<ZCRMTax> TaxList { get => taxList; private set => taxList = value; }
+
+        public List<string> Tags { get => tags; set => tags = value; }
 
         public void SetProperty(string name, object value)
         {
@@ -144,12 +147,12 @@ namespace ZCRMSDK.CRM.Library.CRUD
             return Convert(null);
         }
 
-        private Dictionary<string, long> Convert(ZCRMRecord potential)
+        public Dictionary<string, long> Convert(ZCRMRecord potential)
         {
             return Convert(potential, null);
         }
 
-        private Dictionary<string, long> Convert(ZCRMRecord potential, ZCRMUser assignToUser)
+        public Dictionary<string, long> Convert(ZCRMRecord potential, ZCRMUser assignToUser)
         {
             return EntityAPIHandler.GetInstance(this).ConvertRecord(potential, assignToUser);
         }
@@ -220,15 +223,15 @@ namespace ZCRMSDK.CRM.Library.CRUD
 
 
 
-        public BulkAPIResponse<ZCRMAttachment> GetAllAttachmentsDetails()
+        public BulkAPIResponse<ZCRMAttachment> GetAttachments()
         {
-            return GetAllAttachmentsDetails(0, 20, null);
+            return GetAttachments(0, 20, null);
         }
 
 
-        public BulkAPIResponse<ZCRMAttachment> GetAllAttachmentsDetails(int page, int perPage, string modifiedSince)
+        public BulkAPIResponse<ZCRMAttachment> GetAttachments(int page, int perPage, string modifiedSince)
         {
-            return ZCRMModuleRelation.GetInstance(this, "Attachments").GetAllAttachmentsDetails(page, perPage, modifiedSince);
+            return ZCRMModuleRelation.GetInstance(this, "Attachments").GetAttachments(page, perPage, modifiedSince);
         }
 
 
@@ -297,5 +300,39 @@ namespace ZCRMSDK.CRM.Library.CRUD
             newRecord.Properties = null;
             return newRecord; 
         }
+
+        public APIResponse AddTags(List<string> tagNames)
+        {
+            if (this.entityId == null || this.entityId == 0)
+            {
+                throw new ZCRMException("Record ID MUST NOT be null/empty for Add Tags to a Specific record operation");
+            }
+            if (this.moduleAPIName == null || this.moduleAPIName == "")
+            {
+                throw new ZCRMException("Module Api Name MUST NOT be null/empty for Add Tags to a Specific record operation");
+            }
+            if (tagNames.Count <= 0)
+            {
+                throw new ZCRMException("Tag Name list MUST NOT be null/empty for Add Tags to a Specific record operation");
+            }
+            return TagAPIHandler.GetInstance().AddTags(this, tagNames);
+        }
+
+        public APIResponse RemoveTags(List<string> tagNames)
+        {
+            if (this.entityId == null || this.entityId == 0)
+            {
+                throw new ZCRMException("Record ID MUST NOT be null/empty for Remove Tags from a Specific record operation");
+            }
+            if (string.IsNullOrEmpty(this.moduleAPIName))
+            {
+                throw new ZCRMException("Module Api Name MUST NOT be null/empty for Remove Tags from a Specific record operation");
+            }
+            if (tagNames.Count <= 0)
+            {
+                throw new ZCRMException("Tag Name list MUST NOT be null/empty for Remove Tags from a Specific record operation");
+            }
+            return TagAPIHandler.GetInstance().RemoveTags(this, tagNames);
+    	}
     }
 }

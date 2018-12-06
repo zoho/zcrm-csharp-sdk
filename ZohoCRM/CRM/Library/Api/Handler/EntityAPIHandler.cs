@@ -84,9 +84,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 dataArray.Add(GetZCRMRecordAsJSON());
                 requestBodyObject.Add(APIConstants.DATA, dataArray);
                 requestBody = requestBodyObject;
-
                 APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
-
                 JArray responseDataArray = (JArray)response.ResponseJSON[APIConstants.DATA];
                 JObject responseData = (JObject)responseDataArray[0];
                 JObject responseDetails = (JObject)responseData[APIConstants.DETAILS];
@@ -133,15 +131,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
                 if(potential != null)
                 {
-                    dataObject.Add(APIConstants.DEALS, GetInstance(potential).GetZCRMRecordAsJSON());
+                    dataObject.Add(APIConstants.DEALS, GetInstance(potential).GetZCRMRecordAsJSON());                   
                 }
                 dataArray.Add(dataObject);
                 requestBodyObject.Add(APIConstants.DATA, dataArray);
                 requestBody = requestBodyObject;
-
                 APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
-
-
                 JArray responseJson = (JArray)response.ResponseJSON[APIConstants.DATA];
                 JObject convertedIdsJSON = (JObject)responseJson[0];
 
@@ -241,11 +236,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
                 else if (fieldAPIName.Equals("Product_Details"))
                 {
-                    SetInventoryLineItems((JArray)token.Value);
+                    SetInventoryLineItems(token.Value);
                 }
                 else if (fieldAPIName.Equals("Participants"))
                 {
-                    SetParticipants((JArray)token.Value);
+                    SetParticipants(token.Value);
                 }
                 else if (fieldAPIName.Equals("Pricing_Details"))
                 {
@@ -261,6 +256,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     JObject modifiedObject = (JObject)token.Value;
                     ZCRMUser modifiedBy = ZCRMUser.GetInstance(Convert.ToInt64(modifiedObject["id"]), (string)modifiedObject["name"]);
+                    record.ModifiedBy = modifiedBy;
                 }
                 else if (fieldAPIName.Equals("Created_Time"))
                 {
@@ -312,13 +308,22 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
                 else if (fieldAPIName.Equals("Tax") && token.Value.Type != JTokenType.Null)
                 {
-                    JArray taxNames = (JArray)token.Value;
-                    int arrayLen = taxNames.Count;
-                    for (int i = 0; i < arrayLen; i++)
+                    var taxNames = token.Value;
+                    foreach ( string data in taxNames )
                     {
-                        ZCRMTax tax = ZCRMTax.GetInstance((string)taxNames[i]);
+                        ZCRMTax tax = ZCRMTax.GetInstance(data);
                         record.AddTax(tax);
                     }
+                }
+                else if (fieldAPIName.Equals("tags") && token.Value.Type != JTokenType.Null)
+                {
+                    JArray jsonArray = (JArray)token.Value;
+                    List<string> tags = new List<string>();
+                    foreach (string tag in jsonArray)
+                    {
+                        tags.Add(tag);
+                    }
+                    record.Tags = tags;
                 }
                 else if (fieldAPIName.StartsWith("$", StringComparison.CurrentCulture))
                 {
@@ -356,7 +361,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
         }
 
-        private void SetParticipants(JArray participants)
+        private void SetParticipants(JToken participants)
         {
             foreach (JObject participantDetails in participants)
             {
@@ -365,7 +370,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         }
 
 
-        private void SetInventoryLineItems(JArray lineItems)
+        private void SetInventoryLineItems(JToken lineItems)
         {
             foreach (JObject lineItem in lineItems)
             {
@@ -413,15 +418,25 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         private ZCRMEventParticipant GetZCRMParticipant(JObject participantDetails)
         {
-            long participantId = Convert.ToInt64(participantDetails["participant"]);
+            object participantId = participantDetails["participant"];
             string type = (string)participantDetails["type"];
 
-            ZCRMEventParticipant participant = ZCRMEventParticipant.GetInstance(type, participantId);
-            participant.Name = (string)participantDetails["name"];
-            participant.Email = (string)participantDetails["Email"];
-            participant.IsInvited = (bool)participantDetails["invited"];
-            participant.Status = (string)participantDetails["status"];
-
+            ZCRMEventParticipant participant = null;
+            if (type != "email")
+            {
+                participant = ZCRMEventParticipant.GetInstance(type, Convert.ToInt64(participantId));
+                participant.Name = (string)participantDetails["name"];
+                participant.Email = (string)participantDetails["Email"];
+                participant.IsInvited = (bool)participantDetails["invited"];
+                participant.Status = (string)participantDetails["status"];
+            }
+            else
+            {
+                participant = ZCRMEventParticipant.GetInstance(type, 0L);
+                participant.Name = (string)participantDetails["name"];
+                participant.IsInvited = (bool)participantDetails["invited"];
+                participant.Status = (string)participantDetails["status"];
+            }
             return participant;
         }
 
@@ -444,11 +459,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             Dictionary<string, object> recordData = record.Data;
             if (record.Owner != null)
             {
-                recordJSON.Add("Owner", record.Owner.Id.ToString());
+                recordJSON.Add("Owner", record.Owner.Id);
             }
             if (record.Layout != null)
             {
-                recordJSON.Add("Layout", record.Layout.Id.ToString());
+                recordJSON.Add("Layout", record.Layout.Id);
             }
             MapAsJSON(recordData, recordJSON);
             if (GetLineItemsAsJSONArray() != null)
@@ -457,9 +472,8 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 recordJSON.Add("Participants", GetParticipantsAsJSONArray());
             if (GetPriceDetailsAsJSONArray() != null)
                 recordJSON.Add("Pricing_Details", GetPriceDetailsAsJSONArray());
-            if (GetTaxAsJSONArray() == null)
+            if (GetTaxAsJSONArray() != null)
                 recordJSON.Add("Tax", GetTaxAsJSONArray());
-
             return recordJSON;
         }
 
@@ -476,11 +490,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
                 else if (value is ZCRMRecord)
                 {
-                    value = ((ZCRMRecord)value).EntityId.ToString();
+                    value = ((ZCRMRecord)value).EntityId;
                 }
                 else if (value is ZCRMUser)
                 {
-                    value = ((ZCRMUser)value).Id.ToString();
+                    value = ((ZCRMUser)value).Id;
                 }
                 else if (value is List<object>)
                 {
@@ -498,8 +512,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                     }
                     value = jsonArray;
                 }
-
-                recordJSON.Add(data.Key, value.ToString());
+                recordJSON.Add(data.Key, JToken.FromObject(value));
             }
         }
 

@@ -28,7 +28,7 @@ namespace ZCRMSDK.OAuth.ClientApp
             return tokens;
         }
 
-        public void SaveOAuthData(ZohoOAuthTokens zohoOAuthTokens)
+        public void SaveOAuthTokens(ZohoOAuthTokens zohoOAuthTokens)
         {
             InMemoryStorage tokenStorage = InMemoryStorage.GetInstance();
             tokenStorage.AccessToken = zohoOAuthTokens.AccessToken;

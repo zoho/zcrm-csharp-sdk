@@ -32,12 +32,18 @@ namespace ZCRMSDK.CRM.Library.CRMException
             if(string.IsNullOrEmpty(logFile))
             {
                 logFile = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location) + Path.DirectorySeparatorChar + "LogFile.log";
-             }
+            }
+            else
+            {
+                logFile += "LogFile.log";
+            }
             DefaultTraceListener defaultTrace = new DefaultTraceListener
             {
                 LogFileName = logFile
             };
-            Trace.Listeners.RemoveAt(0);
+            while (Trace.Listeners.Count > 0){
+                Trace.Listeners.RemoveAt(0);
+            }
             Trace.Listeners.Add(defaultTrace);
         }
 

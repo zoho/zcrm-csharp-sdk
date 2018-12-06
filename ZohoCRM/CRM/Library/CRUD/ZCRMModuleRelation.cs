@@ -127,15 +127,15 @@ namespace ZCRMSDK.CRM.Library.CRUD
         }
   
 
-        public BulkAPIResponse<ZCRMAttachment> GetAllAttachmentsDetails()
+        public BulkAPIResponse<ZCRMAttachment> GetAttachments()
         {
-            return GetAllAttachmentsDetails(0, 20, null);
+            return GetAttachments(0, 20, null);
         }
 
 
-        public BulkAPIResponse<ZCRMAttachment> GetAllAttachmentsDetails(int page, int per_page, String modifiedSince)
+        public BulkAPIResponse<ZCRMAttachment> GetAttachments(int page, int per_page, String modifiedSince)
         {
-            return RelatedListAPIHandler.GetInstance(parentRecord, this).GetAllAttachmentsDetails(page, per_page, modifiedSince);
+            return RelatedListAPIHandler.GetInstance(parentRecord, this).GetAttachments(page, per_page, modifiedSince);
         }
 
 

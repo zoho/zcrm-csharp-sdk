@@ -44,7 +44,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
                 else
                 {
-                    throw new ZCRMException("Entity ID MUST be null for create operation.");
+                    throw new ZCRMException("Entity ID Must be null/empty for CreateRecords operation.");
                 }
             }
             requestBodyObject.Add(APIConstants.DATA, dataArray);
@@ -73,10 +73,54 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
             response.BulkData = createdRecords;
             return response;
-
         }
 
-        public BulkAPIResponse<ZCRMRecord> UpdateRecords(List<long> entityIds, string fieldAPIName, Object value)
+        public BulkAPIResponse<ZCRMRecord> UpdateRecords(List<ZCRMRecord> records)
+        {
+            if (records.Count > 100)
+            {
+                throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
+            }
+            requestMethod = APIConstants.RequestMethod.PUT;
+            urlPath = module.ApiName;
+            JObject requestBodyObject = new JObject();
+            JArray dataArray = new JArray();
+            foreach (ZCRMRecord record in records)
+            {
+                if (record.GetFieldValue("id") == null || (long)record.GetFieldValue("id") <= 0)
+                {
+                    throw new ZCRMException("Entity ID Must Not be null/empty for UpdateRecords operation.");
+                }
+                dataArray.Add(EntityAPIHandler.GetInstance(record).GetZCRMRecordAsJSON());
+            }
+            requestBodyObject.Add(APIConstants.DATA, dataArray);
+            requestBody = requestBodyObject;
+
+            BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
+            List<ZCRMRecord> updatedRecords = new List<ZCRMRecord>();
+            List<EntityResponse> responses = response.BulkEntitiesResponse;
+            int responseSize = responses.Count;
+            for (int i = 0; i < responseSize; i++)
+            {
+                EntityResponse entityResponse = responses[i];
+                if (entityResponse.Status.Equals(APIConstants.CODE_SUCCESS))
+                {
+                    JObject responseData = entityResponse.ResponseJSON;
+                    JObject recordDetails = (JObject)responseData[APIConstants.DETAILS];
+                    ZCRMRecord newRecord = records[i];
+                    EntityAPIHandler.GetInstance(newRecord).SetRecordProperties(recordDetails);
+                    updatedRecords.Add(newRecord);
+                    entityResponse.Data = newRecord;
+                }
+                else
+                {
+                    entityResponse.Data = null;
+                }
+            }
+            response.BulkData = updatedRecords;
+            return response;
+        }
+        public BulkAPIResponse<ZCRMRecord> MassUpdateRecords(List<long> entityIds, string fieldAPIName, Object value)
         {
             if (entityIds.Count > 100)
             {
@@ -282,7 +326,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             return response;
         }
 
-        public BulkAPIResponse<ZCRMRecord> SearchByText(string searchText, int page, int perPage)
+        public BulkAPIResponse<ZCRMRecord> SearchByWord(string searchText, int page, int perPage)
         {
             return SearchRecords("word", searchText, page, perPage);
         }
@@ -334,8 +378,8 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         {
             foreach(KeyValuePair<string, JToken> trashRecordDetail in trashRecordDetails)
             {
-                string fieldAPIName = Convert.ToString(trashRecordDetail.Value);
-                if(fieldAPIName.Equals("Created_By") && trashRecordDetail.Value.Type != JTokenType.Null)
+                string fieldAPIName = Convert.ToString(trashRecordDetail.Key);
+                if(fieldAPIName.Equals("created_by") && trashRecordDetail.Value.Type != JTokenType.Null)
                 {
                     JObject createdByObject = (JObject)trashRecordDetail.Value;
                     ZCRMUser createdUser = ZCRMUser.GetInstance(Convert.ToInt64(createdByObject["id"]), (string)createdByObject["name"]);
@@ -345,7 +389,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     JObject modifiedByObject = (JObject)trashRecordDetail.Value;
                     ZCRMUser DeletedByUser = ZCRMUser.GetInstance(Convert.ToInt64(modifiedByObject["id"]), (string)modifiedByObject["name"]);
-                    trashRecord.CreatedBy = DeletedByUser;
+                    trashRecord.DeletedBy = DeletedByUser;
                 }
                 else if(fieldAPIName.Equals("display_name"))
                 {

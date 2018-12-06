@@ -4,6 +4,7 @@ using ZCRMSDK.OAuth.Common;
 using ZCRMSDK.OAuth.Contract;
 using MySql.Data.MySqlClient;
 using ZCRMSDK.CRM.Library.CRMException;
+using ZCRMSDK.CRM.Library.Common;
 
 namespace ZCRMSDK.OAuth.ClientApp
 {
@@ -11,7 +12,7 @@ namespace ZCRMSDK.OAuth.ClientApp
     {
         public void DeleteOAuthTokens(string userMailId)
         {
-            string connectionString = $"server=localhost;database=zohooauth;port=3306;username={GetMySqlUserName()};password={GetMySqlPassword()}";
+            string connectionString = $"server={GetServerName()};username={GetMySqlUserName()};password={GetMySqlPassword()};database={GetDataBaseName()};port={GetPortNumber()};persistsecurityinfo=True;SslMode=none;";
             MySqlConnection connection = null;
             try
             {
@@ -40,7 +41,7 @@ namespace ZCRMSDK.OAuth.ClientApp
 
         public ZohoOAuthTokens GetOAuthTokens(string userMailId)
         {
-            string connectionString = $"server=localhost;database=zohooauth;port=3306;username={GetMySqlUserName()};password={GetMySqlPassword()}";
+            string connectionString = $"server={GetServerName()};username={GetMySqlUserName()};password={GetMySqlPassword()};database={GetDataBaseName()};port={GetPortNumber()};persistsecurityinfo=True;SslMode=none;";
             MySqlConnection connection = null;
             ZohoOAuthTokens tokens = new ZohoOAuthTokens();
             Boolean isUserAvailable = false;
@@ -85,9 +86,9 @@ namespace ZCRMSDK.OAuth.ClientApp
 
 
 
-        public void SaveOAuthData(ZohoOAuthTokens zohoOAuthTokens)
+        public void SaveOAuthTokens(ZohoOAuthTokens zohoOAuthTokens)
         {
-            string connectionString = $"server=localhost;database=zohooauth;port=3306;username={GetMySqlUserName()};password={GetMySqlPassword()}";
+            string connectionString = $"server={GetServerName()};username={GetMySqlUserName()};password={GetMySqlPassword()};database={GetDataBaseName()};port={GetPortNumber()};persistsecurityinfo=True;SslMode=none;";
             MySqlConnection connection = null;
             try
             {
@@ -134,6 +135,33 @@ namespace ZCRMSDK.OAuth.ClientApp
                 return "";
             }
             return password;
+        }
+        public static string GetServerName()
+        {
+            string server = ZohoOAuth.GetConfigValue(ZohoOAuthConstants.MYSQL_SERVER);
+            if (server == null)
+            {
+                return "localhost";
+            }
+            return server;
+        }
+        public static string GetDataBaseName()
+        {
+            string database = ZohoOAuth.GetConfigValue(ZohoOAuthConstants.MYSQL_DATABASE);
+            if (database == null)
+            {
+                return "zohooauth";
+            }
+            return database;
+        }
+        public static string GetPortNumber()
+        {
+            string port = ZohoOAuth.GetConfigValue(ZohoOAuthConstants.MYSQL_PORT);
+            if (port == null)
+            {
+                return "3306";
+            }
+            return port;
         }
     }
 }

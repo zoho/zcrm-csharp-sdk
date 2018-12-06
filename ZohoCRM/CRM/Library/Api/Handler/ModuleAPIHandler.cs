@@ -215,6 +215,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             field.ToolTip = Convert.ToString(fieldJSON["tooltip"]);
             field.Webhook = Convert.ToBoolean(fieldJSON["webhook"]);
             field.CreatedSource = Convert.ToString(fieldJSON["created_source"]);
+            field.JsonType = Convert.ToString(fieldJSON["json_type"]);
             JToken tempJSONObect = fieldJSON["formula"];
             if (tempJSONObect.HasValues)
             {
@@ -326,6 +327,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             moduleRelation.Label = (string)relatedList["display_label"];
             moduleRelation.Module = (string)relatedList["module"];
             moduleRelation.Type = (string)relatedList["type"];
+            moduleRelation.Name = (string)relatedList["name"];
             return moduleRelation;
         }
 
