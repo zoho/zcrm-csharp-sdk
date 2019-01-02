@@ -24,27 +24,76 @@ namespace ZCRMSDK.CRM.Library.CRUD
             this.id = entityId;
             this.moduleApiName = moduleApiName;
         }
-        public static ZCRMTag GetInstance(long? entityId = null,string moduleApiName= null)
+
+        /// <summary>
+        /// To get ZCRMTag instance by passing tag Id and modules' APIName.
+        /// </summary>
+        /// <returns>ZCRMTag class instance.</returns>
+        /// <param name="Id">Id (Long) of the tag.</param>
+        /// <param name="moduleApiName">APIName (String) of the module</param>
+        public static ZCRMTag GetInstance(long? Id = null,string moduleApiName= null)
         {
-            return new ZCRMTag(entityId, moduleApiName);
+            return new ZCRMTag(Id, moduleApiName);
         }
 
+        /// <summary>
+        /// Gets or sets the Id of/for the tag.
+        /// </summary>
+        /// <value>The Id of the tag.</value>
         public long? Id { get => id; set => id = value; }
 
+        /// <summary>
+        /// Gets or sets the name of/for the tag.
+        /// </summary>
+        /// <value>The name of the tag.</value>
+        /// <returns>String</returns>
         public string Name { get => name; set => name = value; }
 
+        /// <summary>
+        /// Gets or sets the user who created the tag.
+        /// </summary>
+        /// <value>The user who created the tag.</value>
+        /// <returns>ZCRMUser class instance</returns>
         public ZCRMUser CreatedBy { get => createdBy; set => createdBy = value; }
 
+        /// <summary>
+        /// Gets or sets the created time of/for the tag.
+        /// </summary>
+        /// <value>The created time of the tag.</value>
+        /// <returns>String</returns>
         public string CreatedTime { get => createdTime; set => createdTime = value; }
 
+        /// <summary>
+        /// Gets or sets the user who modified the tag.
+        /// </summary>
+        /// <value>The user who modified the tag.</value>
+        /// <returns>ZCRMUser class instance</returns>
         public ZCRMUser ModifiedBy { get => modifiedBy; set => modifiedBy = value; }
 
+        /// <summary>
+        /// Gets or sets the modified time of/for the tag.
+        /// </summary>
+        /// <value>The modified time of the tag.</value>
+        /// <returns>ZCRMUser class instance</returns>
         public string ModifiedTime { get => modifiedTime; set => modifiedTime = value; }
 
+        /// <summary>
+        /// Gets or sets the count of/for the tag.
+        /// </summary>
+        /// <value>The count of the tag.</value>
+        /// <returns>Integer</returns>
         public int Count { get => count; set =>count = value; }
 
+        /// <summary>
+        /// Gets or set the APIName of/for the module.
+        /// </summary>
+        /// <value>The name of the module API.</value>
         public string ModuleApiName { get => moduleApiName; set => moduleApiName = value; }
 
+        /// <summary>
+        /// To delete tag specified tag Id.
+        /// </summary>
+        /// <returns>APIResponse class instance.</returns>
         public APIResponse Delete()
         {
             if (this.id == null || this.id == 0)
@@ -54,6 +103,11 @@ namespace ZCRMSDK.CRM.Library.CRUD
             return TagAPIHandler.GetInstance().Delete(this.id);
         }
 
+        /// <summary>
+        /// To merge specified ZCRMTag class instance.
+        /// </summary>
+        /// <returns>APIResponse class instance.</returns>
+        /// <param name="mergetag">ZCRMTag class instance</param>
         public APIResponse Merge(ZCRMTag mergetag)
         {
             if (this.id == null || this.id == 0)
@@ -67,6 +121,10 @@ namespace ZCRMSDK.CRM.Library.CRUD
             return TagAPIHandler.GetInstance().Merge(this.Id, mergetag.Id);
         }
 
+        /// <summary>
+        /// To update ZCRMTag.
+        /// </summary>
+        /// <returns>APIResponse class instance.</returns>
         public APIResponse Update()
         {
             if (this.id == null || this.id == 0)

@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 using ZCRMSDK.CRM.Library.Common;
 using ZCRMSDK.CRM.Library.Api.Handler;
 using ZCRMSDK.CRM.Library.Api.Response;
-using ZCRMSDK.CRM.Library.Setup.Restclient;
+using ZCRMSDK.CRM.Library.Setup.RestClient;
 using ZCRMSDK.CRM.Library.CRMException;
 using System.Reflection;
 

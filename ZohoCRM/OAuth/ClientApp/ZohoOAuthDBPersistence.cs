@@ -37,8 +37,6 @@ namespace ZCRMSDK.OAuth.ClientApp
             }
         }
 
-
-
         public ZohoOAuthTokens GetOAuthTokens(string userMailId)
         {
             string connectionString = $"server={GetServerName()};username={GetMySqlUserName()};password={GetMySqlPassword()};database={GetDataBaseName()};port={GetPortNumber()};persistsecurityinfo=True;SslMode=none;";
@@ -83,8 +81,6 @@ namespace ZCRMSDK.OAuth.ClientApp
                 }
             }
         }
-
-
 
         public void SaveOAuthTokens(ZohoOAuthTokens zohoOAuthTokens)
         {

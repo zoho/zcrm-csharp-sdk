@@ -5,14 +5,12 @@ using ZCRMSDK.OAuth.Contract;
 using ZCRMSDK.OAuth.Common;
 using ZCRMSDK.CRM.Library.CRMException;
 using System.IO;
-using ZCRMSDK.CRM.Library.Setup.Restclient;
 using ZCRMSDK.CRM.Library.Common;
 
 namespace ZCRMSDK.OAuth.ClientApp
 {
     public class ZohoOAuthFilePersistence : IZohoPersistenceHandler
     {
-        
         public void DeleteOAuthTokens(string userMailId)
         {
             try

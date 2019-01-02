@@ -72,7 +72,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
         }
 
-
         public BulkAPIResponse<ZCRMTag> CreateTags(List<ZCRMTag> tags)
         {
             if (tags.Count > 50)
@@ -82,7 +81,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.POST;
-                urlPath = "settings/tags?module="+module.ApiName+"";
+                urlPath = "settings/tags?module="+module.ApiName;
                 JObject requestBodyObject = new JObject();
                 JArray dataArray = new JArray();
                 foreach (ZCRMTag tag in tags)
@@ -184,7 +183,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             {
                 requestMethod = APIConstants.RequestMethod.DELETE;
                 urlPath = "settings/tags/"+ tagid;
-
                 return APIRequest.GetInstance(this).GetAPIResponse();
             }
             catch (Exception e) when (!(e is ZCRMException))
@@ -199,12 +197,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.POST;
-                urlPath = "settings/tags/"+tagId+"/actions/merge";
+                urlPath = "settings/tags/"+mergetagId+ "/actions/merge";
 
                 JObject requestBodyObject = new JObject();
                 JArray dataArray = new JArray();
                 JObject TagJSON = new JObject();
-                TagJSON.Add("conflict_id", mergetagId);
+                TagJSON.Add("conflict_id", tagId);
                 dataArray.Add(TagJSON);
                 requestBodyObject.Add(APIConstants.TAGS, dataArray);
                 requestBody = requestBodyObject;
@@ -431,7 +429,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     tag.Id = Convert.ToInt64(token.Value);
                 }
-                else if (fieldAPIName.Equals("name"))
+                if (fieldAPIName.Equals("name"))
                 {
                     tag.Name = Convert.ToString(token.Value);
                 }

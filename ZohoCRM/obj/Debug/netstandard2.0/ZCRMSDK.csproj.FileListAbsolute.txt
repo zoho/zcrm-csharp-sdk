@@ -7,3 +7,12 @@
 /Users/test/Projects/ZohoCRM/ZohoCRM/obj/Debug/netstandard2.0/ZCRMSDK.AssemblyInfo.cs
 /Users/test/Projects/ZohoCRM/ZohoCRM/obj/Debug/netstandard2.0/ZCRMSDK.dll
 /Users/test/Projects/ZohoCRM/ZohoCRM/obj/Debug/netstandard2.0/ZCRMSDK.pdb
+/Users/raja-7453/Documents/C#SDKLatest/zcrm-csharp-sdk/ZohoCRM/bin/Debug/netstandard2.0/ZCRMSDK.deps.json
+/Users/raja-7453/Documents/C#SDKLatest/zcrm-csharp-sdk/ZohoCRM/bin/Debug/netstandard2.0/ZCRMSDK.dll
+/Users/raja-7453/Documents/C#SDKLatest/zcrm-csharp-sdk/ZohoCRM/bin/Debug/netstandard2.0/ZCRMSDK.pdb
+/Users/raja-7453/Documents/C#SDKLatest/zcrm-csharp-sdk/ZohoCRM/obj/Debug/netstandard2.0/ZCRMSDK.csprojAssemblyReference.cache
+/Users/raja-7453/Documents/C#SDKLatest/zcrm-csharp-sdk/ZohoCRM/obj/Debug/netstandard2.0/ZCRMSDK.csproj.CoreCompileInputs.cache
+/Users/raja-7453/Documents/C#SDKLatest/zcrm-csharp-sdk/ZohoCRM/obj/Debug/netstandard2.0/ZCRMSDK.AssemblyInfoInputs.cache
+/Users/raja-7453/Documents/C#SDKLatest/zcrm-csharp-sdk/ZohoCRM/obj/Debug/netstandard2.0/ZCRMSDK.AssemblyInfo.cs
+/Users/raja-7453/Documents/C#SDKLatest/zcrm-csharp-sdk/ZohoCRM/obj/Debug/netstandard2.0/ZCRMSDK.dll
+/Users/raja-7453/Documents/C#SDKLatest/zcrm-csharp-sdk/ZohoCRM/obj/Debug/netstandard2.0/ZCRMSDK.pdb

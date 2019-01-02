@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using ZCRMSDK.CRM.Library.Setup.Restclient;
+using ZCRMSDK.CRM.Library.Setup.RestClient;
 using ZCRMSDK.OAuth.Client;
 using ZCRMSDK.CRM.Library.CRMException;
 using ZCRMSDK.CRM.Library.Api;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using ZCRMSDK.CRM.Library.Common;
 using ZCRMSDK.CRM.Library.CRMException;
-using ZCRMSDK.CRM.Library.Setup.Restclient;
+using ZCRMSDK.CRM.Library.Setup.RestClient;
 using ZCRMSDK.OAuth.Common;
 using ZCRMSDK.OAuth.Contract;
 
@@ -12,14 +12,13 @@ namespace ZCRMSDK.OAuth.Client
     public class ZohoOAuth
     {
         internal static List<string> OAUTH_CONFIG_KEYS = new List<string>{ ZohoOAuthConstants.CLIENT_ID, ZohoOAuthConstants.CLIENT_SECRET, ZohoOAuthConstants.REDIRECT_URL, ZohoOAuthConstants.ACCESS_TYPE, ZohoOAuthConstants.PERSISTENCE_HANDLER_CLASS,
-            ZohoOAuthConstants.MYSQL_USERNAME, ZohoOAuthConstants.MYSQL_PASSWORD, ZohoOAuthConstants.OAUTH_TOKENS_FILE_PATH,ZohoOAuthConstants.MYSQL_PORT,ZohoOAuthConstants.MYSQL_SERVER,ZohoOAuthConstants.MYSQL_DATABASE,ZohoOAuthConstants.SCOPES};
+            ZohoOAuthConstants.MYSQL_USERNAME, ZohoOAuthConstants.MYSQL_PASSWORD, ZohoOAuthConstants.OAUTH_TOKENS_FILE_PATH,ZohoOAuthConstants.MYSQL_PORT,ZohoOAuthConstants.MYSQL_SERVER,ZohoOAuthConstants.MYSQL_DATABASE,ZohoOAuthConstants.SCOPES,ZohoOAuthConstants.IAM_URL};
         public static Dictionary<string, string> ConfigProperties { get; private set; } = new Dictionary<string, string>();
 
         public static void Initialize(string domainSuffix, Dictionary<string, string> configData)
         {
             try
             {
-                SetIAMUrl(domainSuffix);
                 AddConfigurationData("oauth_configuration");
                 if (configData != null)
                 {
@@ -40,7 +39,18 @@ namespace ZCRMSDK.OAuth.Client
                     }
                    
                 }
-
+                //set iamURL from ConfigProperties  
+                if (ConfigProperties.ContainsKey(ZohoOAuthConstants.IAM_URL))
+                {
+                    if (string.IsNullOrEmpty(ConfigProperties[ZohoOAuthConstants.IAM_URL]) || string.IsNullOrWhiteSpace(ConfigProperties[ZohoOAuthConstants.IAM_URL]))
+                    {
+                        SetIAMUrl(domainSuffix);
+                    }
+                }
+                else
+                {
+                    SetIAMUrl(domainSuffix);
+                }
                 ZohoOAuthParams oAuthParams = new ZohoOAuthParams()
                 {
                     ClientId = GetConfigValue(ZohoOAuthConstants.CLIENT_ID),

@@ -6,7 +6,6 @@ namespace ZCRMSDK.OAuth.ClientApp
 {
     public class ZohoOAuthInMemoryPersistence : IZohoPersistenceHandler
     {
-
         public void DeleteOAuthTokens(string paramName)
         {
             InMemoryStorage tokenStorage = InMemoryStorage.GetInstance();

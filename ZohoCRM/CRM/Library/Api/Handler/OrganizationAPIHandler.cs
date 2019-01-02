@@ -52,7 +52,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             organization.Mobile = (string)orgDetails["mobile"];
             organization.Website = (string)orgDetails["website"];
             organization.PrimaryEmail = (string)orgDetails["primary_email"];
-            organization.EmployeeCount = (int)orgDetails["employee_count"];
+            organization.EmployeeCount = Convert.ToInt32(orgDetails["employee_count"].Type!= JTokenType.Null? orgDetails["employee_count"]: 0); //check the value is null/empty
             organization.Description = (string)orgDetails["description"];
             organization.Timezone = (string)orgDetails["time_zone"];
             organization.IsoCode = (string)orgDetails["iso_code"];

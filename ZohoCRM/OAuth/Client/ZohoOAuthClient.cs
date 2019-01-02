@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 using ZCRMSDK.CRM.Library.CRMException;
 using System.Net;
 using ZCRMSDK.CRM.Library.Common;
-using ZCRMSDK.CRM.Library.Setup.Restclient;
+using ZCRMSDK.CRM.Library.Setup.RestClient;
 
 namespace ZCRMSDK.OAuth.Client
 {
@@ -58,9 +58,13 @@ namespace ZCRMSDK.OAuth.Client
                 tokens = RefreshAccessToken(tokens.RefreshToken, userMailId);
             }
             return tokens.AccessToken;
-         } 
+         }
 
-
+        /// <summary>
+        /// To get access token from grantToken.
+        /// </summary>
+        /// <returns>ZohoOAuthTokens class instance.</returns>
+        /// <param name="grantToken">Grant token (String) of the oauth client</param>
         public ZohoOAuthTokens GenerateAccessToken(string grantToken)
         {
             if (grantToken == null || grantToken.Length == 0)
@@ -93,6 +97,12 @@ namespace ZCRMSDK.OAuth.Client
             }
         }
 
+        /// <summary>
+        /// To generates the access token from refresh token.
+        /// </summary>
+        /// <returns>ZohoOAuthTokens class instance.</returns>
+        /// <param name="refreshToken">Refresh token (String) of the oauth client</param>
+        /// <param name="userMailId">User mail Id (String)</param>
         public ZohoOAuthTokens GenerateAccessTokenFromRefreshToken(string refreshToken, string userMailId)
         {
             return RefreshAccessToken(refreshToken, userMailId);
@@ -159,7 +169,7 @@ namespace ZCRMSDK.OAuth.Client
                 {
                     tokens.RefreshToken = (string)responseJSON[ZohoOAuthConstants.REFRESH_TOKEN];
                 }
-                CRM.Library.Common.ZCRMConfigUtil.ConfigProperties["apiBaseUrl"] = (string)responseJSON["api_domain"];
+                //CRM.Library.Common.ZCRMConfigUtil.ConfigProperties["apiBaseUrl"] = (string)responseJSON["api_domain"];
                 return tokens;
             }
             catch (Exception) { throw; }

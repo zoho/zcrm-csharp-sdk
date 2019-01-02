@@ -2,22 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>Test.Sample.Library</PackageId>
-    <Authors>ram</Authors>
-    <Owners>ram</Owners>
-    <PackageReleaseNotes>Test Release</PackageReleaseNotes>
-    <Summary>Test SDK</Summary>
-    <PackageTags>test, sample, library, sdk</PackageTags>
-    <Title>Test SDK</Title>
-    <Description>test sdk</Description>
+    <PackageId>ZCRMSDK</PackageId>
+    <Authors>Zoho CRM API Team</Authors>
+    <Owners>Zoho CRM API Team</Owners>
+    <Summary>C# SDK offers a way to create client C# applications that can be integrated with Zoho CRM. This SDK makes the access and use of necessary CRM APIs with ease.</Summary>
+    <PackageTags>ZCRMSDK,zohocrm,sdk,zcrmsdk</PackageTags>
+    <Title>ZCRMSDK</Title>
+    <Description>Provides C# SDK support for Zoho CRM APIs.</Description>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageProjectUrl>https://github.com/zoho/zcrm-csharp-sdk</PackageProjectUrl>
+    <SynchReleaseVersion>false</SynchReleaseVersion>
+    <PackageReleaseNotes>Added C# SDK support.</PackageReleaseNotes>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="MySql.Data" Version="8.0.11" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
-    <PackageReference Include="NuGet.Build.Packaging" Version="0.2.2" />
-  </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\configuration.txt" />
   </ItemGroup>
@@ -26,5 +23,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CRM\Library\Common\ConfigFileHandler\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="MySql.Data" Version="8.0.13" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
   </ItemGroup>
 </Project>
