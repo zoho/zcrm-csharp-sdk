@@ -69,7 +69,7 @@ Your OAuth Client details should be given to the SDK as a section in app.config 
 - `client_id`, `client_secret` and `redirect_uri` are your OAuth client’s configurations that you get after registering your Zoho client.
 - `access_type` will be set to offline by default. Access and Refresh tokens will be received only when it is offline.
 - `persistence_handler_class` is your implementation of the IZohoPersistenceHandler interface, which has handler methods to store OAuth data. This is discussed in the next section.
-For example: `persistence_handler_class=com.zoho.oauth.clientapp.ZohoOAuthFilePersistence` (or) `com.zoho.oauth.clientapp.ZohoOAuthDBPersistence` (or) your own persistence handler class.
+For example: `persistence_handler_class=ZCRMSDK.OAuth.ClientApp.ZohoOAuthFilePersistence, ZCRMSDK` (or) `ZCRMSDK.OAuth.ClientApp.ZohoOAuthDBPersistence, ZCRMSDK` (or) your own persistence handler class.
 - If you prefer to use our DB persistence (`ZohoOAuthDBPersistence.cs`) , you need to give the `mysql_username` and `mysql_password` keys for mysql connectivity.
  
  	- By default, mysql_username = "root", mysql_password = "", mysql_database = "zohooauth", mysql_server = "localhost" and mysql_port = "3306".
