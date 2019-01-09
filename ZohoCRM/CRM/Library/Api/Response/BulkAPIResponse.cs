@@ -67,6 +67,18 @@ namespace ZCRMSDK.CRM.Library.Api.Response
                     }
                 }
             }
+            else if (ResponseJSON.ContainsKey(APIConstants.TAXES))
+            {
+                recordsArray = (JArray)ResponseJSON[APIConstants.TAXES];
+                foreach (JObject recordJSON in recordsArray)
+                {
+                    if (recordJSON.ContainsKey(APIConstants.STATUS))
+                    {
+                        EntityResponse individualResponse = new EntityResponse(recordJSON);
+                        BulkEntitiesResponse.Add(individualResponse);
+                    }
+                }
+            }
         }
 
 

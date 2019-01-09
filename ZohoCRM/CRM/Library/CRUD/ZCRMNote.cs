@@ -139,9 +139,9 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <summary>
         /// To download the attachment of the notes based on attachment Id.
         /// </summary>
-        /// <returns>APIResponse class instance.</returns>
+        /// <returns>FileAPIResponse class instance.</returns>
         /// <param name="attachmentId">Attachment Id (Long) of the notes</param>
-        public APIResponse DownloadAttachment(long attachmentId)
+        public FileAPIResponse DownloadAttachment(long attachmentId)
         {
             return ZCRMModuleRelation.GetInstance(ZCRMRecord.GetInstance("Notes", id), "Attachments").DownloadAttachment(attachmentId);
         }

@@ -448,10 +448,22 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         private ZCRMOrgTax GetZCRMOrgTax(JObject taxDetails)
         {
             ZCRMOrgTax tax = ZCRMOrgTax.GetInstance((long)taxDetails["id"]);
-            tax.Name = (string)taxDetails["name"];
-            tax.DisplayName = (string)taxDetails["display_label"];
-            tax.Value = (double)taxDetails["value"];
-            tax.Sequence = (int)taxDetails["sequence_number"];
+            if (taxDetails.ContainsKey("name"))
+            {
+                tax.Name = (string)taxDetails["name"];
+            }
+            if (taxDetails.ContainsKey("display_label"))
+            {
+                tax.DisplayName = (string)taxDetails["display_label"];
+            }
+            if (taxDetails.ContainsKey("value"))
+            {
+                tax.Value = (double)taxDetails["value"];
+            }
+            if(taxDetails.ContainsKey("sequence_number"))
+            {
+                tax.Sequence = (int)taxDetails["sequence_number"];
+            }
             return tax;
         }
 
@@ -525,7 +537,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
             try
             {
-                requestMethod = APIConstants.RequestMethod.POST;
+                requestMethod = APIConstants.RequestMethod.PUT;
                 urlPath = "org/taxes";
                 JObject requestBodyObject = new JObject();
                 JArray dataArray = new JArray();
@@ -536,7 +548,26 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 requestBodyObject.Add("taxes", dataArray);
                 requestBody = requestBodyObject;
 
-                return APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMOrgTax>();
+                BulkAPIResponse<ZCRMOrgTax> response =  APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMOrgTax>();
+                List<ZCRMOrgTax> updateTaxes = new List<ZCRMOrgTax>();
+                List<EntityResponse> responses = response.BulkEntitiesResponse;
+                foreach (EntityResponse entityResponse in responses)
+                {
+                    if (entityResponse.Status.Equals(APIConstants.CODE_SUCCESS))
+                    {
+                        JObject responseData = entityResponse.ResponseJSON;
+                        JObject responseDetails = (JObject)responseData[APIConstants.DETAILS];
+                        ZCRMOrgTax tax = GetZCRMOrgTax(responseDetails);
+                        updateTaxes.Add(tax);
+                        entityResponse.Data = tax;
+                    }
+                    else
+                    {
+                        entityResponse.Data = null;
+                    }
+                }
+                response.BulkData = updateTaxes;
+                return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
             {

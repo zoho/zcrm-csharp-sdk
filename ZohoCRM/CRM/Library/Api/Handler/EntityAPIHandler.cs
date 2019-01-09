@@ -309,7 +309,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 else if (fieldAPIName.Equals("Tax") && token.Value.Type != JTokenType.Null)
                 {
                     var taxNames = token.Value;
-                    foreach ( string data in taxNames )
+                    foreach (string data in taxNames)
                     {
                         ZCRMTax tax = ZCRMTax.GetInstance(data);
                         record.AddTax(tax);
@@ -322,6 +322,16 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                     foreach (string tag in jsonArray)
                     {
                         tags.Add(tag);
+                    }
+                    record.Tags = tags;
+                }
+                else if (fieldAPIName.Equals("Tag") && token.Value.Type != JTokenType.Null)
+                {
+                    JArray jsonArray = (JArray)token.Value;
+                    List<string> tags = new List<string>();
+                    foreach (JObject tag in jsonArray)
+                    {
+                        tags.Add(tag.GetValue("name").ToString());
                     }
                     record.Tags = tags;
                 }

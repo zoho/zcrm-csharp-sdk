@@ -12,6 +12,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageProjectUrl>https://github.com/zoho/zcrm-csharp-sdk</PackageProjectUrl>
     <SynchReleaseVersion>false</SynchReleaseVersion>
+    <copyright>© 2019, Zoho Corporation Pvt. Ltd. All Rights Reserved.</copyright>
     <PackageReleaseNotes>Added C# SDK support.</PackageReleaseNotes>
   </PropertyGroup>
 
