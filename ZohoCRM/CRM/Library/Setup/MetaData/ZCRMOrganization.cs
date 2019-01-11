@@ -327,7 +327,7 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
         /// <returns>BulkAPIResponse&lt;ZCRMUser&gt; class instance.</returns>
         public BulkAPIResponse<ZCRMUser> GetAllActiveConfirmedUsers()
         {
-            return OrganizationAPIHandler.GetInstance().GetAllActiveConfirmedUsers(1, 200);
+            return GetAllActiveConfirmedUsers(1, 200);
         }
 
         /// <summary>
@@ -347,7 +347,7 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
         /// <returns>BulkAPIResponse&lt;ZCRMUser&gt; class instance.</returns>
         public BulkAPIResponse<ZCRMUser> GetAllAdminUsers()
         {
-            return OrganizationAPIHandler.GetInstance().GetAllAdminUsers(1, 200);
+            return GetAllAdminUsers(1, 200);
         }
 
         /// <summary>
@@ -367,7 +367,7 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
         /// <returns>BulkAPIResponse&lt;ZCRMUser&gt; class instance.</returns>
         public BulkAPIResponse<ZCRMUser> GetAllActiveUsers()
         {
-            return OrganizationAPIHandler.GetInstance().GetAllActiveUsers(1, 200);
+            return GetAllActiveUsers(1, 200);
         }
 
         /// <summary>
@@ -387,7 +387,7 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
         /// <returns>BulkAPIResponse&lt;ZCRMUser&gt; class instance.</returns>
         public BulkAPIResponse<ZCRMUser> GetAllInActiveUsers()
         {
-            return OrganizationAPIHandler.GetInstance().GetAllDeactivatedUsers(1, 200);
+            return GetAllInActiveUsers(1, 200);
         }
 
         /// <summary>

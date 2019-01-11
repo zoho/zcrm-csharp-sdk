@@ -34,12 +34,15 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             JObject responseJSON = response.ResponseJSON;
             List<ZCRMModule> allModules = new List<ZCRMModule>();
 
-            JArray modulesArray = (JArray)responseJSON["modules"];
-            foreach(JObject moduleDetails in modulesArray)
+            if(responseJSON.ContainsKey("modules"))
             {
-                allModules.Add(GetZCRMModule(moduleDetails));
+                JArray modulesArray = (JArray)responseJSON["modules"];
+                foreach (JObject moduleDetails in modulesArray)
+                {
+                    allModules.Add(GetZCRMModule(moduleDetails));
+                }
+                response.BulkData = allModules;
             }
-            response.BulkData = allModules;
             return response;
         }
 

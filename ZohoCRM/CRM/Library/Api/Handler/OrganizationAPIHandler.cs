@@ -460,10 +460,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             {
                 tax.Value = (double)taxDetails["value"];
             }
-            if(taxDetails.ContainsKey("sequence_number"))
-            {
-                tax.Sequence = (int)taxDetails["sequence_number"];
-            }
             return tax;
         }
 
@@ -475,7 +471,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 { "id", tax.Id },
                 { "display_label", tax.DisplayName },
                 { "value", tax.Value },
-                { "sequence_number", tax.Sequence }
             };
             return taxJSON;
 
