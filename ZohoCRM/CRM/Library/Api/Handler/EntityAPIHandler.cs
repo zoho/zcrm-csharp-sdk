@@ -287,8 +287,15 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
                 else if (fieldAPIName.Equals("Remind_At") && token.Value.Type != JTokenType.Null)
                 {
-                    JObject remindObject = (JObject)token.Value;
-                    record.SetFieldValue(fieldAPIName, remindObject["ALARM"]);
+                    if (token.Value is JObject)
+                    {
+                        JObject remindObject = (JObject)token.Value;
+                        record.SetFieldValue(fieldAPIName, remindObject["ALARM"]);
+                    }
+                    else
+                    {
+                        record.SetFieldValue(fieldAPIName, token.Value);
+                    }
                 }
                 else if (fieldAPIName.Equals("Recurring_Activity") && token.Value.Type != JTokenType.Null)
                 {
@@ -354,13 +361,20 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                     lookupRecord.LookupLabel = (string)lookupDetails["name"];
                     record.SetFieldValue(fieldAPIName, lookupRecord);
                 }
-                else if (token.Value is JArray)
+                else if (token.Value is JArray jsonArray)
                 {
-                    JArray jsonArray = (JArray)token.Value;
                     List<object> values = new List<object>();
-                    foreach (JObject jsonObject in jsonArray)
+
+                    foreach (Object obj in jsonArray)
                     {
-                        values.Add(jsonObject);
+                        if (obj is JObject)
+                        {
+                            values.Add((JObject)obj);
+                        }
+                        else
+                        {
+                            values.Add(obj);
+                        }
                     }
                     record.SetFieldValue(fieldAPIName, values);
                 }

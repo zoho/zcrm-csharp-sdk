@@ -13,7 +13,8 @@
     <PackageProjectUrl>https://github.com/zoho/zcrm-csharp-sdk</PackageProjectUrl>
     <SynchReleaseVersion>false</SynchReleaseVersion>
     <copyright>© 2019, Zoho Corporation Pvt. Ltd. All Rights Reserved.</copyright>
-    <PackageReleaseNotes>Added C# SDK support.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fix for the invalid type cast Exception issuse.</PackageReleaseNotes>
+    <PackageVersion>1.0.2</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
