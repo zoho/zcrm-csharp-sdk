@@ -1,15 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-
-
-
 namespace ZCRMSDK.CRM.Library.Api
 {
-    
-
     public static class APIConstants
     {
-
         public static readonly string ALLOWED_API_CALLS_PER_MINUTE = "X-RATELIMIT-LIMIT";
         public static readonly string REMAINING_COUNT_FOR_THIS_WINDOW = "X-RATELIMIT-REMAINING";
         public static readonly string REMAINING_TIME_FOR_WINDOW__RESET = "X-RATELIMIT-RESET";

@@ -13,6 +13,7 @@ using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("Zoho CRM API Team")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyCopyrightAttribute("© 2019, Zoho Corporation Pvt. Ltd. All Rights Reserved.")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Provides C# SDK support for Zoho CRM APIs.")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]

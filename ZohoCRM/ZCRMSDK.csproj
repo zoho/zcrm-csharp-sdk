@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/zoho/zcrm-csharp-sdk</PackageProjectUrl>
     <SynchReleaseVersion>false</SynchReleaseVersion>
     <copyright>© 2019, Zoho Corporation Pvt. Ltd. All Rights Reserved.</copyright>
-    <PackageReleaseNotes>Fix for the invalid type cast Exception issue.</PackageReleaseNotes>
-    <PackageVersion>1.0.2</PackageVersion>
+    <PackageReleaseNotes>Fix for the exception exePath must be specified when not running inside a stand alone exe in ASP.NET web applications.</PackageReleaseNotes>
+    <PackageVersion>1.0.3</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,9 +27,11 @@
     <Folder Include="CRM\Library\Common\ConfigFileHandler\" />
   </ItemGroup>
   <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="MySql.Data" Version="8.0.14" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="MySql.Data" Version="8.0.13" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
   </ItemGroup>
 </Project>
