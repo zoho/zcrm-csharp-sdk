@@ -18,7 +18,7 @@ namespace ZCRMSDK.CRM.Library.Api.Response
 
         public BulkAPIResponse() { }
 
-        public BulkAPIResponse(HttpWebResponse response) : base(response)
+        public BulkAPIResponse(int statusCode, string responseString, WebHeaderCollection headers) : base(statusCode, responseString, headers) 
         {
             SetInfo();
         }

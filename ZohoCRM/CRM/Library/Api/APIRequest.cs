@@ -20,7 +20,6 @@ namespace ZCRMSDK.CRM.Library.Api
         private Dictionary<string, string> requestHeaders = new Dictionary<string, string>();
         private Dictionary<string, string> requestParams = new Dictionary<string, string>();
         private JObject requestBody;
-        private HttpWebResponse response;
         private static string boundary = "----FILEBOUNDARY----";
         private Stream fileRequestBody;
         private Stream requestStream = null;
@@ -122,16 +121,20 @@ namespace ZCRMSDK.CRM.Library.Api
 
         public APIResponse GetAPIResponse()
         {
-            GetResponseFromServer();
-            return new APIResponse(response);
+            using (HttpWebResponse response = GetResponseFromServer())
+            {
+                return new APIResponse((int)response.StatusCode, new StreamReader(response.GetResponseStream()).ReadToEnd(), response.Headers);
+            }
         }
 
         public BulkAPIResponse<T> GetBulkAPIResponse<T>() where T : ZCRMEntity
         {
             try
             {
-                GetResponseFromServer();
-                return new BulkAPIResponse<T>(response);
+                using (HttpWebResponse response = GetResponseFromServer())
+                {
+                    return new BulkAPIResponse<T>((int)response.StatusCode, new StreamReader(response.GetResponseStream()).ReadToEnd(), response.Headers);
+                }
             }
             catch (Exception e) when(!(e is ZCRMException))
             {
@@ -141,7 +144,7 @@ namespace ZCRMSDK.CRM.Library.Api
             }
         }
 
-        private void GetResponseFromServer()
+        private HttpWebResponse GetResponseFromServer()
         {
             try
             {
@@ -160,6 +163,7 @@ namespace ZCRMSDK.CRM.Library.Api
                 SetRequestMethod(request);
              
                 ZCRMLogger.LogInfo(ToString());
+                HttpWebResponse response;
                 try
                 {
                     response = (HttpWebResponse)request.GetResponse();
@@ -169,7 +173,9 @@ namespace ZCRMSDK.CRM.Library.Api
                     response = (HttpWebResponse)e.Response;
                 }
 				APIStats.UpdateStats(response);
-            }catch(WebException e)
+                return response;
+            }
+            catch(WebException e)
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(e);
@@ -282,8 +288,10 @@ namespace ZCRMSDK.CRM.Library.Api
             try
             {
                 fileRequestBody = GetFileRequestBodyStream(filePath);
-                GetResponseFromServer();
-                return new APIResponse(response);
+                using (HttpWebResponse response = GetResponseFromServer())
+                {
+                    return new APIResponse((int)response.StatusCode, new StreamReader(response.GetResponseStream()).ReadToEnd(), response.Headers);
+                }
             }
             catch(Exception e) when(!(e is ZCRMException))
             {
@@ -295,8 +303,8 @@ namespace ZCRMSDK.CRM.Library.Api
         public FileAPIResponse DownloadFile()
         {
             try{
-                GetResponseFromServer();
-                return new FileAPIResponse(response);
+                HttpWebResponse response = GetResponseFromServer();
+                return new FileAPIResponse(response, (int)response.StatusCode, null, response.Headers);
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
