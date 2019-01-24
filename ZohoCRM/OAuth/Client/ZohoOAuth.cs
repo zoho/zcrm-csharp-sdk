@@ -19,8 +19,11 @@ namespace ZCRMSDK.OAuth.Client
         {
             try
             {
-                AddConfigurationData("oauth_configuration");
-                if (configData != null)
+                if(configData == null)
+                {
+                    AddConfigurationData("oauth_configuration");
+                }
+                else
                 {
                     AddConfigurationData(configData);
                 }

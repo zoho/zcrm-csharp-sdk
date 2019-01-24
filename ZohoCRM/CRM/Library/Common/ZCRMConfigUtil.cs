@@ -40,17 +40,20 @@ namespace ZCRMSDK.CRM.Library.Common
         }
 
 
-        public static void Initialize(bool initOAuth, Stream configStream, Dictionary<string, string> configData) {
-
+        public static void Initialize(bool initOAuth, Stream configStream, Dictionary<string, string> configData)
+        {
             Assembly assembly = Assembly.GetAssembly(typeof(ZCRMConfigUtil));
             ConfigProperties = CommonUtil.GetFileAsDict(assembly.GetManifestResourceStream(assembly.GetName().Name + ".Resources.configuration.txt"));
-            Dictionary<string, string> keyValuePairs = CommonUtil.GetConfigFileAsDict("zcrm_configuration");
 
-            foreach (KeyValuePair<string, string> keyValues in keyValuePairs)
+            if(configStream == null && configData == null)
             {
-                ConfigProperties[keyValues.Key] = keyValues.Value;
-            }
+                Dictionary<string, string> keyValuePairs = CommonUtil.GetConfigFileAsDict("zcrm_configuration");
 
+                foreach (KeyValuePair<string, string> keyValues in keyValuePairs)
+                {
+                    ConfigProperties[keyValues.Key] = keyValues.Value;
+                }
+            }
             if(configStream != null)
             {
                 configData = CommonUtil.GetFileAsDict(configStream);
