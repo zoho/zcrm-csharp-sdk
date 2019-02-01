@@ -51,7 +51,7 @@ namespace ZCRMSDK.OAuth.Common
                     }
                 }
                 request.UserAgent = "Mozilla/5.0";
-                var data = Encoding.ASCII.GetBytes(postData);
+                var data = Encoding.UTF8.GetBytes(postData);
 
                 if (RequestHeaders.Count != 0)
                 {

@@ -206,7 +206,7 @@ namespace ZCRMSDK.CRM.Library.Api
                 if (RequestBody.Type != JTokenType.Null && RequestBody.Count > 0)
                 {
                     string dataString = RequestBody.ToString();
-                    var data = Encoding.ASCII.GetBytes(dataString);
+                    var data = Encoding.UTF8.GetBytes(dataString);
                     int dataLength = data.Length;
                     request.ContentType = "application/json";
                     request.ContentLength = dataLength;
