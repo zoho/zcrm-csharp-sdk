@@ -27,7 +27,6 @@ namespace ZCRMSDK.OAuth.Client
                 {
                     AddConfigurationData(configData);
                 }
-
                 List<string> MandatoryKeys = new List<string>() { ZohoOAuthConstants.CLIENT_ID, ZohoOAuthConstants.CLIENT_SECRET, ZohoOAuthConstants.PERSISTENCE_HANDLER_CLASS, ZohoOAuthConstants.REDIRECT_URL };
                 foreach (string key in MandatoryKeys)
                 {
@@ -128,7 +127,6 @@ namespace ZCRMSDK.OAuth.Client
                 }
             }
         }
-
         //AddConfigurationData overloading ends!.
 
         public static string GetConfigValue(string key){

@@ -27,7 +27,27 @@ namespace ZCRMSDK.CRM.Library.CRUD
         {
             return new ZCRMSubform(name, id);
         }
-        private long? Id { get => id; set => id = value; }
-        private string Name { get => name; set => name = value; }
+        private long? Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
+        private string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ using ZCRMSDK.CRM.Library.Common;
 using ZCRMSDK.CRM.Library.CRMException;
 using ZCRMSDK.CRM.Library.CRUD;
 using ZCRMSDK.CRM.Library.Setup.Users;
+using Newtonsoft.Json;
 
 namespace ZCRMSDK.CRM.Library.Api.Handler
 {
@@ -89,7 +90,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                     JObject modifiedByObject = (JObject)moduleDetails["modified_by"];
                     ZCRMUser modifiedUser = ZCRMUser.GetInstance(Convert.ToInt64(modifiedByObject["id"]), (string)modifiedByObject["name"]);
                     module.ModifiedBy = modifiedUser;
-                    module.ModifiedTime = (string)moduleDetails["modified_time"];
+                    module.ModifiedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(moduleDetails["modified_time"]));
                 }
                 if (moduleDetails.ContainsKey("related_lists") && moduleDetails["related_lists"].Type != JTokenType.Null)
                 {

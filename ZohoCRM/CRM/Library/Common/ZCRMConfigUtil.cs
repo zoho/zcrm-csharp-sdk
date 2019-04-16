@@ -17,7 +17,17 @@ namespace ZCRMSDK.CRM.Library.Common
     {
         private static Boolean handleAuthentication;
 
-        public static Boolean HandleAuthentication { get => handleAuthentication; private set => handleAuthentication = value; }
+        public static Boolean HandleAuthentication
+        {
+            get
+            {
+                return handleAuthentication;
+            }
+            private set
+            {
+                handleAuthentication = value;
+            }
+        }
 
         public static Dictionary<string, string> ConfigProperties { get; private set; } = new Dictionary<string, string>();
 

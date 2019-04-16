@@ -32,35 +32,85 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <value>The name of the section.</value>
         /// <returns>String</returns>
-        public string Name { get => name; private set => name = value; }
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            private set
+            {
+                name = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the display name of/for the section.
         /// </summary>
         /// <value>The display name of the section.</value>
         /// <returns>String</returns>
-        public string DisplayName { get => displayName; set => displayName = value; }
+        public string DisplayName
+        {
+            get
+            {
+                return displayName;
+            }
+            set
+            {
+                displayName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the column count of/for the section.
         /// </summary>
         /// <value>The column count of the section.</value>
         /// <returns>Integer</returns>
-        public int ColumnCount { get => columnCount; set => columnCount = value; }
+        public int ColumnCount
+        {
+            get
+            {
+                return columnCount;
+            }
+            set
+            {
+                columnCount = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the sequence of/for the section.
         /// </summary>
         /// <value>The sequence of the section.</value>
         /// <returns>Integer</returns>
-        public int Sequence { get => sequence; set => sequence = value; }
+        public int Sequence
+        {
+            get
+            {
+                return sequence;
+            }
+            set
+            {
+                sequence = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the fields of/for the section.
         /// </summary>
         /// <value>The fields.</value>
         /// <returns>List of ZCRMField class instance</returns>
-        public List<ZCRMField> Fields { get => fields; set => fields = value; }
+        public List<ZCRMField> Fields
+        {
+            get
+            {
+                return fields;
+            }
+            set
+            {
+                fields = value;
+            }
+        }
 
         /// <summary>
         /// To add the field of the section based on ZCRMField class instance.

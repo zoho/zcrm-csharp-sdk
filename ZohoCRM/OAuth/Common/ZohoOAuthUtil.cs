@@ -23,7 +23,7 @@ namespace ZCRMSDK.OAuth.Common
                         if (!values[0].StartsWith("#", StringComparison.CurrentCulture))
                         {
                             string val = null;
-                            if (values.Length == 2 && values[1] != null && values[1] != "" ) 
+                            if (values.Length == 2 && values[1] != null && values[1] != "")
                             {
                                 val = values[1];
                             }
@@ -44,7 +44,8 @@ namespace ZCRMSDK.OAuth.Common
         internal static Dictionary<string, string> GetConfigFileAsDict(string sectionName)
         {
             Dictionary<string, string> retDict = new Dictionary<string, string>();
-            try{
+            try
+            {
                 ExeConfigurationFileMap configurationFileMap = new ExeConfigurationFileMap();
                 Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                 ConfigFileSection section = configuration.GetSection(sectionName) as ConfigFileSection;
@@ -56,7 +57,8 @@ namespace ZCRMSDK.OAuth.Common
                     }
                 }
 
-            }catch(Exception e)
+            }
+            catch(Exception e)
             {
                 ZCRMLogger.LogError(e);
                 throw new ZohoOAuthException(e);

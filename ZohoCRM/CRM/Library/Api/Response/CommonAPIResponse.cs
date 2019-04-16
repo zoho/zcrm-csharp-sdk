@@ -15,7 +15,17 @@ namespace ZCRMSDK.CRM.Library.Api.Response
         protected ResponseHeaders responseHeaders;
         string responseString;
 
-        protected HttpWebResponse Response { get => response; set => response = value; }
+        protected HttpWebResponse Response
+        {
+            get
+            {
+                return response;
+            }
+            set
+            {
+                response = value;
+            }
+        }
 
         //NOTE: Because of naming collision, the properties have been changed to properties;
         public ResponseHeaders GetResponseHeaders() 
@@ -28,19 +38,49 @@ namespace ZCRMSDK.CRM.Library.Api.Response
             responseHeaders = new ResponseHeaders(Response);
         }
 
-        public APIConstants.ResponseCode? HttpStatusCode { get => httpStatusCode; private set => httpStatusCode = value; }
+        public APIConstants.ResponseCode? HttpStatusCode
+        {
+            get
+            {
+                return httpStatusCode;
+            }
+            private set
+            {
+                httpStatusCode = value;
+            }
+        }
 
-        public JObject ResponseJSON { get => responseJSON; set => responseJSON = value; }
+        public JObject ResponseJSON
+        {
+            get
+            {
+                return responseJSON;
+            }
+            set
+            {
+                responseJSON = value;
+            }
+        }
 
         public CommonAPIResponse() { }
 
         public CommonAPIResponse(HttpWebResponse response)
         {
-            Response = response;
-            Init();
-            ProcessResponse();
-            SetResponseHeaders();
-            ZCRMLogger.LogInfo(ToString());
+            try
+            {
+                Response = response;
+                Init();
+                ProcessResponse();
+                SetResponseHeaders();
+            }
+            catch (Exception)
+            { }
+            finally
+            {
+                response.Close();
+                ZCRMLogger.LogInfo(ToString());
+            }
+
         }
 
         protected void Init()
@@ -110,9 +150,39 @@ namespace ZCRMSDK.CRM.Library.Api.Response
                 }
             }
 
-            public int AllowedAPICallsPerMinute { get => allowedAPICallsPerMinute; private set => allowedAPICallsPerMinute = value; }
-            public int RemainingAPICountForThisWindow { get => remainingCountForThisWindow; private set => remainingCountForThisWindow = value; }
-            public long RemainingTimeForThisWindowReset { get => remainingTimeForThisWindowReset; private set => remainingTimeForThisWindowReset = value; }
+            public int AllowedAPICallsPerMinute
+            {
+                get
+                {
+                    return allowedAPICallsPerMinute;
+                }
+                private set
+                {
+                    allowedAPICallsPerMinute = value;
+                }
+            }
+            public int RemainingAPICountForThisWindow
+            {
+                get
+                {
+                    return remainingCountForThisWindow;
+                }
+                private set
+                {
+                    remainingCountForThisWindow = value;
+                }
+            }
+            public long RemainingTimeForThisWindowReset
+            {
+                get
+                {
+                    return remainingTimeForThisWindowReset;
+                }
+                private set
+                {
+                    remainingTimeForThisWindowReset = value;
+                }
+            }
 
             public override string ToString()
             {

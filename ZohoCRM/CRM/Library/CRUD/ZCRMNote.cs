@@ -52,70 +52,170 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <value>The parent record of the note.</value>
         /// <returns>ZCRMRecord class instance</returns>
-        public ZCRMRecord ParentRecord { get => parentRecord; private set => parentRecord = value; }
+        public ZCRMRecord ParentRecord
+        {
+            get
+            {
+                return parentRecord;
+            }
+            private set
+            {
+                parentRecord = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the note Id.
         /// </summary>
         /// <value>The identifier.</value>
         /// <returns>Long</returns>
-        public long? Id { get => id; set => id = value; }
+        public long? Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the title of/for the note.
         /// </summary>
         /// <value>The title of the note.</value>
         /// <returns>String</returns>
-        public string Title { get => title; set => title = value; }
+        public string Title
+        {
+            get
+            {
+                return title;
+            }
+            set
+            {
+                title = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the content of/for the note.
         /// </summary>
         /// <value>The content of the note.</value>
         /// <returns>String</returns>
-        public string Content { get => content; set => content = value; }
+        public string Content
+        {
+            get
+            {
+                return content;
+            }
+            set
+            {
+                content = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user who owner of the notes.
         /// </summary>
         /// <value>The user who owner of the notes.</value>
         /// <returns>ZCRMUser class instance</returns>
-        public ZCRMUser NotesOwner { get => notesOwner; set => notesOwner = value; }
+        public ZCRMUser NotesOwner
+        {
+            get
+            {
+                return notesOwner;
+            }
+            set
+            {
+                notesOwner = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user who created the notes.
         /// </summary>
         /// <value>The user who created the notes.</value>
         /// <returns>ZCRMUser class instance</returns>
-        public ZCRMUser CreatedBy { get => createdBy; set => createdBy = value; }
+        public ZCRMUser CreatedBy
+        {
+            get
+            {
+                return createdBy;
+            }
+            set
+            {
+                createdBy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the created time of/for the notes.
         /// </summary>
         /// <value>The created time of the notes.</value>
         /// <returns>String</returns>
-        public string CreatedTime { get => createdTime; set => createdTime = value; }
+        public string CreatedTime
+        {
+            get
+            {
+                return createdTime;
+            }
+            set
+            {
+                createdTime = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user who modified the notes.
         /// </summary>
         /// <value>The user who modified the notes.</value>
         /// <returns>ZCRMUser class instance</returns>
-        public ZCRMUser ModifiedBy { get => modifiedBy; set => modifiedBy = value; }
+        public ZCRMUser ModifiedBy
+        {
+            get
+            {
+                return modifiedBy;
+            }
+            set
+            {
+                modifiedBy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the modified time of/for the notes.
         /// </summary>
         /// <value>The modified time of the notes.</value>
         /// <returns>String</returns>
-        public string ModifiedTime { get => modifiedTime; set => modifiedTime = value; }
+        public string ModifiedTime
+        {
+            get
+            {
+                return modifiedTime;
+            }
+            set
+            {
+                modifiedTime = value;
+            }
+        }
 
         /// <summary>
         /// Gets the attachments of the notes.
         /// </summary>
         /// <value>The attachments of the notes.</value>
         /// <returns>List of ZCRMAttachment class instance</returns>
-        public List<ZCRMAttachment> Attachments { get => attachments; private set => attachments = value; }
+        public List<ZCRMAttachment> Attachments
+        {
+            get
+            {
+                return attachments;
+            }
+            private set
+            {
+                attachments = value;
+            }
+        }
 
         /// <summary>
         /// To add the attachment of the notes based on ZCRMAttachment class instance.

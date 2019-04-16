@@ -36,34 +36,84 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <value>The Id of the tax.</value>
         /// <returns>Long</returns>
-        public long? Id { get => id; set => id = value; }
+        public long? Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the name of/for the tax.
         /// </summary>
         /// <value>The name of the tax.</value>
         /// <returns>String</returns>
-        public string Name { get => name; set => name = value; }
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the display name of/for the tax.
         /// </summary>
         /// <value>The display name of the tax.</value>
         /// <returns>String</returns>
-        public string DisplayName { get => displayName; set => displayName = value; }
+        public string DisplayName
+        {
+            get
+            {
+                return displayName;
+            }
+            set
+            {
+                displayName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the value of/for the tax.
         /// </summary>
         /// <value>The value of the tax.</value>
         /// <returns>Double</returns>
-        public double Value { get => value; set => this.value = value; }
+        public double Value
+        {
+            get
+            {
+                return value;
+            }
+            set
+            {
+                this.value = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the sequence of/for the tax.
         /// </summary>
         /// <value>The sequence of the tax.</value>
         /// <returns>Integer</returns>
-        public int Sequence { get => sequence; set => sequence = value; }
+        public int Sequence
+        {
+            get
+            {
+                return sequence;
+            }
+            set
+            {
+                sequence = value;
+            }
+        }
     }
 }

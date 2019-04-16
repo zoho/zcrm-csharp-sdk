@@ -15,9 +15,28 @@ namespace ZCRMSDK.OAuth.Common
         private Dictionary<string, string> requestParams = new Dictionary<string, string>();
         private Dictionary<string, string> requestHeaders = new Dictionary<string, string>();
 
-        public string Url { get => url; set => url = value; }
-        public Dictionary<string, string> RequestHeaders { get => requestHeaders; set => requestHeaders = value; }
-
+        public string Url
+        {
+            get
+            {
+                return url;
+            }
+            set
+            {
+                url = value;
+            }
+        }
+        public Dictionary<string, string> RequestHeaders
+        {
+            get
+            {
+                return requestHeaders;
+            }
+            set
+            {
+                requestHeaders = value;
+            }
+        }
         public void AddParam(string key, string value)
         {
             requestParams.Add(key, value);

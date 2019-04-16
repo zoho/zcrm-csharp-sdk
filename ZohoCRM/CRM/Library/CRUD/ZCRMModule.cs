@@ -50,126 +50,296 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <value>The API name of the module.</value>
         /// <returns>String</returns>
-        public string ApiName { get => apiName; private set => apiName = value; }
+        public string ApiName
+        {
+            get
+            {
+                return apiName;
+            }
+            private set
+            {
+                apiName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the ZohoCRM modules' Id.
         /// </summary>
         /// <value>The modules' Id.</value>
         /// <returns>Long</returns>
-        public long Id { get => id; set => id = value; }
+        public long Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the name of/for the module.
         /// </summary>
         /// <value>The name of the module.</value>
         /// <returns>String</returns>
-        public string SystemName { get => systemName; set => systemName = value; }
+        public string SystemName
+        {
+            get
+            {
+                return systemName;
+            }
+            set
+            {
+                systemName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the singular name of/for the module.
         /// </summary>
         /// <value>The singular name of the module.</value>
         /// <returns>String</returns>
-        public string SingularLabel { get => singularLabel; set => singularLabel = value; }
+        public string SingularLabel
+        {
+            get
+            {
+                return singularLabel;
+            }
+            set
+            {
+                singularLabel = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the plural name of/for the module.
         /// </summary>
         /// <value>The plural name of the module.</value>
         /// <returns>String</returns>
-        public string PluralLabel { get => pluralLabel; set => pluralLabel = value; }
+        public string PluralLabel
+        {
+            get
+            {
+                return pluralLabel;
+            }
+            set
+            {
+                pluralLabel = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this module is convertable.
         /// </summary>
         /// <value><c>true</c> if convertable; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool Convertable { get => convertable; set => convertable = value; }
+        public bool Convertable
+        {
+            get
+            {
+                return convertable;
+            }
+            set
+            {
+                convertable = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this module is deletable.
         /// </summary>
         /// <value><c>true</c> if deletable; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool Deletable { get => deletable; set => deletable = value; }
+        public bool Deletable
+        {
+            get
+            {
+                return deletable;
+            }
+            set
+            {
+                deletable = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this module is editable.
         /// </summary>
         /// <value><c>true</c> if editable; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool Editable { get => editable; set => editable = value; }
+        public bool Editable
+        {
+            get
+            {
+                return editable;
+            }
+            set
+            {
+                editable = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this module is viewable.
         /// </summary>
         /// <value><c>true</c> if viewable; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool Viewable { get => viewable; set => viewable = value; }
+        public bool Viewable
+        {
+            get
+            {
+                return viewable;
+            }
+            set
+            {
+                viewable = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this module is custom module.
         /// </summary>
         /// <value><c>true</c> if custom module; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool CustomModule { get => customModule; set => customModule = value; }
+        public bool CustomModule
+        {
+            get
+            {
+                return customModule;
+            }
+            set
+            {
+                customModule = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user who modified the module.
         /// </summary>
         /// <value>The user who modified the module.</value>
         /// <returns>ZCRMUser class instance</returns>
-        public ZCRMUser ModifiedBy { get => modifiedBy; set => modifiedBy = value; }
+        public ZCRMUser ModifiedBy
+        {
+            get
+            {
+                return modifiedBy;
+            }
+            set
+            {
+                modifiedBy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the modified time of/for the module.
         /// </summary>
         /// <value>The modified time of/for the module.</value>
         /// <returns>String</returns>
-        public string ModifiedTime { get => modifiedTime; set => modifiedTime = value; }
+        public string ModifiedTime
+        {
+            get
+            {
+                return modifiedTime;
+            }
+            set
+            {
+                modifiedTime = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the bussiness card fields of/for the module.
         /// </summary>
         /// <value>The bussiness card fields of the module.</value>
         /// <returns>List of string</returns>
-        public List<string> BussinessCardFields { get => bussinessCardFields; set => bussinessCardFields = value; }
+        public List<string> BussinessCardFields
+        {
+            get
+            {
+                return bussinessCardFields;
+            }
+            set
+            {
+                bussinessCardFields = value;
+            }
+        }
 
         /// <summary>
         /// Sets the layouts of the module. 
         /// </summary>
         /// <value>The layouts of the module.</value>
         /// <returns>List of ZCRMLayout class instance</returns>
-        public List<ZCRMLayout> Layouts { set => layouts = value; }
+        public List<ZCRMLayout> Layouts { set { layouts = value; } }
 
         /// <summary>
         /// Gets or sets the related lists of the module.
         /// </summary>
         /// <value>The related lists of the module.</value>
         /// <returns>List of ZCRMModuleRelation class instance</returns>
-        public List<ZCRMModuleRelation> RelatedLists { get => relatedLists; set => relatedLists = value; }
+        public List<ZCRMModuleRelation> RelatedLists
+        {
+            get
+            {
+                return relatedLists;
+            }
+            set
+            {
+                relatedLists = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this module is creatable.
         /// </summary>
         /// <value><c>true</c> if creatable; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool Creatable { get => creatable; set => creatable = value; }
+        public bool Creatable
+        {
+            get
+            {
+                return creatable;
+            }
+            set
+            {
+                creatable = value;
+            }
+        }
 
         /// <summary>
         /// Gets the list of profiles which has access to the module.
         /// </summary>
         /// <value>list of profiles.</value>
         /// <returns>List of ZCRMProfile class instance</returns>
-        public List<ZCRMProfile> AccessibleProfiles { get => accessibleProfiles; private set => accessibleProfiles = value; }
+        public List<ZCRMProfile> AccessibleProfiles
+        {
+            get
+            {
+                return accessibleProfiles;
+            }
+            private set
+            {
+                accessibleProfiles = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this module is API supported.
         /// </summary>
         /// <value><c>true</c> if API supported; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool ApiSupported { get => apiSupported; set => apiSupported = value; }
+        public bool ApiSupported
+        {
+            get
+            {
+                return apiSupported;
+            }
+            set
+            {
+                apiSupported = value;
+            }
+        }
 
         /// <summary>
         /// To get related lists of the module.

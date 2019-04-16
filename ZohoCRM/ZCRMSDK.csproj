@@ -1,37 +1,163 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.props" Condition="Exists('packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.props')" />
+  <Import Project="packages\NuGet.Build.Packaging.0.1.248\build\NuGet.Build.Packaging.props" Condition="Exists('packages\NuGet.Build.Packaging.0.1.248\build\NuGet.Build.Packaging.props')" />
+  <Import Project="packages\NuGet.Build.Packaging.0.1.248\build\NuGet.Build.Packaging.targets" Condition="Exists('packages\NuGet.Build.Packaging.0.1.248\build\NuGet.Build.Packaging.targets')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7109D93A-24B3-4B64-A8FE-8486D211AFE1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZCRMSDK</RootNamespace>
+    <AssemblyName>ZCRMSDK</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PackageId>ZCRMSDK</PackageId>
+    <PackageVersion>2.0.0</PackageVersion>
+    <NeutralLanguage>en-US</NeutralLanguage>
     <Authors>Zoho CRM API Team</Authors>
+    <Description>Provides C# SDK support for Zoho CRM APIs.</Description>
     <Owners>Zoho CRM API Team</Owners>
+    <PackageProjectUrl>https://github.com/zoho/zcrm-csharp-sdk</PackageProjectUrl>
     <Summary>C# SDK offers a way to create client C# applications that can be integrated with Zoho CRM. This SDK makes the access and use of necessary CRM APIs with ease.</Summary>
     <PackageTags>ZCRMSDK,zohocrm,sdk,zcrmsdk</PackageTags>
     <Title>ZCRMSDK</Title>
-    <Description>Provides C# SDK support for Zoho CRM APIs.</Description>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <PackageProjectUrl>https://github.com/zoho/zcrm-csharp-sdk</PackageProjectUrl>
-    <SynchReleaseVersion>false</SynchReleaseVersion>
-    <copyright>© 2019, Zoho Corporation Pvt. Ltd. All Rights Reserved.</copyright>
-    <PackageReleaseNotes>Replaced request body's ASCII encoding technique with UTF-8.</PackageReleaseNotes>
-    <PackageVersion>1.0.4</PackageVersion>
+    <PackageReleaseNotes>Enhancement:
+	- From the version 2.0.0+, SDK is compatible with Visual Studio 2015.
+	- Configuration details have to be passed as a dictionary only.
+	- Support ISO 8601-time format
+Issue fix:
+	- The operation has timed out.</PackageReleaseNotes>
   </PropertyGroup>
-
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>Latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>Latest</LangVersion>
+  </PropertyGroup>
   <ItemGroup>
-    <None Remove="Resources\configuration.txt" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="MySql.Data">
+      <HintPath>packages\MySql.Data.6.9.12\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CRM\Library\Api\APIConstants.cs" />
+    <Compile Include="CRM\Library\Api\APIRequest.cs" />
+    <Compile Include="CRM\Library\Api\APIStats.cs" />
+    <Compile Include="CRM\Library\Api\Handler\CommonAPIHandler.cs" />
+    <Compile Include="CRM\Library\Api\Handler\EntityAPIHandler.cs" />
+    <Compile Include="CRM\Library\Api\Handler\IAPIHandler.cs" />
+    <Compile Include="CRM\Library\Api\Handler\MassEntityAPIHandler.cs" />
+    <Compile Include="CRM\Library\Api\Handler\MetaDataAPIHandler.cs" />
+    <Compile Include="CRM\Library\Api\Handler\ModuleAPIHandler.cs" />
+    <Compile Include="CRM\Library\Api\Handler\OrganizationAPIHandler.cs" />
+    <Compile Include="CRM\Library\Api\Handler\RelatedListAPIHandler.cs" />
+    <Compile Include="CRM\Library\Api\Handler\TagAPIHandler.cs" />
+    <Compile Include="CRM\Library\Api\Response\APIResponse.cs" />
+    <Compile Include="CRM\Library\Api\Response\BulkAPIResponse.cs" />
+    <Compile Include="CRM\Library\Api\Response\CommonAPIResponse.cs" />
+    <Compile Include="CRM\Library\Api\Response\EntityResponse.cs" />
+    <Compile Include="CRM\Library\Api\Response\FileAPIResponse.cs" />
+    <Compile Include="CRM\Library\Common\CommonUtil.cs" />
+    <Compile Include="CRM\Library\Common\ConfigFileHandler\ConfigFileCollection.cs" />
+    <Compile Include="CRM\Library\Common\ConfigFileHandler\ConfigFileElement.cs" />
+    <Compile Include="CRM\Library\Common\ConfigFileHandler\ConfigFileSection.cs" />
+    <Compile Include="CRM\Library\Common\DateTimeUtil.cs" />
+    <Compile Include="CRM\Library\Common\ZCRMConfigUtil.cs" />
+    <Compile Include="CRM\Library\Common\ZCRMEntity.cs" />
+    <Compile Include="CRM\Library\CRMException\ZCRMException.cs" />
+    <Compile Include="CRM\Library\CRMException\ZCRMLogger.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMAttachment.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMCustomView.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMEventParticipant.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMField.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMInventoryLineItem.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMJunctionRecord.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMLayout.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMModule.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMModuleRelation.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMNote.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMOrgTax.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMPickListValue.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMPriceBookPricing.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMRecord.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMSection.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMSubform.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMTag.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMTax.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMTrashRecord.cs" />
+    <Compile Include="CRM\Library\Setup\MetaData\ZCRMOrganization.cs" />
+    <Compile Include="CRM\Library\Setup\RestClient\ZCRMRestClient.cs" />
+    <Compile Include="CRM\Library\Setup\Users\ZCRMProfile.cs" />
+    <Compile Include="CRM\Library\Setup\Users\ZCRMRole.cs" />
+    <Compile Include="CRM\Library\Setup\Users\ZCRMUser.cs" />
+    <Compile Include="OAuth\ClientApp\ZohoOAuthDBPersistence.cs" />
+    <Compile Include="OAuth\ClientApp\ZohoOAuthFilePersistence.cs" />
+    <Compile Include="OAuth\ClientApp\ZohoOAuthInMemoryPersistence.cs" />
+    <Compile Include="OAuth\Client\IZohoPersistenceHandler.cs" />
+    <Compile Include="OAuth\Client\ZohoOAuth.cs" />
+    <Compile Include="OAuth\Client\ZohoOAuthClient.cs" />
+    <Compile Include="OAuth\Common\ZohoHTTPConnector.cs" />
+    <Compile Include="OAuth\Common\ZohoOAuthConstants.cs" />
+    <Compile Include="OAuth\Common\ZohoOAuthException.cs" />
+    <Compile Include="OAuth\Common\ZohoOAuthUtil.cs" />
+    <Compile Include="OAuth\Contract\ZohoOAuthParams.cs" />
+    <Compile Include="OAuth\Contract\ZohoOAuthTokens.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\configuration.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CRM\Library\Common\ConfigFileHandler\" />
-  </ItemGroup>
-  <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="MySql.Data" Version="8.0.14" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
-  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <Import Project="packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.targets" Condition="Exists('packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.targets')" />
 </Project>

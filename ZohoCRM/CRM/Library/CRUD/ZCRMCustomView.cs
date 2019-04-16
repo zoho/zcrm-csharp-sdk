@@ -42,77 +42,187 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <value>The modules' API name.</value>
         /// <returns>String</returns>
-        public string ModuleAPIName { get => moduleAPIName; private set => moduleAPIName = value; }
+        public string ModuleAPIName
+        {
+            get
+            {
+                return moduleAPIName;
+            }
+            private set
+            {
+                moduleAPIName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the custom view Id.
         /// </summary>
         /// <value>The custom view Id.</value>
         /// <returns>Long</returns>
-        public long Id { get => id; set => id = value; }
+        public long Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the name of/for the custom view.
         /// </summary>
         /// <value>The name of custom view.</value>
         /// <returns>String</returns>
-        public string Name { get => name; set => name = value; }
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the system name of/for the custom view.
         /// </summary>
         /// <value>The system name of the custom view.</value>
         /// <returns>String</returns>
-        public string SystemName { get => systemName; set => systemName = value; }
+        public string SystemName
+        {
+            get
+            {
+                return systemName;
+            }
+            set
+            {
+                systemName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the display name of/for the custom view.
         /// </summary>
         /// <value>The display name of the custom view.</value>
         /// <returns>String</returns>
-        public string DisplayName { get => displayName; set => displayName = value; }
+        public string DisplayName
+        {
+            get
+            {
+                return displayName;
+            }
+            set
+            {
+                displayName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the fields of/for the custom view.
         /// </summary>
         /// <value>The fields of the custom view.</value>
         /// <returns>List of string</returns>
-        public List<string> Fields { get => fields; set => fields = value; }
+        public List<string> Fields
+        {
+            get
+            {
+                return fields;
+            }
+            set
+            {
+                fields = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the sort order of/for the custom view.
         /// </summary>
         /// <value>The sort order preference - asc/desc.</value>
         /// <returns>CommonUtil.SortOrder(asc, desc) response </returns>
-        public CommonUtil.SortOrder SortOrder { get => sortOrder; set => sortOrder = value; }
+        public CommonUtil.SortOrder SortOrder
+        {
+            get
+            {
+                return sortOrder;
+            }
+            set
+            {
+                sortOrder = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the sort value of/for custom view.
         /// </summary>
         /// <value>The sort value of/for custom view.</value>
         /// <returns>String</returns>
-        public string SortBy { get => sortBy; set => sortBy = value; }
+        public string SortBy
+        {
+            get
+            {
+                return sortBy;
+            }
+            set
+            {
+                sortBy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the category of/for the custom view.
         /// </summary>
         /// <value>The category of the custom view.</value>
         /// <returns>String</returns>
-        public string Category { get => category; set => category = value; }
+        public string Category
+        {
+            get
+            {
+                return category;
+            }
+            set
+            {
+                category = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this custom view is default.
         /// </summary>
         /// <value><c>true</c> if isdefault; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool Isdefault { get => isdefault; set => isdefault = value; }
+        public bool Isdefault
+        {
+            get
+            {
+                return isdefault;
+            }
+            set
+            {
+                isdefault = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the favourite of/for the custom view.
         /// </summary>
         /// <value>The favourite of the custom view.</value>
         /// <returns>Integer</returns>
-        public int Favourite { get => favourite; set => favourite = value; }
+        public int Favourite
+        {
+            get
+            {
+                return favourite;
+            }
+            set
+            {
+                favourite = value;
+            }
+        }
 
         /// <summary>
         /// To get records of the custom view.

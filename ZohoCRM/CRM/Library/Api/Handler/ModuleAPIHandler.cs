@@ -6,6 +6,7 @@ using ZCRMSDK.CRM.Library.CRMException;
 using ZCRMSDK.CRM.Library.Common;
 using ZCRMSDK.CRM.Library.Setup.Users;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ZCRMSDK.CRM.Library.Api.Handler
 {
@@ -179,14 +180,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 JObject createdByObject = (JObject)layoutDetails["created_by"];
                 ZCRMUser createdUser = ZCRMUser.GetInstance(Convert.ToInt64(createdByObject["id"]), Convert.ToString(createdByObject["name"]));
                 layout.CreatedBy = createdUser;
-                layout.CreatedTime = (string)layoutDetails["created_time"];
+                layout.CreatedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(layoutDetails["created_time"]));
             }
             if (layoutDetails["modified_by"].HasValues)
             {
                 JObject modifiedByObject = (JObject)layoutDetails["modified_by"];
                 ZCRMUser modifiedUser = ZCRMUser.GetInstance(Convert.ToInt64(modifiedByObject["id"]), Convert.ToString(modifiedByObject["name"]));
                 layout.ModifiedBy = modifiedUser;
-                layout.ModifiedTime = (string)layoutDetails["modified_time"];
+                layout.ModifiedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(layoutDetails["modified_time"]));
             }
             JArray accessibleProfilesArray = (JArray)layoutDetails["profiles"];
             foreach (JObject profileObject in accessibleProfilesArray)

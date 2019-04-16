@@ -32,21 +32,51 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <value>The APIName of the JunctionRecord.</value>
         /// <returns>String</returns>
-        public string ApiName { get => apiName; private set => apiName = value; }
+        public string ApiName
+        {
+            get
+            {
+                return apiName;
+            }
+            private set
+            {
+                apiName = value;
+            }
+        }
 
         /// <summary>
         /// Gets the JunctionRecord Id.
         /// </summary>
         /// <value>The Id of the JunctionRecord.</value>
         /// <returns>Long</returns>
-        public long Id { get => id; private set => id = value; }
+        public long Id
+        {
+            get
+            {
+                return id;
+            }
+            private set
+            {
+                id = value;
+            }
+        }
 
         /// <summary>
         /// Gets the related details of the JunctionRecord.
         /// </summary>
         /// <value>The related details of the JunctionRecord.</value>
         /// <returns>Dictionary(String,Object)</returns>
-        public Dictionary<string, object> RelatedDetails { get => relatedDetails; private set => relatedDetails = value; }
+        public Dictionary<string, object> RelatedDetails
+        {
+            get
+            {
+                return relatedDetails;
+            }
+            private set
+            {
+                relatedDetails = value;
+            }
+        }
 
         /// <summary>
         /// To set the related details of the JunctionRecord based on field APIName and value.

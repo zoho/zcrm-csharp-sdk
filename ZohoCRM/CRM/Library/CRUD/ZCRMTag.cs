@@ -40,55 +40,135 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// Gets or sets the Id of/for the tag.
         /// </summary>
         /// <value>The Id of the tag.</value>
-        public long? Id { get => id; set => id = value; }
+        public long? Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the name of/for the tag.
         /// </summary>
         /// <value>The name of the tag.</value>
         /// <returns>String</returns>
-        public string Name { get => name; set => name = value; }
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user who created the tag.
         /// </summary>
         /// <value>The user who created the tag.</value>
         /// <returns>ZCRMUser class instance</returns>
-        public ZCRMUser CreatedBy { get => createdBy; set => createdBy = value; }
+        public ZCRMUser CreatedBy
+        {
+            get
+            {
+                return createdBy;
+            }
+            set
+            {
+                createdBy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the created time of/for the tag.
         /// </summary>
         /// <value>The created time of the tag.</value>
         /// <returns>String</returns>
-        public string CreatedTime { get => createdTime; set => createdTime = value; }
+        public string CreatedTime
+        {
+            get
+            {
+                return createdTime;
+            }
+            set
+            {
+                createdTime = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user who modified the tag.
         /// </summary>
         /// <value>The user who modified the tag.</value>
         /// <returns>ZCRMUser class instance</returns>
-        public ZCRMUser ModifiedBy { get => modifiedBy; set => modifiedBy = value; }
+        public ZCRMUser ModifiedBy
+        {
+            get
+            {
+                return modifiedBy;
+            }
+            set
+            {
+                modifiedBy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the modified time of/for the tag.
         /// </summary>
         /// <value>The modified time of the tag.</value>
         /// <returns>ZCRMUser class instance</returns>
-        public string ModifiedTime { get => modifiedTime; set => modifiedTime = value; }
+        public string ModifiedTime
+        {
+            get
+            {
+                return modifiedTime;
+            }
+            set
+            {
+                modifiedTime = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the count of/for the tag.
         /// </summary>
         /// <value>The count of the tag.</value>
         /// <returns>Integer</returns>
-        public int Count { get => count; set =>count = value; }
+        public int Count
+        {
+            get
+            {
+                return count;
+            }
+            set
+            {
+                count = value;
+            }
+        }
 
         /// <summary>
         /// Gets or set the APIName of/for the module.
         /// </summary>
         /// <value>The name of the module API.</value>
-        public string ModuleApiName { get => moduleApiName; set => moduleApiName = value; }
+        public string ModuleApiName
+        {
+            get
+            {
+                return moduleApiName;
+            }
+            set
+            {
+                moduleApiName = value;
+            }
+        }
 
         /// <summary>
         /// To delete tag specified tag Id.

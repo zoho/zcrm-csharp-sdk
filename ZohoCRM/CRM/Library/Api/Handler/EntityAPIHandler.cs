@@ -6,6 +6,7 @@ using ZCRMSDK.CRM.Library.Setup.Users;
 using ZCRMSDK.CRM.Library.Api.Response;
 using ZCRMSDK.CRM.Library.CRMException;
 using ZCRMSDK.CRM.Library.Common;
+using Newtonsoft.Json;
 
 namespace ZCRMSDK.CRM.Library.Api.Handler
 {
@@ -49,7 +50,8 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public APIResponse CreateRecord()
         {
-            try{
+            try
+            {
                 requestMethod = APIConstants.RequestMethod.POST;
                 urlPath = record.ModuleAPIName;
                 JObject requestBodyObject = new JObject();
@@ -76,7 +78,8 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public APIResponse UpdateRecord()
         {
-            try{
+            try
+            {
                 requestMethod = APIConstants.RequestMethod.PUT;
                 urlPath = record.ModuleAPIName + "/" + record.EntityId;
                 JObject requestBodyObject = new JObject();
@@ -119,7 +122,8 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public Dictionary<string, long> ConvertRecord(ZCRMRecord potential, ZCRMUser assignToUser)
         {
-            try{
+            try
+            {
                 requestMethod = APIConstants.RequestMethod.POST;
                 urlPath = record.ModuleAPIName + "/" + record.EntityId + "/actions/convert";
                 JObject requestBodyObject = new JObject();
@@ -131,7 +135,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
                 if(potential != null)
                 {
-                    dataObject.Add(APIConstants.DEALS, GetInstance(potential).GetZCRMRecordAsJSON());                   
+                    dataObject.Add(APIConstants.DEALS, GetInstance(potential).GetZCRMRecordAsJSON());
                 }
                 dataArray.Add(dataObject);
                 requestBodyObject.Add(APIConstants.DATA, dataArray);
@@ -260,11 +264,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
                 else if (fieldAPIName.Equals("Created_Time"))
                 {
-                    record.CreatedTime = (string)token.Value;
+                    record.CreatedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(token.Value));
                 }
                 else if (fieldAPIName.Equals("Modified_Time"))
                 {
-                    record.ModifiedTime = (string)token.Value;
+                    record.ModifiedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(token.Value));
                 }
                 else if (fieldAPIName.Equals("Owner") && token.Value.Type != JTokenType.Null)
                 {
@@ -330,17 +334,18 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                     {
                         tags.Add(tag);
                     }
-                    record.Tags = tags;
+                    record.TagNames = tags;
                 }
                 else if (fieldAPIName.Equals("Tag") && token.Value.Type != JTokenType.Null)
                 {
                     JArray jsonArray = (JArray)token.Value;
-                    List<string> tags = new List<string>();
                     foreach (JObject tag in jsonArray)
                     {
-                        tags.Add(tag.GetValue("name").ToString());
+                        ZCRMTag tagIns = ZCRMTag.GetInstance(Convert.ToInt64(tag.GetValue("id")));
+                        tagIns.Name = tag.GetValue("name").ToString();
+                        record.Tags.Add(tagIns);
+
                     }
-                    record.Tags = tags;
                 }
                 else if (fieldAPIName.StartsWith("$", StringComparison.CurrentCulture))
                 {
@@ -361,8 +366,9 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                     lookupRecord.LookupLabel = (string)lookupDetails["name"];
                     record.SetFieldValue(fieldAPIName, lookupRecord);
                 }
-                else if (token.Value is JArray jsonArray)
+                else if (token.Value is JArray)
                 {
+                    JArray jsonArray = (JArray)token.Value;
                     List<object> values = new List<object>();
 
                     foreach (Object obj in jsonArray)
@@ -380,7 +386,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
                 else
                 {
-                    record.SetFieldValue(fieldAPIName, token.Value);
+                    if(token.Value.Type.ToString().Equals("Date"))
+                    {
+                        record.SetFieldValue(fieldAPIName, CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(token.Value)));
+                    }
+                    else
+                    {
+                        record.SetFieldValue(fieldAPIName, token.Value);
+                    }
                 }
             }
         }
@@ -442,32 +455,20 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         private ZCRMEventParticipant GetZCRMParticipant(JObject participantDetails)
         {
-            object participantId = participantDetails["participant"];
+            long Id = Convert.ToInt64(participantDetails["id"]);
             string type = (string)participantDetails["type"];
-
-            ZCRMEventParticipant participant = null;
-            if (type != "email")
-            {
-                participant = ZCRMEventParticipant.GetInstance(type, Convert.ToInt64(participantId));
-                participant.Name = (string)participantDetails["name"];
-                participant.Email = (string)participantDetails["Email"];
-                participant.IsInvited = (bool)participantDetails["invited"];
-                participant.Status = (string)participantDetails["status"];
-            }
-            else
-            {
-                participant = ZCRMEventParticipant.GetInstance(type, 0L);
-                participant.Name = (string)participantDetails["name"];
-                participant.IsInvited = (bool)participantDetails["invited"];
-                participant.Status = (string)participantDetails["status"];
-            }
+            ZCRMEventParticipant participant = ZCRMEventParticipant.GetInstance(type, Id);
+            participant.Name = (string)participantDetails["name"];
+            participant.Email = (string)participantDetails["Email"];
+            participant.IsInvited = (bool)participantDetails["invited"];
+            participant.Status = (string)participantDetails["status"];
+            participant.Participant = (string)participantDetails["participant"];
             return participant;
         }
 
         private ZCRMPriceBookPricing GetZCRMPriceDetail(JObject priceDetail)
         {
             long id = Convert.ToInt64(priceDetail["id"]);
-
             ZCRMPriceBookPricing pricing = ZCRMPriceBookPricing.GetInstance(id);
             pricing.Discount = Convert.ToDouble(priceDetail["discount"]);
             pricing.ToRange = Convert.ToDouble(priceDetail["to_range"]);
@@ -476,7 +477,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             return pricing;
         }
 
-       
+
         public JObject GetZCRMRecordAsJSON()
         {
             JObject recordJSON = new JObject();
@@ -496,8 +497,10 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 recordJSON.Add("Participants", GetParticipantsAsJSONArray());
             if (GetPriceDetailsAsJSONArray() != null)
                 recordJSON.Add("Pricing_Details", GetPriceDetailsAsJSONArray());
-            if (GetTaxAsJSONArray() != null)
+            if (GetTaxAsJSONArray() != null && record.ModuleAPIName.Equals("Products"))
                 recordJSON.Add("Tax", GetTaxAsJSONArray());
+            if (GetTaxAsJSONArray() != null)
+                recordJSON.Add("$line_tax", GetTaxAsJSONArray());
             return recordJSON;
         }
 
@@ -635,7 +638,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         {
             JObject participantJSON = new JObject
             {
-                { "participant", participant.Id.ToString() },
+                { "participant", participant.Id == 0?participant.Participant:participant.Id.ToString()},
                 { "type", participant.Type },
                 { "name", participant.Name },
                 { "Email", participant.Email },

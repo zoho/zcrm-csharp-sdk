@@ -6,6 +6,7 @@ using ZCRMSDK.CRM.Library.Common;
 using ZCRMSDK.CRM.Library.CRMException;
 using ZCRMSDK.CRM.Library.CRUD;
 using ZCRMSDK.CRM.Library.Setup.Users;
+using Newtonsoft.Json;
 
 namespace ZCRMSDK.CRM.Library.Api.Handler
 {
@@ -397,7 +398,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
                 else if(fieldAPIName.Equals("deleted_time"))
                 {
-                    trashRecord.DeletedTime = Convert.ToString(trashRecordDetail.Value);
+                    trashRecord.DeletedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(trashRecordDetail.Value));
                 }
             }
         }

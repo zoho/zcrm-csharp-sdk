@@ -13,17 +13,40 @@ namespace ZCRMSDK.CRM.Library.CRMException
         private Exception originalException;
         private JObject errorDetails;
 
-        internal string Code { get => code; private set => code = value; }
+        internal string Code
+        {
+            get
+            {
+                return code;
+            }
+            private set
+            {
+                code = value;
+            }
+        }
         internal string ErrorMsg { 
             get {
                 if (originalException != null)
                     return originalException.ToString();
                 return errorMsg;
             }
-            private set => errorMsg = value; 
+            private set
+            {
+                errorMsg = value;
+            }
         }
 
-        internal JObject ErrorDetails { get => errorDetails; private set => errorDetails = value; }
+        internal JObject ErrorDetails
+        {
+            get
+            {
+                return errorDetails;
+            }
+            private set
+            {
+                errorDetails = value;
+            }
+        }
 
         public ZCRMException(string code, string message, JObject errorDetails) : base(message)
         {

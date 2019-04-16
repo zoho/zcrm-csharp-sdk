@@ -11,11 +11,41 @@ namespace ZCRMSDK.OAuth.Contract
         private string refreshToken;
         private long expiryTime;
 
-        public string UserMaiilId { get => userMailId; set => userMailId = value; }
+        public string UserMaiilId
+        {
+            get
+            {
+                return userMailId;
+            }
+            set
+            {
+                userMailId = value;
+            }
+        }
 
-        public string RefreshToken { get => refreshToken; set => refreshToken = value; }
+        public string RefreshToken
+        {
+            get
+            {
+                return refreshToken;
+            }
+            set
+            {
+                refreshToken = value;
+            }
+        }
 
-        public long ExpiryTime { get => expiryTime; set => expiryTime = value; }
+        public long ExpiryTime
+        {
+            get
+            {
+                return expiryTime;
+            }
+            set
+            {
+                expiryTime = value;
+            }
+        }
 
         public string AccessToken { 
             get {
@@ -24,7 +54,10 @@ namespace ZCRMSDK.OAuth.Contract
                 }
                 throw new ZohoOAuthException("Access token expired");
             }
-            set => accessToken = value; 
+            set
+            {
+                accessToken = value;
+            }
         }
 
         private bool IsAccessTokenValid(){

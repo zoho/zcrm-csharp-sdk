@@ -10,6 +10,8 @@ using ZCRMSDK.CRM.Library.Api.Response;
 using ZCRMSDK.CRM.Library.Setup.RestClient;
 using ZCRMSDK.CRM.Library.CRMException;
 using System.Reflection;
+using System.Xml;
+using Newtonsoft.Json;
 
 namespace ZCRMSDK.CRM.Library.Api
 {
@@ -25,9 +27,39 @@ namespace ZCRMSDK.CRM.Library.Api
         private Stream fileRequestBody;
         private Stream requestStream = null;
 
-        private Dictionary<string, string> RequestHeaders { get => requestHeaders; set => requestHeaders = value; }
-        private Dictionary<string, string> RequestParams { get => requestParams; set => requestParams = value; }
-        private JObject RequestBody { get => requestBody; set => requestBody = value; }
+        private Dictionary<string, string> RequestHeaders
+        {
+            get
+            {
+                return requestHeaders;
+            }
+            set
+            {
+                requestHeaders = value;
+            }
+        }
+        private Dictionary<string, string> RequestParams
+        {
+            get
+            {
+                return requestParams;
+            }
+            set
+            {
+                requestParams = value;
+            }
+        }
+        private JObject RequestBody
+        {
+            get
+            {
+                return requestBody;
+            }
+            set
+            {
+                requestBody = value;
+            }
+        }
 
 
         private APIRequest(IAPIHandler handler)
@@ -80,12 +112,24 @@ namespace ZCRMSDK.CRM.Library.Api
         {
             foreach(KeyValuePair<string, string> keyValuePairs in RequestHeaders)
             {
-                if(keyValuePairs.Value != null && keyValuePairs.Value != "")
+                if (!string.IsNullOrEmpty(keyValuePairs.Value))
                 {
-                    request.Headers[keyValuePairs.Key] = keyValuePairs.Value;   
+                    if (WebHeaderCollection.IsRestricted(keyValuePairs.Key))
+                    {
+                        if (keyValuePairs.Key == "If-Modified-Since")
+                        {
+                            DateTime dateConversion = XmlConvert.ToDateTime(CommonUtil.removeEscaping(JsonConvert.SerializeObject(keyValuePairs.Value)), XmlDateTimeSerializationMode.Utc);
+                            request.IfModifiedSince = dateConversion;
+                        }
+                    }
+                    else
+                    {
+
+                        request.Headers[keyValuePairs.Key] = keyValuePairs.Value;
+                    }
                 }
             }
-         
+
         }
 
         private void AuthenticateRequest()

@@ -93,70 +93,170 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <value>The APIName of the module relation.</value>
         /// <returns>String</returns>
-        public string ApiName { get => apiName; set => apiName = value; }
+        public string ApiName
+        {
+            get
+            {
+                return apiName;
+            }
+            set
+            {
+                apiName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the Id of/for the module relation.
         /// </summary>
         /// <value>The Id of the module relation.</value>
         /// <returns>Long</returns>
-        public long Id { get => id; set => id = value; }
+        public long Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
 
         /// <summary>
         /// Gets the parent module API Name of the module relation.
         /// </summary>
         /// <value>The parent module API Name of the module relation.</value>
         /// <returns>String</returns>
-        public string ParentModuleAPIName { get => parentModuleAPIName; private set => parentModuleAPIName = value; }
+        public string ParentModuleAPIName
+        {
+            get
+            {
+                return parentModuleAPIName;
+            }
+            private set
+            {
+                parentModuleAPIName = value;
+            }
+        }
 
         /// <summary>
         /// Gets the parent record of the module relation.
         /// </summary>
         /// <value>The parent record of the module relation.</value>
         /// <returns>ZCRMRecord class instance</returns>
-        public ZCRMRecord ParentRecord { get => parentRecord; private set => parentRecord = value; }
+        public ZCRMRecord ParentRecord
+        {
+            get
+            {
+                return parentRecord;
+            }
+            private set
+            {
+                parentRecord = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the junction record of/for the module relation.
         /// </summary>
         /// <value>The junction record of the module relation.</value>
         /// <returns>ZCRMJunctionRecord class instance</returns>
-        private ZCRMJunctionRecord JunctionRecord { get => junctionRecord; set => junctionRecord = value; }
+        private ZCRMJunctionRecord JunctionRecord
+        {
+            get
+            {
+                return junctionRecord;
+            }
+            set
+            {
+                junctionRecord = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the module name of/for the module relation.
         /// </summary>
         /// <value>The module name of the module relation.</value>
         /// <returns>String</returns>
-        public string Module { get => module; set => module = value; }
+        public string Module
+        {
+            get
+            {
+                return module;
+            }
+            set
+            {
+                module = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the label of/for the module relation.
         /// </summary>
         /// <value>The label of the module relation.</value>
         /// <returns>String</returns>
-        public string Label { get => label; set => label = value; }
+        public string Label
+        {
+            get
+            {
+                return label;
+            }
+            set
+            {
+                label = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the name of/for the module relation.
         /// </summary>
         /// <value>The name of the module relation.</value>
         /// <returns>String</returns>
-        public string Name { get => name; set => name = value; }
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether module relation is visible.
         /// </summary>
         /// <value><c>true</c> if visible; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool Visible { get => visible; set => visible = value; }
+        public bool Visible
+        {
+            get
+            {
+                return visible;
+            }
+            set
+            {
+                visible = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the type of/for the module relation.
         /// </summary>
         /// <value>The type.</value>
         /// <returns>String</returns>
-        public string Type { get => type; set => type = value; }
+        public string Type
+        {
+            get
+            {
+                return type;
+            }
+            set
+            {
+                type = value;
+            }
+        }
 
         /// <summary>
         /// To get all records of the module relation.

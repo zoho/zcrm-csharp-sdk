@@ -5,6 +5,8 @@ using ZCRMSDK.CRM.Library.Api.Response;
 using ZCRMSDK.CRM.Library.CRMException;
 using ZCRMSDK.CRM.Library.CRUD;
 using ZCRMSDK.CRM.Library.Setup.Users;
+using Newtonsoft.Json;
+using ZCRMSDK.CRM.Library.Common;
 
 namespace ZCRMSDK.CRM.Library.Api.Handler
 {
@@ -447,11 +449,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
                 else if (fieldAPIName.Equals("created_time"))
                 {
-                    tag.CreatedTime = Convert.ToString(token.Value);
+                    tag.CreatedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(token.Value));
                 }
                 else if (fieldAPIName.Equals("modified_time"))
                 {
-                    tag.ModifiedTime = Convert.ToString(token.Value);
+                    tag.ModifiedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(token.Value));
                 }
                 else if (fieldAPIName.Equals("count"))
                 {

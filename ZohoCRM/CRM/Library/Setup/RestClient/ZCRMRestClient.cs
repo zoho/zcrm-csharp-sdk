@@ -36,7 +36,7 @@ namespace ZCRMSDK.CRM.Library.Setup.RestClient
         /// <summary>
         /// To Initialize SDK with configuration property values through app.config.
         /// </summary>
-        public static void Initialize()
+       /* public static void Initialize()
         {
             Initialize(true);
         }
@@ -53,7 +53,7 @@ namespace ZCRMSDK.CRM.Library.Setup.RestClient
         public static void Initialize(Stream inputStream)
         {
             ZCRMConfigUtil.CustomInitialize(inputStream);
-        }
+        }*/
 
         /// <summary>
         /// To Initialize SDK with configuration property values through Dictionary.

@@ -7,6 +7,7 @@ using ZCRMSDK.CRM.Library.CRMException;
 using ZCRMSDK.CRM.Library.Setup.MetaData;
 using ZCRMSDK.CRM.Library.Setup.Users;
 using ZCRMSDK.CRM.Library.Common;
+using Newtonsoft.Json;
 
 namespace ZCRMSDK.CRM.Library.Api.Handler
 {
@@ -235,14 +236,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 JObject createdByObject = (JObject)userDetails["created_by"];
                 ZCRMUser createdUser = ZCRMUser.GetInstance((long)createdByObject["id"], (string)createdByObject["name"]);
                 user.CreatedBy = createdUser;
-                user.CreatedTime = (string)userDetails["created_time"];
+                user.CreatedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(userDetails["created_time"]));
             }
             if (userDetails.ContainsKey("Modified_By") && userDetails["Modified_By"].Type != JTokenType.Null)
             {
                 JObject modifiedByObject = (JObject)userDetails["Modified_By"];
                 ZCRMUser modifiedByUser = ZCRMUser.GetInstance((long)modifiedByObject["id"], (string)modifiedByObject["name"]);
                 user.ModifiedBy = modifiedByUser;
-                user.ModifiedTime = (string)userDetails["Modified_Time"];
+                user.ModifiedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(userDetails["Modified_Time"]));
             }
             if (userDetails.ContainsKey("Reporting_To") && userDetails["Reporting_To"].Type != JTokenType.Null)
             {

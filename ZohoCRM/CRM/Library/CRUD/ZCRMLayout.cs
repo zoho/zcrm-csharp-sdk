@@ -38,70 +38,170 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <value>The Id of the layout.</value>
         /// <returns>Long</returns>
-        public long Id { get => id; private set => id = value; }
+        public long Id
+        {
+            get
+            {
+                return id;
+            }
+            private set
+            {
+                id = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the name of/for the layout.
         /// </summary>
         /// <value>The name of the layout.</value>
         /// <returns>String</returns>
-        public string Name { get => name; set => name = value; }
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user who created the layout.
         /// </summary>
         /// <value>The user who created the layout.</value>
         /// <returns>ZCRMUser class instance</returns>
-        public ZCRMUser CreatedBy { get => createdBy; set => createdBy = value; }
+        public ZCRMUser CreatedBy
+        {
+            get
+            {
+                return createdBy;
+            }
+            set
+            {
+                createdBy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the created time of/for the layout.
         /// </summary>
         /// <value>The created time of the layout.</value>
         /// <returns>String</returns>
-        public string CreatedTime { get => createdTime; set => createdTime = value; }
+        public string CreatedTime
+        {
+            get
+            {
+                return createdTime;
+            }
+            set
+            {
+                createdTime = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user who modified the layout.
         /// </summary>
         /// <value>The user who modified the layout.</value>
         /// <returns>ZCRMUser class instance</returns>
-        public ZCRMUser ModifiedBy { get => modifiedBy; set => modifiedBy = value; }
+        public ZCRMUser ModifiedBy
+        {
+            get
+            {
+                return modifiedBy;
+            }
+            set
+            {
+                modifiedBy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the modified time of/for the layout.
         /// </summary>
         /// <value>The modified time of the layout.</value>
         /// <returns>String</returns>
-        public string ModifiedTime { get => modifiedTime; set => modifiedTime = value; }
+        public string ModifiedTime
+        {
+            get
+            {
+                return modifiedTime;
+            }
+            set
+            {
+                modifiedTime = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this layout is visible.
         /// </summary>
         /// <value><c>true</c> if visible; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool Visible { get => visible; set => visible = value; }
+        public bool Visible
+        {
+            get
+            {
+                return visible;
+            }
+            set
+            {
+                visible = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the status of/for the layout.
         /// </summary>
         /// <value>The status of the layout.</value>
         /// <returns>Integer</returns>
-        public int Status { get => status; set => status = value; }
+        public int Status
+        {
+            get
+            {
+                return status;
+            }
+            set
+            {
+                status = value;
+            }
+        }
 
         /// <summary>
         /// Gets the accessible profies of the layout.
         /// </summary>
         /// <value>The accessible profies of the layout.</value>
         /// <returns>List of ZCRMProfile class instance</returns>
-        public List<ZCRMProfile> AccessibleProfies { get => accessibleProfies; private set => accessibleProfies = value; }
+        public List<ZCRMProfile> AccessibleProfies
+        {
+            get
+            {
+                return accessibleProfies;
+            }
+            private set
+            {
+                accessibleProfies = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the sections of/for the layout.
         /// </summary>
         /// <value>The sections of the layout.</value>
         /// <returns>List of ZCRMSection class instance</returns>
-        public List<ZCRMSection> Sections { get => sections; set => sections = value; }
+        public List<ZCRMSection> Sections
+        {
+            get
+            {
+                return sections;
+            }
+            set
+            {
+                sections = value;
+            }
+        }
 
         /// <summary>
         /// To add the accessible profiles of the layout based on ZCRMProfile class instance.

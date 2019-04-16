@@ -6,6 +6,7 @@ using ZCRMSDK.CRM.Library.Common;
 using ZCRMSDK.CRM.Library.CRMException;
 using ZCRMSDK.CRM.Library.CRUD;
 using ZCRMSDK.CRM.Library.Setup.Users;
+using Newtonsoft.Json;
 
 namespace ZCRMSDK.CRM.Library.Api.Handler
 {
@@ -88,7 +89,8 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public BulkAPIResponse<ZCRMNote> GetNotes(string sortByField, CommonUtil.SortOrder? sortOrder, int page, int perPage, string modifiedSince)
         {
-            try{
+            try
+            {
                 requestMethod = APIConstants.RequestMethod.GET;
                 urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + relatedList.ApiName;
                 if(sortByField != null)
@@ -130,7 +132,8 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public APIResponse AddNote(ZCRMNote note)
         {
-            try{
+            try
+            {
                 requestMethod = APIConstants.RequestMethod.POST;
                 urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + relatedList.ApiName;
                 JObject requestBodyObject = new JObject();
@@ -207,7 +210,8 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public BulkAPIResponse<ZCRMAttachment> GetAttachments(int page, int perPage, string modifiedSince)
         {
-            try{
+            try
+            {
                 requestMethod = APIConstants.RequestMethod.GET;
                 urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + relatedList.ApiName;
                 requestQueryParams.Add(APIConstants.PAGE, page.ToString());
@@ -324,12 +328,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             JObject createdByObject = (JObject)noteDetails["Created_By"];
             ZCRMUser createdBy = ZCRMUser.GetInstance(Convert.ToInt64(createdByObject["id"]), (string)createdByObject["name"]);
             note.CreatedBy = createdBy;
-            note.CreatedTime = (string)noteDetails["Created_Time"];
+            note.CreatedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(noteDetails["Created_Time"]));
 
             JObject modifiedByObject = (JObject)noteDetails["Modified_By"];
             ZCRMUser modifiedBy = ZCRMUser.GetInstance(Convert.ToInt64(modifiedByObject["id"]), (string)modifiedByObject["name"]);
             note.ModifiedBy = modifiedBy;
-            note.ModifiedTime = (string)noteDetails["Modified_Time"];
+            note.ModifiedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(noteDetails["Modified_Time"]));
 
             if (noteDetails["Owner"] != null && noteDetails["Owner"].Type != JTokenType.Null)
             {
@@ -392,7 +396,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 JObject createdByObject = (JObject)attachmentDetails["Created_By"];
                 ZCRMUser createdBy = ZCRMUser.GetInstance(Convert.ToInt64(createdByObject["id"]), (string)createdByObject["name"]);
                 attachment.CreatedBy = createdBy;
-                attachment.CreatedTime = (string)attachmentDetails["Created_Time"];
+                attachment.CreatedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(attachmentDetails["Created_Time"]));
 
                 if (attachmentDetails["Owner"] != null && attachmentDetails["Owner"].Type != JTokenType.Null)
                 {
@@ -410,7 +414,43 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 JObject modifiedByObject = (JObject)attachmentDetails["Modified_By"];
                 ZCRMUser modifiedBy = ZCRMUser.GetInstance(Convert.ToInt64(modifiedByObject["id"]), (string)modifiedByObject["name"]);
                 attachment.ModifiedBy = modifiedBy;
-                attachment.ModifiedTime = (string)attachmentDetails["Modified_Time"];
+                attachment.ModifiedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(attachmentDetails["Modified_Time"]));
+            }
+
+            if (attachmentDetails.ContainsKey("$editable"))
+            {
+                if (attachmentDetails["$editable"] != null)
+                {
+                    attachment.Editable = Convert.ToBoolean(attachmentDetails["$editable"]);
+                }
+            }
+            if (attachmentDetails.ContainsKey("$file_id"))
+            {
+                if (attachmentDetails["$file_id"] != null)
+                {
+                    attachment.FieldId = Convert.ToString(attachmentDetails["$file_id"]);
+                }
+            }
+            if (attachmentDetails.ContainsKey("$type"))
+            {
+                if (attachmentDetails["$type"] != null)
+                {
+                    attachment.Type = Convert.ToString(attachmentDetails["$type"]);
+                }
+            }
+            if (attachmentDetails.ContainsKey("$se_module"))
+            {
+                if (attachmentDetails["$se_module"] != null)
+                {
+                    attachment.Se_module = Convert.ToString(attachmentDetails["$se_module"]);
+                }
+            }
+            if (attachmentDetails.ContainsKey("$link_url"))
+            {
+                if (attachmentDetails["$link_url"] != null)
+                {
+                    attachment.Link_url = Convert.ToString(attachmentDetails["$link_url"]);
+                }
             }
 
             return attachment;
@@ -448,7 +488,8 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     relatedDetailsJSON.Add(keyValuePairs.Key, Convert.ToInt32(value));
                 }
-                else{
+                else
+                {
                     relatedDetailsJSON.Add(keyValuePairs.Key, value.ToString());
                 }
 

@@ -28,7 +28,8 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private string modifiedTime;
         private ZCRMLayout layout;
         private List<ZCRMTax> taxList = new List<ZCRMTax>();
-        private List<string> tags = new List<string>();
+        private List<ZCRMTag> tags = new List<ZCRMTag>();
+        private List<string> tagnames = new List<string>();
 
 
         private ZCRMRecord(string module, long? id)
@@ -59,112 +60,288 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <value>The APIName of the module.</value>
         /// <returns>String</returns>
-        public string ModuleAPIName { get => moduleAPIName; private set => moduleAPIName = value; }
+        public string ModuleAPIName
+        {
+            get
+            {
+                return moduleAPIName;
+            }
+            private set
+            {
+                moduleAPIName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the Id of/for the record.
         /// </summary>
         /// <value>The entity(record) Id of the record.</value>
         /// <returns>Long</returns>
-        public long? EntityId { get => entityId; set => entityId = value; }
+        public long? EntityId
+        {
+            get
+            {
+                return entityId;
+            }
+            set
+            {
+                entityId = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the lookup label of/for the record.
         /// </summary>
         /// <value>The lookup label of the record.</value>
         /// <returns>String</returns>
-        public string LookupLabel { get => lookupLabel; set => lookupLabel = value; }
+        public string LookupLabel
+        {
+            get
+            {
+                return lookupLabel;
+            }
+            set
+            {
+                lookupLabel = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the layout of/for the record.
         /// </summary>
         /// <value>The layout of the record.</value>
         /// <returns>ZCRMLayout class instance</returns>
-        public ZCRMLayout Layout { get => layout; set => layout = value; }
+        public ZCRMLayout Layout
+        {
+            get
+            {
+                return layout;
+            }
+            set
+            {
+                layout = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user who owner of the record.
         /// </summary>
         /// <value>The owner.</value>
         /// <returns>ZCRMUser class instance</returns>
-        public ZCRMUser Owner { get => owner; set => owner = value; }
+        public ZCRMUser Owner
+        {
+            get
+            {
+                return owner;
+            }
+            set
+            {
+                owner = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user who created the record.
         /// </summary>
         /// <value>The created by.</value>
         /// <returns>ZCRMUser class instance</returns>
-        public ZCRMUser CreatedBy { get => createdBy; set => createdBy = value; }
+        public ZCRMUser CreatedBy
+        {
+            get
+            {
+                return createdBy;
+            }
+            set
+            {
+                createdBy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the created time of/for the record.
         /// </summary>
         /// <value>The created time.</value>
         /// <returns>String</returns>
-        public string CreatedTime { get => createdTime; set => createdTime = value; }
+        public string CreatedTime
+        {
+            get
+            {
+                return createdTime;
+            }
+            set
+            {
+                createdTime = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user who modified the record.
         /// </summary>
         /// <value>The modified by.</value>
         /// <returns>ZCRMUser class instance</returns>
-        public ZCRMUser ModifiedBy { get => modifiedBy; set => modifiedBy = value; }
+        public ZCRMUser ModifiedBy
+        {
+            get
+            {
+                return modifiedBy;
+            }
+            set
+            {
+                modifiedBy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the modified time of/for the record.
         /// </summary>
         /// <value>The modified time.</value>
         /// <returns>String</returns>
-        public string ModifiedTime { get => modifiedTime; set => modifiedTime = value; }
+        public string ModifiedTime
+        {
+            get
+            {
+                return modifiedTime;
+            }
+            set
+            {
+                modifiedTime = value;
+            }
+        }
 
         /// <summary>
         /// Gets the properties of the record.
         /// </summary>
         /// <value>The properties of the record.</value>
         /// <returns>Dictionary(String,Object)</returns>
-        public Dictionary<string, object> Properties {  get => properties;  private set => properties = value; }
+        public Dictionary<string, object> Properties
+        {
+            get
+            {
+                return properties;
+            }
+            private set
+            {
+                properties = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the data of/for the record.
         /// </summary>
         /// <value>The data of the record.</value>
         /// <returns>Dictionary(String,Object)</returns>
-        public Dictionary<string, object> Data { get => fieldNameVsValue; set => fieldNameVsValue = value; }
+        public Dictionary<string, object> Data
+        {
+            get
+            {
+                return fieldNameVsValue;
+            }
+            set
+            {
+                fieldNameVsValue = value;
+            }
+        }
 
         /// <summary>
         /// Gets the line items of the record.
         /// </summary>
         /// <value>The line items of the record.</value>
         /// <returns>List of ZCRMInventoryLineItem class instance</returns>
-        public List<ZCRMInventoryLineItem> LineItems { get => lineItems; private set => lineItems = value; }
+        public List<ZCRMInventoryLineItem> LineItems
+        {
+            get
+            {
+                return lineItems;
+            }
+            private set
+            {
+                lineItems = value;
+            }
+        }
 
         /// <summary>
         /// Gets the participants of the record.
         /// </summary>
         /// <value>The participants of the record.</value>
         /// <returns>List of ZCRMEventParticipant class instance</returns>
-        public List<ZCRMEventParticipant> Participants { get => participants; private set => participants = value; }
+        public List<ZCRMEventParticipant> Participants
+        {
+            get
+            {
+                return participants;
+            }
+            private set
+            {
+                participants = value;
+            }
+        }
 
         /// <summary>
         /// Gets the price details of the record.
         /// </summary>
         /// <value>The price details of the record.</value>
         /// <returns>List of ZCRMPriceBookPricing class instance</returns>
-        public List<ZCRMPriceBookPricing> PriceDetails { get => priceDetails; private set => priceDetails = value; }
+        public List<ZCRMPriceBookPricing> PriceDetails
+        {
+            get
+            {
+                return priceDetails;
+            }
+            private set
+            {
+                priceDetails = value;
+            }
+        }
 
         /// <summary>
         /// Gets the tax list of the record.
         /// </summary>
         /// <value>The tax list of the record.</value>
         /// <returns>List of ZCRMTax class instance</returns>
-        public List<ZCRMTax> TaxList { get => taxList; private set => taxList = value; }
+        public List<ZCRMTax> TaxList
+        {
+            get
+            {
+                return taxList;
+            }
+            private set
+            {
+                taxList = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the tags of/for the record.
         /// </summary>
         /// <value>The tags of the record.</value>
         /// <returns>List of String</returns>
-        public List<string> Tags { get => tags; set => tags = value; }
+        public List<ZCRMTag> Tags
+        {
+            get
+            {
+                return tags;
+            }
+            set
+            {
+                tags = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the tag names.
+        /// </summary>
+        /// <value>The tag names.</value>
+        public List<string> TagNames
+        {
+            get
+            {
+                return tagnames;
+            }
+            set
+            {
+                tagnames = value;
+            }
+        }
 
         /// <summary>
         /// To set the property based on Property name and value.
@@ -594,6 +771,6 @@ namespace ZCRMSDK.CRM.Library.CRUD
                 throw new ZCRMException("Tag Name list MUST NOT be null/empty for Remove Tags from a Specific record operation");
             }
             return TagAPIHandler.GetInstance().RemoveTags(this, tagNames);
-    	}
+        }
     }
 }

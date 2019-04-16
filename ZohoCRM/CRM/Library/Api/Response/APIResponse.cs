@@ -18,9 +18,39 @@ namespace ZCRMSDK.CRM.Library.Api.Response
 
         public APIResponse(HttpWebResponse response) : base(response) { }
 
-        public ZCRMEntity Data { get => data; set => data = value; }
-        public string Message { get => message; private set => message = value; }
-        public string Status { get => status; internal set => status = value; }
+        public ZCRMEntity Data
+        {
+            get
+            {
+                return data;
+            }
+            set
+            {
+                data = value;
+            }
+        }
+        public string Message
+        {
+            get
+            {
+                return message;
+            }
+            private set
+            {
+                message = value;
+            }
+        }
+        public string Status
+        {
+            get
+            {
+                return status;
+            }
+            internal set
+            {
+                status = value;
+            }
+        }
 
 
         protected override void ProcessDataResponse()

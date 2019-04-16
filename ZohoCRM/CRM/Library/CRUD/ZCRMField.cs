@@ -50,161 +50,391 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <value>The APIName of the fields.</value>
         /// <returns>String</returns>
-        public string ApiName { get => apiName; set => apiName = value; }
+        public string ApiName
+        {
+            get
+            {
+                return apiName;
+            }
+            set
+            {
+                apiName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the fields' Id.
         /// </summary>
         /// <value>The Id of the fields.</value>
         /// <returns>Long</returns>
-        public long Id { get => id; set => id = value; }
+        public long Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the json type of/for the fields.
         /// </summary>
         /// <value>The json type of the fields.</value>
         /// <returns>String</returns>
-        public string JsonType{ get => jsonType; set => jsonType = value;}
+        public string JsonType
+        {
+            get
+            {
+                return jsonType;
+            }
+            set
+            {
+                jsonType = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the display name of/for the fields.
         /// </summary>
         /// <value>The display name of the fields.</value>
         /// <returns>String</returns>
-        public string DisplayName { get => displayName; set => displayName = value; }
+        public string DisplayName
+        {
+            get
+            {
+                return displayName;
+            }
+            set
+            {
+                displayName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the data type of/for the fields.
         /// </summary>
         /// <value>The data type of the fields.</value>
         /// <returns>String</returns>
-        public string DataType { get => dataType; set => dataType = value; }
+        public string DataType
+        {
+            get
+            {
+                return dataType;
+            }
+            set
+            {
+                dataType = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this field is read only.
         /// </summary>
         /// <value><c>true</c> if read only; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool ReadOnly { get => readOnly; set => readOnly = value; }
+        public bool ReadOnly
+        {
+            get
+            {
+                return readOnly;
+            }
+            set
+            {
+                readOnly = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this field is visible.
         /// </summary>
         /// <value><c>true</c> if visible; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool Visible { get => visible; set => visible = value; }
+        public bool Visible
+        {
+            get
+            {
+                return visible;
+            }
+            set
+            {
+                visible = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the mandatory fields.
         /// </summary>
         /// <value>The mandatory fields.</value>
         /// <returns>Boolean</returns>
-        public bool? Mandatory { get => mandatory; set => mandatory = value; }
+        public bool? Mandatory
+        {
+            get
+            {
+                return mandatory;
+            }
+            set
+            {
+                mandatory = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this field is custom field.
         /// </summary>
         /// <value><c>true</c> if custom field; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool CustomField { get => customField; set => customField = value; }
+        public bool CustomField
+        {
+            get
+            {
+                return customField;
+            }
+            set
+            {
+                customField = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the field default value.
         /// </summary>
         /// <value>The default value of the field.</value>
         /// <returns>Object</returns>
-        public object DefaultValue { get => defaultValue; set => defaultValue = value; }
+        public object DefaultValue
+        {
+            get
+            {
+                return defaultValue;
+            }
+            set
+            {
+                defaultValue = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the sequence no of/for the fields.
         /// </summary>
         /// <value>The sequence no of the fields.</value>
         /// <returns>Integer</returns>
-        public int? SequenceNo { get => sequenceNo; set => sequenceNo = value; }
+        public int? SequenceNo
+        {
+            get
+            {
+                return sequenceNo;
+            }
+            set
+            {
+                sequenceNo = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the max length of/for the fields.
         /// </summary>
         /// <value>The max length of the fields.</value>
         /// <returns>Integer</returns>
-        public int? MaxLength { get => maxLength; set => maxLength = value; }
+        public int? MaxLength
+        {
+            get
+            {
+                return maxLength;
+            }
+            set
+            {
+                maxLength = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the precision of/for the fields.
         /// </summary>
         /// <value>The precision of the fields.</value>
         /// <returns>Integer</returns>
-        public int? Precision { get => precision; set => precision = value; }
+        public int? Precision
+        {
+            get
+            {
+                return precision;
+            }
+            set
+            {
+                precision = value;
+            }
+        }
 
         /// <summary>
         /// Sets the sub layouts of the field.
         /// </summary>
         /// <value>The sub layouts present in the field.</value>
         /// <returns>List of string</returns>
-        public List<string> SubLayoutsPresent { private get => subLayoutsPresent; set => subLayoutsPresent = value; }
+        public List<string> SubLayoutsPresent
+        {
+            private get
+            {
+                return subLayoutsPresent;
+            }
+            set
+            {
+                subLayoutsPresent = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the formula return type of/for the fields.
         /// </summary>
         /// <value>The formula return type of the fields.</value>
         /// <returns>String</returns>
-        public string FormulaReturnType { get => formulaReturnType; set => formulaReturnType = value; }
+        public string FormulaReturnType
+        {
+            get
+            {
+                return formulaReturnType;
+            }
+            set
+            {
+                formulaReturnType = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this field is webhook.
         /// </summary>
         /// <value><c>true</c> if webhook; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool Webhook { get => webhook; set => webhook = value; }
+        public bool Webhook
+        {
+            get
+            {
+                return webhook;
+            }
+            set
+            {
+                webhook = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the tool tip of/for the fields.
         /// </summary>
         /// <value>The tool tip of the fields.</value>
         /// <returns>String</returns>
-        public string ToolTip { get => toolTip; set => toolTip = value; }
+        public string ToolTip
+        {
+            get
+            {
+                return toolTip;
+            }
+            set
+            {
+                toolTip = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the created source of/for the fields.
         /// </summary>
         /// <value>The created source of the fields.</value>
         /// <returns>String</returns>
-        public string CreatedSource { get => createdSource; set => createdSource = value; }
+        public string CreatedSource
+        {
+            get
+            {
+                return createdSource;
+            }
+            set
+            {
+                createdSource = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the sub form tab Id of/for the field.
         /// </summary>
         /// <value>The sub form tab Id of the field.</value>
         /// <returns>Long</returns>
-        public long SubFormTabId { get => subFormTabId; set => subFormTabId = value; }
+        public long SubFormTabId
+        {
+            get
+            {
+                return subFormTabId;
+            }
+            set
+            {
+                subFormTabId = value;
+            }
+        }
 
         /// <summary>
         /// Gets the subform details of the fields.
         /// </summary>
         /// <value>The subform details of the fields.</value>
         /// <returns>Dictionary(String,Object)</returns>
-        public Dictionary<string, object> SubformDetails { get => subformDetails; private set => subformDetails = value; }
+        public Dictionary<string, object> SubformDetails
+        {
+            get
+            {
+                return subformDetails;
+            }
+            private set
+            {
+                subformDetails = value;
+            }
+        }
 
         /// <summary>
         /// Gets the lookup details of the fields.
         /// </summary>
         /// <value>The lookup details of the fields.</value>
         /// <returns>Dictionary(String,Object)</returns>
-        public Dictionary<string, object> LookupDetails { get => lookupDetails; private  set => lookupDetails = value; }
+        public Dictionary<string, object> LookupDetails
+        {
+            get
+            {
+                return lookupDetails;
+            }
+            private set
+            {
+                lookupDetails = value;
+            }
+        }
 
         /// <summary>
         /// Gets the multiselect lookup of the fields.
         /// </summary>
         /// <value>The multiselect lookup of the fields.</value>
         /// <returns>Dictionary(String,Object)</returns>
-        public Dictionary<string, object> MultiselectLookup { get => multiselectLookup; private set => multiselectLookup = value; }
+        public Dictionary<string, object> MultiselectLookup
+        {
+            get
+            {
+                return multiselectLookup;
+            }
+            private set
+            {
+                multiselectLookup = value;
+            }
+        }
 
         /// <summary>
         /// Gets the pick list values of the fields.
         /// </summary>
         /// <value>The pick list values of the fields.</value>
         /// <returns>List of ZCRMPickListValue class instance</returns>
-        public List<ZCRMPickListValue> PickListValues { get => pickListValues; private set => pickListValues = value; }
+        public List<ZCRMPickListValue> PickListValues
+        {
+            get
+            {
+                return pickListValues;
+            }
+            private set
+            {
+                pickListValues = value;
+            }
+        }
 
         /// <summary>
         /// To add the pick list value based on ZCRMPickListValue class instance.
