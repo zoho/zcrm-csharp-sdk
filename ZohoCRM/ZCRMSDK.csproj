@@ -17,7 +17,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <PackageId>ZCRMSDK</PackageId>
-    <PackageVersion>2.0.0</PackageVersion>
+    <PackageVersion>2.0.1</PackageVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Authors>Zoho CRM API Team</Authors>
     <Description>Provides C# SDK support for Zoho CRM APIs.</Description>
@@ -26,17 +26,10 @@
     <Summary>C# SDK offers a way to create client C# applications that can be integrated with Zoho CRM. This SDK makes the access and use of necessary CRM APIs with ease.</Summary>
     <PackageTags>ZCRMSDK,zohocrm,sdk,zcrmsdk</PackageTags>
     <Title>ZCRMSDK</Title>
-    <PackageReleaseNotes>Enhancement:
-	- From the version 2.0.0+, SDK is compatible with Visual Studio 2015.
-	- Configuration details have to be passed as a dictionary only.
-	- Support ISO 8601-time format
-Issue fix:
-	- The operation has timed out.</PackageReleaseNotes>
+    <PackageReleaseNotes>SDK compatability support given for Visual Studio 2015. The operation has timed out issue fixed. app.config file usage removed.</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -44,7 +37,6 @@ Issue fix:
     <LangVersion>Latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
