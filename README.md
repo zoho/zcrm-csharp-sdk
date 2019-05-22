@@ -1,3 +1,4 @@
+
 # C# SDK for Zoho CRM
 ----------------------
 C# SDK for Zoho CRM APIs provides wrapper for Zoho CRM APIs. Hence, invoking a Zoho CRM API from your client C# application is only a method call.
@@ -12,23 +13,55 @@ Since Zoho CRM APIs are authenticated with OAuth2 standards, you should register
 5) Click `Create`.
 
 Your Client app would have been created and displayed by now.
-The newly registered app's `Client ID` and `Client Secret` can be found by clicking `Options` → `Edit`. (Options is the three dot icon at the right corner).
+The newly registered app's `Client ID` and `Client Secret` can be found by clicking `Options` → `Edit`.
+(Options is the three dot icon at the right corner).
 
 Setting Up
 ----------
 C# SDK is available as a `Nuget` Package. The `ZCRMSDK` Assembly can be installed through `Nuget Package Manager` and through the following options:
 Package Manager:
 
-	>Install-Package ZCRMSDK --version 1.0.3/
+	>Install-Package ZCRMSDK --version 2.0.2/
 
 .NET CLI:
 
-	>dotnet add package ZCRMSDK --version 1.0.3/
+	>dotnet add package ZCRMSDK --version 2.0.2/
 
 >**Note:** The C# SDK is built against for .net standard 2.0.
 
 Configurations
 --------------
+>**Note:** From version 2.0.1 onwards configuration details has to be passed as a Dictionary.
+```
+public static Dictionary<string, string> config = new Dictionary<string, string>()
+{
+    {"client_id","1000.xxxxxxxxxxxxxxxxxxxxxxxxxxx"},
+    {"client_secret","b47xxxxxxxxxxxxxxxxxxxxxxxxx"},
+    {"redirect_uri","{redirect_url}"},
+    {"access_type","offline"},
+    {"persistence_handler_class","ZCRMSDK.OAuth.ClientApp.ZohoOAuthDBPersistence, ZCRMSDK"},
+    {"oauth_tokens_file_path","{file_path}"},
+    {"mysql_username","root"},
+    {"mysql_password",""},
+    {"mysql_database","zohooauth"},
+    {"mysql_server","localhost"},
+    {"mysql_port","3306"},
+    {"apiBaseUrl","https://www.zohoapis.com"},
+    {"iamURL","https://accounts.zoho.com"},
+    {"photoUrl","{photo_url}"},
+    {"apiVersion","v2"},
+    {"logFilePath","{lof_file_path}" },
+    {"timeout",""},
+    {"minLogLevel",""},
+    {"domainSuffix",""},
+    {"currentUserEmail","user@user.com"}
+};
+ZCRMRestClient.Initialize(config);
+
+```
+
+>**Note:**  For the version below 2.0.1 configuration details can be passed as app.config file. 
+
 Your OAuth Client details should be given to the SDK as a section in app.config file. Add a section oauth_configuration in the app.config file and make sure that the section has the attribute type as `ZCRMSDK.CRM.Library.Common.ConfigFileHandler.ConfigFileSection, ZCRMSDK`. It is illustrated in the example below.
     
     <configuration>
@@ -81,6 +114,7 @@ For example: `persistence_handler_class=ZCRMSDK.OAuth.ClientApp.ZohoOAuthFilePer
 - `iamURL` - Url to be used when calling an Oauth accounts. It is used to denote the domain of the user. Url may be 
 	- `https://accounts.zoho.com` for US.
 	- `https://accounts.zoho.eu` for European countries.
+	- `https://accounts.zoho.in` for India.
 	- `https://accounts.zoho.com.cn` for China.
 
 Other than the above OAuth configurations, the SDK also provides options to override certain HTTP request attributes. These configurations should be provided under a section named `zcrm_configuration`, in the app.config file.
@@ -92,11 +126,13 @@ The following are the supported configurations in the zcrm_configuration section
 - `apiBaseUrl` - Url to be used when calling an API. It is used to denote the domain of the user. Url may be 
 	- `https://www.zohoapis.com` for US.
 	- `https://www.zohoapis.eu` for European countries.
+	- `https://www.zohoapis.in` for India.
 	- `https://www.zohoapis.com.cn` for China.
 
 - `photoUrl` - Url for the image representing the record. The domain might be different based on the apiBaseUrl. Url may be 
 	- `https://profile.zoho.com/api/v1/user/self/photo` for US.
 	- `https://profile.zoho.eu/api/v1/user/self/photo` for European countries.
+	- `https://profile.zoho.in/api/v1/user/self/photo` for India.
 	- `https://profile.zoho.com.cn/api/v1/user/self/photo` for China.
 - `apiVersion` is "v2".
 - `timeOut` - Represents the request timeout in milliseconds. Let this be omitted or empty if not needed.
@@ -165,7 +201,7 @@ For multiple users, it is the responsibility of your client app to generate the 
 #### Generating Access tokens
 After obtaining the grant token, the following code snippet should be executed from your main class to get access and refresh tokens. Please paste the copied grant token in the string literally mentioned.  This is one time process only.
 ```
-ZCRMRestClient.Initialize();
+ZCRMRestClient.Initialize(config);
 ZohoOAuthClient client = ZohoOAuthClient.GetInstance();
 string grantToken = "Paste the generated Access Token here";
 ZohoOAuthTokens tokens = client.GenerateAccessToken(grantToken);
@@ -183,7 +219,7 @@ In case of Single users, the current user email can be set either through the ab
 #### From refresh token
 The following code snippet should be executed from your main class to get access token.
 ```
-ZCRMRestClient.Initialize();
+ZCRMRestClient.Initialize(config);
 ZohoOAuthClient client = ZohoOAuthClient.GetInstance();
 string refreshToken = <paste_refresh_token_here>;
 string userMailId = <provide_user_email_here>;
@@ -198,38 +234,11 @@ Please paste the generated refresh token in the string literal mentioned. This i
 #### App Startup
 The SDK requires the following line of code being invoked every time your app gets started.
 ```
-ZCRMRestClient.Initialize(); 
+ZCRMRestClient.Initialize(config); 
 ```
 
 >**Note:** This method should be called from the main class of your c# application to start the application. It needs to be invoked without any exception.
-
-The SDK also allows for custom initialization, overriding the data from the app.config file. Or, you could also override when there is no need for the config file. The custom initialization scenarios are:
-```
-public static Dictionary<string, string> config = new Dictionary<string, string>()
-{
-    {"client_id","1000.8ETLN5A9356890756HRWXWZ69VJCBN"},
-    {"client_secret","b477d8bac9a8ad722334582b3430fdca7dde44de4e"},
-    {"redirect_uri","{redirect_url}"},
-    {"access_type","offline"},
-    {"persistence_handler_class","ZCRMSDK.OAuth.ClientApp.ZohoOAuthDBPersistence, ZCRMSDK"},
-    {"oauth_tokens_file_path","{file_path}"},
-    {"mysql_username","root"},
-    {"mysql_password",""},
-    {"mysql_database","zohooauth"},
-    {"mysql_server","localhost"},
-    {"mysql_port","3306"},
-    {"apiBaseUrl","{https"//www.zohoapis.com}"},
-    {"photoUrl","{photo_url}"},
-    {"apiVersion","v2"},
-    {"logFilePath","{lof_file_path}" },
-    {"timeout",""},
-    {"minLogLevel",""},
-    {"domainSuffix","com"},
-    {"currentUserEmail","user@user.com"}
-};
-ZCRMRestClient.Initialize(config);
-```
->**Note:** Once the SDK has been initialized, you can use any APIs of the SDK to get proper results.
+>Once the SDK has been initialized, you can use any methods of the SDK to get proper results from the APIs.
 
 Class Hierarchy
 ---------------
@@ -319,49 +328,48 @@ Examples
 ```
 Sample code to insert a record:
 -------------------------------
-try
+try{
+    ZCRMRestClient.Initialize(config);
+    ZCRMRestClient restClient = ZCRMRestClient.GetInstance();
+    ZCRMRecord IRecord = new ZCRMRecord("Leads");#module API Name
+	record.SetFieldValue(“field_api_name”, “field_value”);
+    record.SetFieldValue(“field_api_name”, “field_value”);
+    record.SetFieldValue(“field_api_name”, “field_value”);
+    record.SetFieldValue(“field_api_name”, “field_value”);
+    APIResponse userResponse = restClient.GetCurrentUser();
+    ZCRMUser user = ZCRMUser.GetInstance(((ZCRMUser)userResponse.Data).Id);
+    IRecord.Owner = user;
+    List<ZCRMRecord> records = new List<ZCRMRecord> { IRecord };
+    ZCRMModule module = restClient.GetModuleInstance(ApiName.Key);
+    BulkAPIResponse<ZCRMRecord> response = module.CreateRecords(records);
+    foreach (EntityResponse eResponse in response.BulkEntitiesResponse)
     {
-        ZCRMRestClient restClient = ZCRMRestClient.GetInstance();
-        ZCRMRecord IRecord = new ZCRMRecord("Leads");#module API Name
-        record.SetFieldValue(“field_api_name”, “field_value”);
-        record.SetFieldValue(“field_api_name”, “field_value”);
-        record.SetFieldValue(“field_api_name”, “field_value”);
-        record.SetFieldValue(“field_api_name”, “field_value”);
-        APIResponse userResponse = restClient.GetCurrentUser();
-        ZCRMUser user = ZCRMUser.GetInstance(((ZCRMUser)userResponse.Data).Id);
-        IRecord.Owner = user;
-        List<ZCRMRecord> records = new List<ZCRMRecord> { IRecord };
-        ZCRMModule module = restClient.GetModuleInstance(ApiName.Key);
-        BulkAPIResponse<ZCRMRecord> response = module.CreateRecords(records);
-        foreach (EntityResponse eResponse in response.BulkEntitiesResponse)
-        {
-            Console.WriteLine(eResponse.ResponseJSON);//Fetches response as JSON
-            Console.WriteLine(eResponse.Status);//Fetches status value present in the response
-            Console.WriteLine(eResponse.Code);//Fetches code value present in the response
-            Console.WriteLine(eResponse.Message);//Fetches message value present in the response
-
+	    Console.WriteLine(eResponse.ResponseJSON);//Fetches response as JSON
+		Console.WriteLine(eResponse.Status);//Fetches status value present in the response
+		Console.WriteLine(eResponse.Code);//Fetches code value present in the response
+		Console.WriteLine(eResponse.Message);//Fetches message value present in the response
         }
-    }catch(ZCRMException ex){
-        Console.WriteLine(ex.Message)
-    }
+}catch(ZCRMException ex){
+	Console.WriteLine(ex.Message)
+}
 ```
 ```
 Sample code to fetch records:
 -----------------------------
 try{
- ZCRMModule module = restClient.GetModuleInstance(ApiName.Key);
-BulkAPIResponse<ZCRMRecord> response = module.GetRecords();
-List<ZCRMRecord> records = response.BulkData;
-foreach(ZCRMRecord record in records)
-{
- 	Console.WriteLine(record.EntityId);//Fetches record id
- 	Console.WriteLine(record.Data);//Fetches a dictionary which has field api name and it’s value as key and value in that dictionary 
- 	Console.WriteLine(record.CreatedBy);//Fetches created by of the record
- 	Console.WriteLine(record.ModuleAPIName);//Fetches record’s module api name
-}
+	ZCRMRestClient.Initialize(config);
+	ZCRMModule module = restClient.GetModuleInstance(ApiName.Key);
+	BulkAPIResponse<ZCRMRecord> response = module.GetRecords();
+	List<ZCRMRecord> records = response.BulkData;
+	foreach(ZCRMRecord record in records)
+	{
+	 	Console.WriteLine(record.EntityId);//Fetches record id
+	 	Console.WriteLine(record.Data);//Fetches a dictionary which has field api name and it’s value as key and value in that dictionary 
+	 	Console.WriteLine(record.CreatedBy);//Fetches created by of the record
+	 	Console.WriteLine(record.ModuleAPIName);//Fetches record’s module api name
+	}
 }catch(ZCRMException ex){
-Console.WriteLine(ex.Message)
-}
+	Console.WriteLine(ex.Message)
 }
 ```
     
