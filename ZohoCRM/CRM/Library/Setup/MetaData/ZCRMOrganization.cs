@@ -786,5 +786,35 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
             return OrganizationAPIHandler.GetInstance().DeleteTaxes(taxIds);
         }
 
+        /// <summary>
+        /// Creates the user.
+        /// </summary>
+        /// <returns>The user instance.</returns>
+        /// <param name="userInstance">User instance.</param>
+        public APIResponse CreateUser(ZCRMUser userInstance)
+        {
+            return OrganizationAPIHandler.GetInstance().CreateUser(userInstance);
+        }
+
+        /// <summary>
+        /// Updates the user.
+        /// </summary>
+        /// <returns>The user instance.</returns>
+        /// <param name="userInstance">User instance.</param>
+        public APIResponse UpdateUser(ZCRMUser userInstance)
+        {
+            return OrganizationAPIHandler.GetInstance().UpdateUser(userInstance);
+        }
+
+        /// <summary>
+        /// Deletes the user.
+        /// </summary>
+        /// <returns>The user identifier.</returns>
+        /// <param name="userId">User identifier.</param>
+        public APIResponse DeleteUser(long userId)
+        {
+            return OrganizationAPIHandler.GetInstance().DeleteUser(userId);
+        }
+
     }
 }

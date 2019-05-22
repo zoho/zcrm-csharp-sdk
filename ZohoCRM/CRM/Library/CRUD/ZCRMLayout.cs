@@ -17,6 +17,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private int status;
         private List<ZCRMSection> sections = new List<ZCRMSection>();
         private List<ZCRMProfile> accessibleProfies = new List<ZCRMProfile>();
+        private Dictionary<string, ZCRMLeadConvertMapping> convertMapping;
 
         private ZCRMLayout(long layoutId)
         {
@@ -200,6 +201,22 @@ namespace ZCRMSDK.CRM.Library.CRUD
             set
             {
                 sections = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the convert mapping.
+        /// </summary>
+        /// <value>The convert mapping.</value>
+        public Dictionary<string, ZCRMLeadConvertMapping> ConvertMapping
+        {
+            get
+            {
+                return convertMapping;
+            }
+            set
+            {
+                convertMapping = value;
             }
         }
 

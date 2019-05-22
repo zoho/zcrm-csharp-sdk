@@ -63,8 +63,13 @@ namespace ZCRMSDK.CRM.Library.Api.Response
             }
             if (msgJSON.ContainsKey(APIConstants.TAGS))
             {
-                JArray recordsArray = (JArray)ResponseJSON.GetValue(APIConstants.TAGS);
-                msgJSON = (JObject)recordsArray[0];
+                JArray tagsArray = (JArray)ResponseJSON.GetValue(APIConstants.TAGS);
+                msgJSON = (JObject)tagsArray[0];
+            }
+            if (msgJSON.ContainsKey(APIConstants.USERS))
+            {
+                JArray usersArray = (JArray)ResponseJSON.GetValue(APIConstants.USERS);
+                msgJSON = (JObject)usersArray[0];
             }
             if (msgJSON.ContainsKey(APIConstants.MESSAGE))
             {

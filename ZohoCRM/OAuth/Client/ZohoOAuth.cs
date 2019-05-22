@@ -82,6 +82,9 @@ namespace ZCRMSDK.OAuth.Client
                 case "cn":
                     ConfigProperties[ZohoOAuthConstants.IAM_URL]= "https://accounts.zoho.com.cn";
                     break;
+                case "in":
+                    ConfigProperties[ZohoOAuthConstants.IAM_URL] = "https://accounts.zoho.in";
+                    break;
                 default:
                     ConfigProperties[ZohoOAuthConstants.IAM_URL]= "https://accounts.zoho.com";
                     break;

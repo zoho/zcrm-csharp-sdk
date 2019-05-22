@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using Newtonsoft.Json.Linq;
 
 namespace ZCRMSDK.CRM.Library.CRUD
 {
@@ -10,6 +10,10 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private string displayName;
         private int columnCount;
         private int sequence;
+        private bool isSubformSection;
+        private int tabTraversal;
+        private string apiName;
+        private JObject properties;
         private List<ZCRMField> fields = new List<ZCRMField>();
 
         private ZCRMSection(string name)
@@ -120,5 +124,70 @@ namespace ZCRMSDK.CRM.Library.CRUD
         {
             Fields.Add(field);
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:ZCRMSDK.CRM.Library.CRUD.ZCRMSection"/> is subform section.
+        /// </summary>
+        /// <value><c>true</c> if is subform section; otherwise, <c>false</c>.</value>
+        public bool IsSubformSection 
+        { 
+            get 
+            { 
+                return isSubformSection; 
+            }
+            set
+            {
+                isSubformSection = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the tab traversal.
+        /// </summary>
+        /// <value>The tab traversal.</value>
+        public int TabTraversal
+        {
+            get
+            {
+                return tabTraversal;
+            }
+            set
+            {
+                tabTraversal = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the APIN ame.
+        /// </summary>
+        /// <value>The APIN ame.</value>
+        public string ApiName
+        {
+            get
+            {
+                return apiName;
+            }
+            set
+            {
+                apiName = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the properties.
+        /// </summary>
+        /// <value>The properties.</value>
+        public JObject Properties
+        {
+            get
+            {
+                return properties;
+            }
+            set
+            {
+                properties = value;
+            }
+        }
+
     }
 }

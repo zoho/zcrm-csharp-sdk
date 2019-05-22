@@ -72,15 +72,12 @@ namespace ZCRMSDK.CRM.Library.Api.Response
                 Init();
                 ProcessResponse();
                 SetResponseHeaders();
-            }
-            catch (Exception)
-            { }
-            finally
-            {
-                response.Close();
                 ZCRMLogger.LogInfo(ToString());
             }
-
+            catch (Exception)
+            {
+                ZCRMLogger.LogInfo(ToString());
+            }
         }
 
         protected void Init()

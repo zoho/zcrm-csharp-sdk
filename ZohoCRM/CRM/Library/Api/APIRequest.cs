@@ -167,7 +167,9 @@ namespace ZCRMSDK.CRM.Library.Api
         public APIResponse GetAPIResponse()
         {
             GetResponseFromServer();
-            return new APIResponse(response);
+            APIResponse apiResponse = new APIResponse(response);
+            response.Close();
+            return apiResponse;
         }
 
         public BulkAPIResponse<T> GetBulkAPIResponse<T>() where T : ZCRMEntity
@@ -175,7 +177,9 @@ namespace ZCRMSDK.CRM.Library.Api
             try
             {
                 GetResponseFromServer();
-                return new BulkAPIResponse<T>(response);
+                BulkAPIResponse < T > bulkAPIResponse = new BulkAPIResponse<T>(response);
+                response.Close();
+                return bulkAPIResponse;
             }
             catch (Exception e) when(!(e is ZCRMException))
             {
@@ -219,8 +223,6 @@ namespace ZCRMSDK.CRM.Library.Api
                 throw new ZCRMException(e);
             }
         }
-
-
 
         private void SetRequestMethod(HttpWebRequest request)
         {
@@ -296,7 +298,6 @@ namespace ZCRMSDK.CRM.Library.Api
             }
         }
 
-
         private HttpWebRequest GetHttpWebRequestClient()
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -327,7 +328,9 @@ namespace ZCRMSDK.CRM.Library.Api
             {
                 fileRequestBody = GetFileRequestBodyStream(filePath);
                 GetResponseFromServer();
-                return new APIResponse(response);
+                APIResponse apiResponse = new APIResponse(response);
+                response.Close();
+                return apiResponse;
             }
             catch(Exception e) when(!(e is ZCRMException))
             {
@@ -340,7 +343,8 @@ namespace ZCRMSDK.CRM.Library.Api
         {
             try{
                 GetResponseFromServer();
-                return new FileAPIResponse(response);
+                FileAPIResponse fileAPIResponse = new FileAPIResponse(response);
+                return fileAPIResponse;
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
@@ -348,7 +352,6 @@ namespace ZCRMSDK.CRM.Library.Api
                 throw new ZCRMException(e);
             }
         }
-
 
         private Stream GetFileRequestBodyStream(string filePath)
         {
@@ -385,7 +388,6 @@ namespace ZCRMSDK.CRM.Library.Api
                 throw new ZCRMException(e);
             }
         }
-
 
         public override string ToString()
         {

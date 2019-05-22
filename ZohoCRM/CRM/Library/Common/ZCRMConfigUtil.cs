@@ -119,6 +119,9 @@ namespace ZCRMSDK.CRM.Library.Common
                 case "cn":
                     ConfigProperties[APIConstants.APIBASEURL] = "https://www.zohoapis.com.cn";
                     break;
+                case "in":
+                    ConfigProperties[APIConstants.APIBASEURL] = "https://www.zohoapis.in";
+                    break;
                 default:
                     ConfigProperties[APIConstants.APIBASEURL] = "https://www.zohoapis.com";
                     break;

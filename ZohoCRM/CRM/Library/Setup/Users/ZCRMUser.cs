@@ -1,6 +1,9 @@
-﻿using ZCRMSDK.CRM.Library.Api.Handler;
+﻿using System.Collections.Generic;
+using ZCRMSDK.CRM.Library.Api.Handler;
 using ZCRMSDK.CRM.Library.Api.Response;
 using ZCRMSDK.CRM.Library.Common;
+using ZCRMSDK.CRM.Library.CRMException;
+using ZCRMSDK.CRM.Library.CRUD;
 
 namespace ZCRMSDK.CRM.Library.Setup.Users
 {
@@ -40,11 +43,32 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
         private string modifiedTime;
         private ZCRMUser reportingTo;
 
+        private bool microsoft;
+        private int number;
+        private long offset;
+        private string signature;
+        private ZCRMUserCustomizeInfo customizeInfo;
+        private bool isPersonalAccount;
+        private string defaultTabGroup;
+        private ZCRMUserTheme theme;
+        private string zip;
+        private string decimalSeparator;
+        private List<ZCRMTerritory> territories;
+        private bool isOnline;
+        private string currency;
+        private Dictionary<string, object> fieldNameVsValue = new Dictionary<string, object>();
+        public static List<string> defaultKeys = new List<string>() { "Reporting_To", "Currency", "Modified_Time", "created_time", "territories", "reporting_to", "Isonline", "created_by", "Modified_By", "country", "id", "name", "role", "customize_info", "city", "signature", "name_format", "language", "locale", "personal_account", "default_tab_group", "alias", "street", "theme", "state", "country_locale", "fax", "first_name", "email", "zip", "decimal_separator", "website", "time_format", "profile", "mobile", "last_name", "time_zone", "zuid", "confirm", "full_name", "phone", "dob", "date_format", "status", "microsoft" };
 
         private ZCRMUser(long userId, string fullName)
         {
             Id = userId;
             FullName = fullName;
+
+        }
+        private ZCRMUser(string last_name, string email)
+        {
+            LastName = last_name;
+            EmailId = email;
 
         }
 
@@ -67,6 +91,17 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
         public static ZCRMUser GetInstance(long userId)
         {
             return new ZCRMUser(userId, null);
+        }
+
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        /// <returns>The instance.</returns>
+        /// <param name="last_name">Last name.</param>
+        /// <param name="email">Email.</param>
+        public static ZCRMUser GetInstance(string last_name, string email)
+        {
+            return new ZCRMUser(last_name, email);
         }
 
         /// <summary>
@@ -465,7 +500,9 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
         /// </summary>
         /// <value>The website of the user.</value>
         /// <returns>String</returns>
-        public string Website { get
+        public string Website
+        {
+            get
             {
                 return website;
             }
@@ -611,6 +648,254 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:ZCRMSDK.CRM.Library.Setup.Users.ZCRMUser"/> is microsoft.
+        /// </summary>
+        /// <value><c>true</c> if microsoft; otherwise, <c>false</c>.</value>
+        public bool MicrosoftAppUser
+        {
+            get
+            {
+                return microsoft;
+            }
+            set
+            {
+                microsoft = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the signature.
+        /// </summary>
+        /// <value>The signature.</value>
+        public string Signature
+        {
+            get
+            {
+                return signature;
+            }
+            set
+            {
+                signature = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the customize info.
+        /// </summary>
+        /// <value>The customize info.</value>
+        public ZCRMUserCustomizeInfo CustomizeInfo
+        {
+            get
+            {
+                return customizeInfo;
+            }
+            set
+            {
+                customizeInfo = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:ZCRMSDK.CRM.Library.Setup.Users.ZCRMUser"/> is
+        /// personal account.
+        /// </summary>
+        /// <value><c>true</c> if is personal account; otherwise, <c>false</c>.</value>
+        public bool IsPersonalAccount
+        {
+            get
+            {
+                return isPersonalAccount;
+            }
+            set
+            {
+                isPersonalAccount = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the default tab group.
+        /// </summary>
+        /// <value>The default tab group.</value>
+        public string DefaultTabGroup
+        {
+            get
+            {
+                return defaultTabGroup;
+            }
+            set
+            {
+                defaultTabGroup = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the theme.
+        /// </summary>
+        /// <value>The theme.</value>
+        public ZCRMUserTheme Theme
+        {
+            get
+            {
+                return theme;
+            }
+            set
+            {
+                theme = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the zip.
+        /// </summary>
+        /// <value>The zip.</value>
+        public string Zip
+        {
+            get
+            {
+                return zip;
+            }
+            set
+            {
+                zip = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the decimal separator.
+        /// </summary>
+        /// <value>The decimal separator.</value>
+        public string DecimalSeparator
+        {
+            get
+            {
+                return decimalSeparator;
+            }
+            set
+            {
+                decimalSeparator = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the territories.
+        /// </summary>
+        /// <value>The territories.</value>
+        public List<ZCRMTerritory> Territories
+        {
+            get
+            {
+                return territories;
+            }
+            set
+            {
+                territories = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:ZCRMSDK.CRM.Library.Setup.Users.ZCRMUser"/> is online.
+        /// </summary>
+        /// <value><c>true</c> if is online; otherwise, <c>false</c>.</value>
+        public bool IsOnline
+        {
+            get
+            {
+                return isOnline;
+            }
+            set
+            {
+                isOnline = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the currency.
+        /// </summary>
+        /// <value>The currency.</value>
+        public string Currency
+        {
+            get
+            {
+                return currency;
+            }
+            set
+            {
+                currency = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the data.
+        /// </summary>
+        /// <value>The data.</value>
+        public Dictionary<string, object> Data
+        {
+            get
+            {
+                return fieldNameVsValue;
+            }
+            set
+            {
+                fieldNameVsValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the number.
+        /// </summary>
+        /// <value>The number.</value>
+        public int Number
+        {
+            get
+            {
+                return number;
+            }
+            set
+            {
+                number = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the off set.
+        /// </summary>
+        /// <value>The off set.</value>
+        public long OffSet
+        {
+            get
+            {
+                return offset;
+            }
+            set
+            {
+                offset = value;
+            }
+        }
+        /// <summary>
+        /// Sets the field value.
+        /// </summary>
+        /// <param name="fieldAPIName">Field APIN ame.</param>
+        /// <param name="value">Value.</param>
+        public void SetFieldValue(string fieldAPIName, object value)
+        {
+            Data.Add(fieldAPIName, value);
+        }
+
+        /// <summary>
+        /// Gets the field value.
+        /// </summary>
+        /// <returns>The field value.</returns>
+        /// <param name="fieldAPIName">Field APIN ame.</param>
+        public object GetFieldValue(string fieldAPIName)
+        {
+            if (Data.ContainsKey(fieldAPIName))
+            {
+                if (Data[fieldAPIName] == null) { return null; }
+                return Data[fieldAPIName];
+            }
+            throw new ZCRMException("The given field is not present in this user record - " + fieldAPIName);
+        }
         /// <summary>
         /// To downloads the profile pic of the user.
         /// </summary>

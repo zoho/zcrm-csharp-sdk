@@ -20,6 +20,15 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private int favourite;
         private bool isdefault;
 
+        private string sharedType;
+        private string sharedDetails;
+        private bool isOffline;
+        private bool isSystemDefined;
+        private string criteriaPattern;
+        private string criteriaCondition;
+        private ZCRMCriteria criteria;
+        private List<ZCRMCustomViewCategory> categoriesList;
+
         private ZCRMCustomView(string moduleAPIName, long customViewId)
         {
             ModuleAPIName = moduleAPIName;
@@ -225,6 +234,131 @@ namespace ZCRMSDK.CRM.Library.CRUD
         }
 
         /// <summary>
+        /// Gets or sets the type of the shared.
+        /// </summary>
+        /// <value>The type of the shared.</value>
+        public string SharedType
+        {
+            get
+            {
+                return sharedType;
+            }
+            set
+            {
+                sharedType = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the shared details.
+        /// </summary>
+        /// <value>The shared details.</value>
+        public string SharedDetails
+        {
+            get
+            {
+                return sharedDetails;
+            }
+            set
+            {
+                sharedDetails = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:ZCRMSDK.CRM.Library.CRUD.ZCRMCustomView"/> is offline.
+        /// </summary>
+        /// <value><c>true</c> if is offline; otherwise, <c>false</c>.</value>
+        public bool IsOffline
+        {
+            get
+            {
+                return isOffline;
+            }
+            set
+            {
+                isOffline = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:ZCRMSDK.CRM.Library.CRUD.ZCRMCustomView"/> is
+        /// system defined.
+        /// </summary>
+        /// <value><c>true</c> if is system defined; otherwise, <c>false</c>.</value>
+        public bool IsSystemDefined
+        {
+            get
+            {
+                return isSystemDefined;
+            }
+            set
+            {
+                isSystemDefined = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the criteria pattern.
+        /// </summary>
+        /// <value>The criteria pattern.</value>
+        public string CriteriaPattern
+        {
+            get
+            {
+                return criteriaPattern;
+            }
+            set
+            {
+                criteriaPattern = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the criteria.
+        /// </summary>
+        /// <value>The criteria.</value>
+        public ZCRMCriteria Criteria
+        {
+            get
+            {
+                return criteria;
+            }
+            set
+            {
+                criteria = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the categories list.
+        /// </summary>
+        /// <value>The categories list.</value>
+        public List<ZCRMCustomViewCategory> CategoriesList
+        {
+            get
+            {
+                return categoriesList;
+            }
+            set
+            {
+                categoriesList = value;
+            }
+        }
+
+        public string CriteriaCondition
+        {
+            get
+            {
+                return criteriaCondition;
+            }
+            set
+            {
+                criteriaCondition = value;
+            }
+        }
+
+        /// <summary>
         /// To get records of the custom view.
         /// </summary>
         /// <returns>BulkAPIResponse&lt;ZCRMRecord&gt; class instance.</returns>
@@ -252,7 +386,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <param name="recordFields">List of field API names (String)</param>
         public BulkAPIResponse<ZCRMRecord> GetRecords(int page, int perPage, List<string> recordFields)
         {
-            return GetRecords(null, null, page, perPage, null, recordFields);   
+            return GetRecords(null, null, page, perPage, null, recordFields);
         }
 
         /// <summary>
@@ -279,7 +413,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <param name="recordFields">List of field API names (String)</param>
         public BulkAPIResponse<ZCRMRecord> GetRecords(string sortByField, CommonUtil.SortOrder? sortOrder, int page, int perPage, string modifiedSince, List<string> recordFields)
         {
-            return ZCRMModule.GetInstance(moduleAPIName).GetRecords(Convert.ToInt64(Id), sortByField, sortOrder, page, perPage, modifiedSince, recordFields);   
+            return ZCRMModule.GetInstance(moduleAPIName).GetRecords(Convert.ToInt64(Id), sortByField, sortOrder, page, perPage, modifiedSince, recordFields);
         }
     }
 }

@@ -24,6 +24,7 @@ namespace ZCRMSDK.CRM.Library.Api
         public static readonly string STATUS = "status";
         public static readonly string DETAILS = "details";
         public static readonly string DATA = "data";
+        public static readonly string USERS = "users";
         public static readonly string TAGS = "tags";
         public static readonly string TAXES = "taxes";
         public static readonly string INFO = "info";

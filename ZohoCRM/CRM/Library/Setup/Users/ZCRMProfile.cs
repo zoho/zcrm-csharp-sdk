@@ -14,6 +14,7 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
         private string modifiedTime;
         private bool category;
         private string description;
+        private bool isDefault;
 
         private ZCRMProfile(long profileId, string profileName)
         {
@@ -165,6 +166,22 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
             set
             {
                 description = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:ZCRMSDK.CRM.Library.Setup.Users.ZCRMProfile"/> is isdefault.
+        /// </summary>
+        /// <value><c>true</c> if isdefault; otherwise, <c>false</c>.</value>
+        public bool IsDefault
+        {
+            get
+            {
+                return isDefault;
+            }
+            set
+            {
+                isDefault = value;
             }
         }
     }
