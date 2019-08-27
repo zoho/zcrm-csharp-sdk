@@ -436,10 +436,13 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             lineItem.Description = (string)lineItemJSON["product_description"];
             lineItem.Quantity = Convert.ToDouble(lineItemJSON["quantity"]);
             lineItem.ListPrice = Convert.ToDouble(lineItemJSON["list_price"]);
-            lineItem.UnitPrice = Convert.ToDouble(lineItemJSON["unit_price"]);
+            if(lineItemJSON.ContainsKey("unit_price") && lineItemJSON["unit_price"].Type != JTokenType.Null)
+            {
+                lineItem.UnitPrice = Convert.ToDouble(lineItemJSON["unit_price"]);
+            }
             lineItem.Total = Convert.ToDouble(lineItemJSON["total"]);
             lineItem.Discount = Convert.ToDouble(lineItemJSON["Discount"]);
-            lineItem.TotalAfterDiscount = Convert.ToDouble(lineItemJSON["tota_after_discount"]);
+            lineItem.TotalAfterDiscount = Convert.ToDouble(lineItemJSON["total_after_discount"]);
             lineItem.TaxAmount = Convert.ToDouble(lineItemJSON["Tax"]);
             JArray lineTaxes = (JArray)lineItemJSON["line_tax"];
             foreach (JObject lineTax in lineTaxes)

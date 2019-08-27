@@ -17,20 +17,16 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <PackageId>ZCRMSDK</PackageId>
-    <PackageVersion>2.0.2</PackageVersion>
+    <PackageVersion>2.0.3</PackageVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Authors>Zoho CRM API Team</Authors>
     <Description>Provides C# SDK support for Zoho CRM APIs.</Description>
     <Owners>Zoho CRM API Team</Owners>
     <PackageProjectUrl>https://github.com/zoho/zcrm-csharp-sdk</PackageProjectUrl>
     <Summary>C# SDK offers a way to create client C# applications that can be integrated with Zoho CRM. This SDK makes the access and use of necessary CRM APIs with ease.</Summary>
-    <PackageTags>ZCRMSDK,zohocrm,sdk,zcrmsdk</PackageTags>
+    <PackageTags>ZCRMSDK,zohocrm,sdk,zcrmsdk,zoho</PackageTags>
     <Title>ZCRMSDK</Title>
-    <PackageReleaseNotes>User API support provided in SDK(create, update, delete, etc.). 
-convert mapping, section details in module layout, criteria details in module custom-view can be extracted.
-issue fixes 
-picklist  handling in module field.
-appropriate response provided for files.</PackageReleaseNotes>
+    <PackageReleaseNotes>Issue fixes - Added unit_price datatype check.</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <Optimize>true</Optimize>
