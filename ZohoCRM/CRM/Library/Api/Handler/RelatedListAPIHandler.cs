@@ -480,17 +480,17 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     relatedDetailsJSON.Add(keyValuePairs.Key, JToken.Parse(null));
                 }
-                else if (value is long)
-                {
-                    relatedDetailsJSON.Add(keyValuePairs.Key, Convert.ToInt64(value));
-                }
-                else if (value is int)
-                {
-                    relatedDetailsJSON.Add(keyValuePairs.Key, Convert.ToInt32(value));
-                }
+                //else if (value is long)
+                //{
+                //    relatedDetailsJSON.Add(keyValuePairs.Key, Convert.ToInt64(value));
+                //}
+                //else if (value is int)
+                //{
+                //    relatedDetailsJSON.Add(keyValuePairs.Key, Convert.ToInt32(value));
+                //}
                 else
                 {
-                    relatedDetailsJSON.Add(keyValuePairs.Key, value.ToString());
+                    relatedDetailsJSON.Add(keyValuePairs.Key, JToken.FromObject(value));
                 }
 
             }
