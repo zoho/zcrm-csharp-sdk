@@ -169,7 +169,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         }
 
-        public BulkAPIResponse<ZCRMRecord> UpsertRecords(List<ZCRMRecord> records)
+        public BulkAPIResponse<ZCRMRecord> UpsertRecords(List<ZCRMRecord> records,List<string> duplicate_check_fields)
         {
             if (records.Count > 100)
             {
@@ -185,6 +185,10 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 dataArray.Add(recordJSON);
             }
             requestBodyObject.Add(APIConstants.DATA, dataArray);
+            if (duplicate_check_fields != null && duplicate_check_fields.Count > 0)
+            {
+                requestBodyObject.Add("duplicate_check_fields", JArray.FromObject(duplicate_check_fields));
+            }
             requestBody = requestBodyObject;
             BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
 

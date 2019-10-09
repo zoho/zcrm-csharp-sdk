@@ -476,13 +476,13 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <returns>BulkAPIResponse&lt;ZCRMRecord&gt; class instance.</returns>
         /// <param name="records">List of ZCRMRecord class instance.</param>
-        public BulkAPIResponse<ZCRMRecord> UpsertRecords(List<ZCRMRecord> records)
+        public BulkAPIResponse<ZCRMRecord> UpsertRecords(List<ZCRMRecord> records,List<string> duplicate_check_fields = null)
         {
             if (records == null || records.Count == 0)
             {
                 throw new ZCRMException("Record ID list MUST NOT be null/empty for upsert operation");
             }
-            return MassEntityAPIHandler.GetInstance(this).UpsertRecords(records);
+            return MassEntityAPIHandler.GetInstance(this).UpsertRecords(records,duplicate_check_fields);
         }
 
         /// <summary>
