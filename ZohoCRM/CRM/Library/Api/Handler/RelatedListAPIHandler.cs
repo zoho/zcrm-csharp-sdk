@@ -47,9 +47,9 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             {
                 requestMethod = APIConstants.RequestMethod.GET;
                 urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + relatedList.ApiName;
-                if(sortByField != null)
+                if (sortByField != null)
                 {
-                    requestQueryParams.Add("sort_by", sortByField);   
+                    requestQueryParams.Add("sort_by", sortByField);
                 }
                 if (sortOrder != null)
                 {
@@ -93,7 +93,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             {
                 requestMethod = APIConstants.RequestMethod.GET;
                 urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + relatedList.ApiName;
-                if(sortByField != null)
+                if (sortByField != null)
                 {
                     requestQueryParams.Add("sort_by", sortByField);
                 }
@@ -152,7 +152,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 response.Data = note;
                 return response;
             }
-            catch (Exception e) when(!(e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
@@ -249,9 +249,9 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.POST;
-                urlPath = parentRecord.ModuleAPIName+"/"+parentRecord.EntityId+"/"+relatedList.ApiName;
+                urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + relatedList.ApiName;
 
-                ZCRMLogger.LogInfo("urlPath : "+urlPath);
+                ZCRMLogger.LogInfo("urlPath : " + urlPath);
                 APIResponse response = APIRequest.GetInstance(this).UploadFile(filePath);
 
                 JArray responseDataArray = (JArray)response.ResponseJSON[APIConstants.DATA];
@@ -289,7 +289,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
-            
+
         }
 
         public FileAPIResponse DownloadAttachment(long attachmentId)
@@ -328,12 +328,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             JObject createdByObject = (JObject)noteDetails["Created_By"];
             ZCRMUser createdBy = ZCRMUser.GetInstance(Convert.ToInt64(createdByObject["id"]), (string)createdByObject["name"]);
             note.CreatedBy = createdBy;
-            note.CreatedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(noteDetails["Created_Time"]));
+            note.CreatedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(noteDetails["Created_Time"]));
 
             JObject modifiedByObject = (JObject)noteDetails["Modified_By"];
             ZCRMUser modifiedBy = ZCRMUser.GetInstance(Convert.ToInt64(modifiedByObject["id"]), (string)modifiedByObject["name"]);
             note.ModifiedBy = modifiedBy;
-            note.ModifiedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(noteDetails["Modified_Time"]));
+            note.ModifiedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(noteDetails["Modified_Time"]));
 
             if (noteDetails["Owner"] != null && noteDetails["Owner"].Type != JTokenType.Null)
             {
@@ -370,7 +370,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             {
                 noteJSON.Add("Note_Title", null);
             }
-            if(note.Content!= null)
+            if (note.Content != null)
             {
                 noteJSON.Add("Note_Content", note.Content);
             }
@@ -396,7 +396,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 JObject createdByObject = (JObject)attachmentDetails["Created_By"];
                 ZCRMUser createdBy = ZCRMUser.GetInstance(Convert.ToInt64(createdByObject["id"]), (string)createdByObject["name"]);
                 attachment.CreatedBy = createdBy;
-                attachment.CreatedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(attachmentDetails["Created_Time"]));
+                attachment.CreatedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(attachmentDetails["Created_Time"]));
 
                 if (attachmentDetails["Owner"] != null && attachmentDetails["Owner"].Type != JTokenType.Null)
                 {
@@ -414,7 +414,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 JObject modifiedByObject = (JObject)attachmentDetails["Modified_By"];
                 ZCRMUser modifiedBy = ZCRMUser.GetInstance(Convert.ToInt64(modifiedByObject["id"]), (string)modifiedByObject["name"]);
                 attachment.ModifiedBy = modifiedBy;
-                attachment.ModifiedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(attachmentDetails["Modified_Time"]));
+                attachment.ModifiedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(attachmentDetails["Modified_Time"]));
             }
 
             if (attachmentDetails.ContainsKey("$editable"))
@@ -480,14 +480,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     relatedDetailsJSON.Add(keyValuePairs.Key, JToken.Parse(null));
                 }
-                //else if (value is long)
-                //{
-                //    relatedDetailsJSON.Add(keyValuePairs.Key, Convert.ToInt64(value));
-                //}
-                //else if (value is int)
-                //{
-                //    relatedDetailsJSON.Add(keyValuePairs.Key, Convert.ToInt32(value));
-                //}
+                // else if (value is long)
+                // {
+                //     relatedDetailsJSON.Add(keyValuePairs.Key, Convert.ToInt64(value));
+                // }
+                // else if (value is int)
+                // {
+                //     relatedDetailsJSON.Add(keyValuePairs.Key, Convert.ToInt32(value));
+                // }
                 else
                 {
                     relatedDetailsJSON.Add(keyValuePairs.Key, JToken.FromObject(value));

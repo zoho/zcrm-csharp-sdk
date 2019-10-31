@@ -77,6 +77,28 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
         }
 
+        public APIResponse GetField(long fieldId)
+        {
+            try
+            {
+                requestMethod = APIConstants.RequestMethod.GET;
+                urlPath = "settings/fields/" + fieldId;
+                requestQueryParams.Add("module", module.ApiName);
+
+                APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
+
+                JObject responseJSON = response.ResponseJSON;
+                JArray fieldArray = (JArray)responseJSON["fields"];
+                response.Data = GetZCRMField((JObject)fieldArray[0]);
+                return response;
+            }
+            catch (Exception e) when (!(e is ZCRMException))
+            {
+                ZCRMLogger.LogError(e);
+                throw new ZCRMException(APIConstants.SDK_ERROR, e);
+            }
+        }
+
         public BulkAPIResponse<ZCRMField> GetAllFields(string modifiedSince)
         {
             try
@@ -148,6 +170,28 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
         }
 
+        public APIResponse GetRelatedList(long relatedListId)
+        {
+            try
+            {
+                requestMethod = APIConstants.RequestMethod.GET;
+                urlPath = "settings/related_lists/" + relatedListId;
+                requestQueryParams.Add("module", module.ApiName);
+
+                APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
+
+                JObject responseJSON = response.ResponseJSON;
+                JArray relatedListArray = (JArray)responseJSON["related_lists"];
+                response.Data = GetZCRMModuleRelation((JObject)relatedListArray[0]);
+                return response;
+            }
+            catch (Exception e) when (!(e is ZCRMException))
+            {
+                ZCRMLogger.LogError(e);
+                throw new ZCRMException(APIConstants.SDK_ERROR, e);
+            }
+        }
+
         public BulkAPIResponse<ZCRMModuleRelation> GetAllRelatedLists()
         {
             try
@@ -181,14 +225,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 JObject createdByObject = (JObject)layoutDetails["created_by"];
                 ZCRMUser createdUser = ZCRMUser.GetInstance(Convert.ToInt64(createdByObject["id"]), Convert.ToString(createdByObject["name"]));
                 layout.CreatedBy = createdUser;
-                layout.CreatedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(layoutDetails["created_time"]));
+                layout.CreatedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(layoutDetails["created_time"]));
             }
             if (layoutDetails["modified_by"].HasValues)
             {
                 JObject modifiedByObject = (JObject)layoutDetails["modified_by"];
                 ZCRMUser modifiedUser = ZCRMUser.GetInstance(Convert.ToInt64(modifiedByObject["id"]), Convert.ToString(modifiedByObject["name"]));
                 layout.ModifiedBy = modifiedUser;
-                layout.ModifiedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(layoutDetails["modified_time"]));
+                layout.ModifiedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(layoutDetails["modified_time"]));
             }
             JArray accessibleProfilesArray = (JArray)layoutDetails["profiles"];
             foreach (JObject profileObject in accessibleProfilesArray)
@@ -236,31 +280,73 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         private ZCRMField GetZCRMField(JObject fieldJSON)
         {
             ZCRMField field = ZCRMField.GetInstance(Convert.ToString(fieldJSON["api_name"]));
-            field.DefaultValue = (object)fieldJSON["default_value"];
-            field.Mandatory = (bool?)fieldJSON["required"];
-            field.Id = Convert.ToInt64(fieldJSON["id"]);
-            field.CustomField = Convert.ToBoolean(fieldJSON["custom_field"]);
-            field.DataType = Convert.ToString(fieldJSON["data_type"]);
-            field.DisplayName = Convert.ToString(fieldJSON["field_label"]);
+            field.Mandatory = (bool?)fieldJSON["system_mandatory"];
+            field.Webhook = (bool)(fieldJSON["webhook"]);
+            field.JsonType = (string)(fieldJSON["json_type"]);
+            if (fieldJSON["crypt"].HasValues)
+            {
+                foreach (KeyValuePair<string, JToken> crypt in (JObject)fieldJSON["crypt"])
+                {
+                    field.SetEncrypt(crypt.Key, Convert.ToString(crypt.Value));
+                }
+            }
+            field.DisplayName = (string)(fieldJSON["field_label"]);
+            field.ToolTip = (string)(fieldJSON["tooltip"]);
+            field.CreatedSource = (string)(fieldJSON["created_source"]);
+            field.FieldReadOnly = (bool)(fieldJSON["field_read_only"]);
+            field.DisplayLabel = (string)(fieldJSON["display_label"]);
+            field.ReadOnly = (bool)(fieldJSON["read_only"]);
+            if (fieldJSON["association_details"].HasValues)
+            {
+                foreach (KeyValuePair<string, JToken> association_details in (JObject)fieldJSON["association_details"])
+                {
+                    if (association_details.Key.Equals("lookup_field"))
+                    {
+                        JObject data = (JObject)association_details.Value;
+                        ZCRMField field_obj = ZCRMField.GetInstance(Convert.ToString(data["api_name"]));
+                        field_obj.Id = Convert.ToInt64(data["id"]);
+                        field.SetAssociationDetails(association_details.Key, field_obj);
+                    }
+                    if (association_details.Key.Equals("related_field"))
+                    {
+                        JObject data = (JObject)association_details.Value;
+                        ZCRMField field_obj = ZCRMField.GetInstance(Convert.ToString(data["api_name"]));
+                        field_obj.Id = Convert.ToInt64(data["id"]);
+                        field.SetAssociationDetails(association_details.Key, field_obj);
+                    }
+                }
+            }
+            if(fieldJSON.ContainsKey("businesscard_supported"))
+            {
+                field.BusinesscardSupported = (bool)(fieldJSON["businesscard_supported"]);
+            }
+            if (fieldJSON["currency"].HasValues)
+            {
+                JObject tempJSONObject = (JObject)fieldJSON["currency"];
+                if (tempJSONObject.HasValues)
+                {
+                    if (tempJSONObject.ContainsKey("precision"))
+                    {
+                        field.Precision = (int?)tempJSONObject["precision"];
+                    }
+                    if (tempJSONObject.ContainsKey("rounding_option"))
+                    {
+                        field.RoundingOption = Convert.ToString(tempJSONObject["rounding_option"]);
+                    }
+                }
+            }
+            field.Id = (long)(fieldJSON["id"]);
+            field.CustomField = (bool)(fieldJSON["custom_field"]);
+            if (fieldJSON["lookup"].HasValues)
+            {
+                JObject lookup = (JObject)fieldJSON["lookup"];
+                foreach (KeyValuePair<string, JToken> lookupObject in lookup)
+                {
+                    field.SetLookupDetails(lookupObject.Key, (object)lookupObject.Value);
+                }
+            }
+            field.Visible = (bool)(fieldJSON["visible"]);
             field.MaxLength = (int?)fieldJSON["length"];
-            field.Precision = (int?)fieldJSON["decimal_place"];
-            field.ReadOnly = Convert.ToBoolean(fieldJSON["read_only"]);
-            field.Visible = Convert.ToBoolean(fieldJSON["visible"]);
-            field.SequenceNo = (int?)fieldJSON["sequence_number"];
-            field.ToolTip = Convert.ToString(fieldJSON["tooltip"]);
-            field.Webhook = Convert.ToBoolean(fieldJSON["webhook"]);
-            field.CreatedSource = Convert.ToString(fieldJSON["created_source"]);
-            field.JsonType = Convert.ToString(fieldJSON["json_type"]);
-            JToken tempJSONObect = fieldJSON["formula"];
-            if (tempJSONObect.HasValues)
-            {
-                field.FormulaReturnType = Convert.ToString(fieldJSON["return_type"]);
-            }
-            tempJSONObect = fieldJSON["currency"];
-            if (tempJSONObect.HasValues)
-            {
-                field.Precision = (int?)fieldJSON["precision"];
-            }
             JObject subLayouts = (JObject)fieldJSON["view_type"];
             if (subLayouts.Type != JTokenType.Null)
             {
@@ -277,40 +363,107 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     layoutsPresent.Add("QUICK_CREATE");
                 }
+                if ((bool)subLayouts["edit"])
+                {
+                    layoutsPresent.Add("EDIT");
+                }
                 field.SubLayoutsPresent = layoutsPresent;
             }
-
-            JArray pickList = (JArray)fieldJSON["pick_list_values"];
-            foreach (JObject pickListObject in pickList)
-            {
-                ZCRMPickListValue pickListValue = ZCRMPickListValue.GetInstance();
-                pickListValue.DisplayName = (string)pickListObject["display_value"];
-                pickListValue.ActualName = (string)pickListObject["actual_value"];
-                pickListValue.SequenceNumber = Convert.ToInt32(pickListObject["sequence_number"]);
-                pickListValue.Maps = (JArray)pickListObject["maps"];
-                field.AddPickListValue(pickListValue);
-            }
-            JObject lookup = (JObject)fieldJSON["lookup"];
-            foreach (KeyValuePair<string, JToken> lookupObject in lookup)
-            {
-                field.SetLookupDetails(lookupObject.Key, (object)lookupObject.Value);
-            }
-            JObject multilookup = (JObject)fieldJSON["multiselectlookup"];
-            foreach (KeyValuePair<string, JToken> multiLookupObject in multilookup)
-            {
-                field.SetMultiselectLookup(multiLookupObject.Key, (object)multiLookupObject.Value);
-            }
-            if (fieldJSON.ContainsKey("subformtabId") && fieldJSON["subformtabId"].Type != JTokenType.Null)
-            {
-                field.SubFormTabId = Convert.ToInt64(fieldJSON["subformtabid"]);
-            }
-            if (fieldJSON.ContainsKey("subform") && fieldJSON["subform"].Type != JTokenType.Null)
+            if (fieldJSON["subform"].HasValues)
             {
                 JObject subformDetails = (JObject)fieldJSON["subform"];
                 foreach (KeyValuePair<string, JToken> subformDetail in subformDetails)
                 {
                     field.SetSubformDetails(subformDetail.Key, (object)subformDetail.Value);
                 }
+            }
+            if (fieldJSON["unique"].HasValues)
+            {
+                field.UniqueField = true;
+                JObject casesensitive = (JObject)fieldJSON["unique"];
+                if(casesensitive != null)
+                {
+                    field.CaseSensitive = (string)(casesensitive["casesensitive"]);
+                }
+            }
+            if (fieldJSON.ContainsKey("history_tracking") && fieldJSON["history_tracking"].Type != JTokenType.Null)
+            {
+                field.HistoryTracking = (bool)(fieldJSON["history_tracking"]);
+            }
+            field.DataType = (string)(fieldJSON["data_type"]);
+            if (fieldJSON["formula"].HasValues)
+            {
+                JObject tempJSONObject = (JObject)fieldJSON["formula"];
+                if (tempJSONObject.HasValues)
+                {
+                    if (tempJSONObject.ContainsKey("return_type"))
+                    {
+                        field.FormulaReturnType = (string)(tempJSONObject["return_type"]);
+                    }
+                    if (tempJSONObject.ContainsKey("expression"))
+                    {
+                        field.FormulaExpression = (string)(tempJSONObject["expression"]);
+                    }
+                }
+            }
+            field.DecimalPlace = (int?)fieldJSON["decimal_place"];
+            if(fieldJSON.ContainsKey("mass_update"))
+            {
+                field.MassUpdate = (bool)(fieldJSON["mass_update"]);
+            }
+            if (fieldJSON.ContainsKey("blueprint_supported") && fieldJSON["blueprint_supported"].Type != JTokenType.Null)
+            {
+                field.BluePrintSupported = (bool)(fieldJSON["blueprint_supported"]);
+            }
+            if (fieldJSON["pick_list_values"].HasValues)
+            {
+                JArray pickList = (JArray)fieldJSON["pick_list_values"];
+                foreach (JObject pickListObject in pickList)
+                {
+                    ZCRMPickListValue pickListValue = ZCRMPickListValue.GetInstance();
+                    pickListValue.DisplayName = (string)pickListObject["display_value"];
+                    pickListValue.ActualName = (string)pickListObject["actual_value"];
+                    pickListValue.SequenceNumber = Convert.ToInt32(pickListObject["sequence_number"]);
+                    pickListValue.Maps = (JArray)pickListObject["maps"];
+                    field.AddPickListValue(pickListValue);
+                }
+            }
+            if (fieldJSON["multiselectlookup"].HasValues)
+            {
+                JObject multilookup = (JObject)fieldJSON["multiselectlookup"];
+                foreach (KeyValuePair<string, JToken> multiLookupObject in multilookup)
+                {
+                    field.SetMultiselectLookup(multiLookupObject.Key, (object)multiLookupObject.Value);
+                }
+            }
+            if (fieldJSON["auto_number"].HasValues)
+            {
+                field.AutoNumber = true;
+                JObject auto_number = (JObject)fieldJSON["auto_number"];
+                if (auto_number.ContainsKey("prefix") && auto_number["prefix"].Type != JTokenType.Null)
+                {
+                    field.Prefix = Convert.ToString(auto_number["prefix"]);
+                }
+                if (auto_number.ContainsKey("suffix") && auto_number["suffix"].Type != JTokenType.Null)
+                {
+                    field.Suffix = Convert.ToString(auto_number["suffix"]);
+                }
+                if (auto_number.ContainsKey("start_number") && auto_number["start_number"].Type != JTokenType.Null)
+                {
+                    field.StartNumber = Convert.ToInt32(auto_number["start_number"]);
+                }
+            }
+            if (fieldJSON.ContainsKey("default_value") && fieldJSON["default_value"].Type != JTokenType.Null)
+            {
+                field.DefaultValue = (object)fieldJSON["default_value"];
+            }
+            if (fieldJSON.ContainsKey("sequence_number") && fieldJSON["sequence_number"].Type != JTokenType.Null)
+            {
+                field.SequenceNo = (int?)fieldJSON["sequence_number"];
+            }
+            if (fieldJSON.ContainsKey("subformtabId") && fieldJSON["subformtabId"].Type != JTokenType.Null)
+            {
+                field.SubFormTabId = Convert.ToInt64(fieldJSON["subformtabid"]);
             }
             return field;
         }
@@ -321,7 +474,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             section.ColumnCount = Convert.ToInt32(sectionJSON["column_count"]);
             section.DisplayName = (string)sectionJSON["display_label"];
             section.Sequence = Convert.ToInt32(sectionJSON["sequence_number"]);
-            if(sectionJSON.ContainsKey("isSubformSection"))
+            if (sectionJSON.ContainsKey("isSubformSection"))
             {
                 section.IsSubformSection = Convert.ToBoolean(sectionJSON["isSubformSection"]);
             }
@@ -387,7 +540,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             if (customViewObject.ContainsKey("criteria") && customViewObject["criteria"].Type != JTokenType.Null)
             {
                 JObject jobj = (JObject)customViewObject["criteria"];
-                index= 1;
+                index = 1;
                 customView.Criteria = SetZCRMCriteriaObject(jobj);
                 customView.CriteriaPattern = customView.Criteria.Pattern;
                 customView.CriteriaCondition = customView.Criteria.Criteria;
@@ -413,7 +566,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             ZCRMCriteria recordCriteria = ZCRMCriteria.GetInstance();
             if (criteria.ContainsKey("field") && criteria["field"].Type != JTokenType.Null)
             {
-                recordCriteria.Field = criteria["field"].ToString();
+                recordCriteria.FieldAPIName = criteria["field"].ToString();
             }
             if (criteria.ContainsKey("comparator") && criteria["comparator"].Type != JTokenType.Null)
             {
@@ -421,27 +574,40 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
             if (criteria.ContainsKey("value") && criteria["value"].Type != JTokenType.Null)
             {
-                recordCriteria.Value = criteria["value"].ToString();
+                recordCriteria.Value = criteria["value"];
                 recordCriteria.Index = index;
                 recordCriteria.Pattern = Convert.ToString(index);
                 index++;
-                recordCriteria.Criteria = "("+ criteria["field"].ToString()+":"+criteria["comparator"].ToString()+":"+criteria["value"].ToString()+")";
+                recordCriteria.Criteria = "(" + criteria["field"].ToString() + ":" + criteria["comparator"].ToString() + ":" + criteria["value"].ToString() + ")";
             }
             List<ZCRMCriteria> recordData = new List<ZCRMCriteria>();
             if (criteria.ContainsKey("group") && criteria["group"].Type != JTokenType.Null)
             {
                 JArray jarr = (JArray)criteria["group"];
-                for (int i = 0; i < jarr.Count; i++)
+                foreach (JObject groupJSON in jarr)
                 {
-                    recordData.Add(SetZCRMCriteriaObject((JObject)jarr[i]));
+                    recordData.Add(SetZCRMCriteriaObject(groupJSON));
                 }
                 recordCriteria.Group = recordData;
             }
             if (criteria.ContainsKey("group_operator") && criteria["group_operator"].Type != JTokenType.Null)
             {
+                string criteriavalue = "(", pattern = "(";
                 recordCriteria.GroupOperator = criteria["group_operator"].ToString();
-                recordCriteria.Criteria = "("+recordData[0].Criteria+ recordCriteria.GroupOperator+ recordData[1].Criteria+")";
-                recordCriteria.Pattern = "("+ recordData[0].Pattern+ recordCriteria.GroupOperator+ recordData[1].Pattern+")";
+                int count = recordData.Count, i = 0;
+                foreach (ZCRMCriteria criteriaObj in recordData)
+                {
+                    i++;
+                    criteriavalue += criteriaObj.Criteria;
+                    pattern += criteriaObj.Pattern;
+                    if (i < count)
+                    {
+                        criteriavalue += recordCriteria.GroupOperator;
+                        pattern += recordCriteria.GroupOperator;
+                    }
+                }
+                recordCriteria.Criteria = criteriavalue + ")";
+                recordCriteria.Pattern = pattern + ")";
             }
             return recordCriteria;
         }
@@ -449,11 +615,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         private ZCRMModuleRelation GetZCRMModuleRelation(JObject relatedList)
         {
             ZCRMModuleRelation moduleRelation = ZCRMModuleRelation.GetInstance(module.ApiName, Convert.ToInt64(relatedList["id"]));
-            moduleRelation.ApiName = (string)relatedList["api_name"];
+            moduleRelation.SequenceNumber = (int)relatedList["sequence_number"];
             moduleRelation.Label = (string)relatedList["display_label"];
+            moduleRelation.ApiName = (string)relatedList["api_name"];
             moduleRelation.Module = (string)relatedList["module"];
-            moduleRelation.Type = (string)relatedList["type"];
             moduleRelation.Name = (string)relatedList["name"];
+            moduleRelation.Action = (string)relatedList["action"];
+            moduleRelation.Href = (string)relatedList["href"];
+            moduleRelation.Type = (string)relatedList["type"];
             return moduleRelation;
         }
 
@@ -527,5 +696,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             return relatedLists;
         }
 
+        public List<ZCRMField> GetFields(JArray fieldArray)
+        {
+            List<ZCRMField> fieldLists = new List<ZCRMField>();
+            foreach (JObject fieldetails in fieldArray)
+            {
+                fieldLists.Add(GetZCRMField(fieldetails));
+            }
+            return fieldLists;
+        }
     }
 }

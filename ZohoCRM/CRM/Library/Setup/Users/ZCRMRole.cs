@@ -11,6 +11,9 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
         private bool isAdminUser;
         private ZCRMRole reportingTo;
 
+        private ZCRMUser forecastManager;
+        private bool shareWithPeers;
+        private string description;
 
         private ZCRMRole(long roleId, string roleName)
         {
@@ -113,5 +116,42 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
                 reportingTo = value;
             }
         }
+
+        public ZCRMUser ForecastManager
+        {
+            get
+            {
+                return forecastManager;
+            }
+            set
+            {
+                forecastManager = value;
+            }
+        }
+
+        public bool ShareWithPeers
+        {
+            get
+            {
+                return shareWithPeers;
+            }
+            set
+            {
+                shareWithPeers = value;
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                return description;
+            }
+            set
+            {
+                description = value;
+            }
+        }
+
     }
 }

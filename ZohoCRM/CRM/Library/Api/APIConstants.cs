@@ -11,6 +11,9 @@ namespace ZCRMSDK.CRM.Library.Api
         public static readonly string HEADERS = "HEADERS";
         public static readonly string PARAMS = "PARAMS";
         public static readonly string STATUS_CODE = "STATUS_CODE";
+        public static readonly string API_STATUS_CODE = "status_code";
+        public static readonly string ERRORS = "errors";
+        public static readonly string RESOURCE = "resource";
         public static readonly string RESPONSE_JSON = "RESPONSE_JSON";
         public static readonly string RESPONSE_HEADERS = "RESPONSE_HEADERS";
         public static readonly string EXCEPTION_LOG_MSG = "ZCRM - ";
@@ -23,6 +26,13 @@ namespace ZCRMSDK.CRM.Library.Api
         public static readonly string CODE = "code";
         public static readonly string STATUS = "status";
         public static readonly string DETAILS = "details";
+        public static readonly string QUERY = "query";
+        public static readonly string READ = "read";
+        public static readonly string WRITE = "write";
+        public static readonly string RESULT = "result";
+        public static readonly string CALLBACK = "callback";
+        public static readonly string UPLOAD = "upload";
+        public static readonly string ORG = "org";
         public static readonly string DATA = "data";
         public static readonly string USERS = "users";
         public static readonly string TAGS = "tags";
@@ -50,10 +60,20 @@ namespace ZCRMSDK.CRM.Library.Api
         public static readonly string DUPLICATE_FIELD = "duplicate_field";
         public static readonly string GMT = "GMT";
         public static readonly string MIN_LOG_LEVEL = "minLogLevel";
-        public static readonly string APIBASEURL = "apiBaseUrl";
+        public static readonly string API_BASE_URL = "apiBaseUrl";
+        public static readonly string FILE_UPLOAD_URL = "fileUploadUrl";
+        public static readonly string APIVERSION = "apiVersion";
+        public static readonly string LOGIN_AUTH_CLASS = "loginAuthClass";
+        public static readonly string LOG_FILE_PATH = "logFilePath";
+        public static readonly string PHOTOURL = "photoUrl";
+        public static readonly string LOG_FILE_NAME = "LogFile.log";
         public static readonly string DOMAIN_SUFFIX = "domainSuffix";
+        public static readonly string CURRENT_USER_EMAIL = "currentUserEmail";
         public static readonly string USER_AGENT = "ZOHOCRM C# SDK";
         public static readonly int MAX_ALLOWED_FILE_SIZE_IN_MB = 20;
+        public static readonly string BULK_WRITE_STATUS = "STATUS";
+        public static readonly string FILETYPE = "file_type";
+        public static readonly List<string> WRITE_STATUS = new List<string>() { "ADDED", "UPDATED" };
         public static readonly List<string> CONVERTIBLE_MODULES = new List<string>() { "Leads", "Quotes", "SalesOrders" };
         public static readonly List<string> PHOTO_NOTSUPPORTED_MODULES = new List<string>() { "Deals", "Activities", "Quotes", "Sales_Orders",
                                 "Purchase_Orders", "Invoices", "Campaigns","Price_Books","Cases","Solutions","Tasks","Events","Calls","Notes","Attachments" };

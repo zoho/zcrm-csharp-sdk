@@ -8,7 +8,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
     {
         private string name;
         private long id;
-        private List<ZCRMLeadConvertMappingField> fields;
+        private List<ZCRMLeadConvertMappingField> fields = new List<ZCRMLeadConvertMappingField>();
 
         private ZCRMLeadConvertMapping(string name, long id)
         {

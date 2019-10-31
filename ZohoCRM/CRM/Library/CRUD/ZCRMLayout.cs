@@ -17,7 +17,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private int status;
         private List<ZCRMSection> sections = new List<ZCRMSection>();
         private List<ZCRMProfile> accessibleProfies = new List<ZCRMProfile>();
-        private Dictionary<string, ZCRMLeadConvertMapping> convertMapping;
+        private Dictionary<string, ZCRMLeadConvertMapping> convertMapping = new Dictionary<string, ZCRMLeadConvertMapping>();
 
         private ZCRMLayout(long layoutId)
         {

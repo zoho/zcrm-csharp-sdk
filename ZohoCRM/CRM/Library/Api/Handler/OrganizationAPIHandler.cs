@@ -46,28 +46,60 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         private ZCRMOrganization GetZCRMOrganization(JObject orgDetails)
         {
             ZCRMOrganization organization = ZCRMOrganization.GetInstance((string)orgDetails["company_name"], (long)orgDetails["id"]);
-            organization.Alias = (string)orgDetails["alias"];
-            organization.PrimaryZuid = (long)orgDetails["primary_zuid"];
-            organization.Zgid = (long)orgDetails["zgid"];
-            organization.Phone = (string)orgDetails["phone"];
-            organization.Mobile = (string)orgDetails["mobile"];
-            organization.Website = (string)orgDetails["website"];
-            organization.PrimaryEmail = (string)orgDetails["primary_email"];
-            organization.EmployeeCount = Convert.ToInt32(orgDetails["employee_count"].Type != JTokenType.Null ? orgDetails["employee_count"] : 0); //check the value is null/empty
-            organization.Description = (string)orgDetails["description"];
-            organization.Timezone = (string)orgDetails["time_zone"];
-            organization.IsoCode = (string)orgDetails["iso_code"];
-            organization.CurrencyLocale = (string)orgDetails["currency_locale"];
-            organization.CurrencySymbol = (string)orgDetails["currency_symbol"];
-            organization.Street = (string)orgDetails["street"];
-            organization.State = (string)orgDetails["state"];
-            organization.City = (string)orgDetails["city"];
             organization.Country = (string)orgDetails["country"];
-            organization.CountryCode = (string)orgDetails["country_code"];
-            organization.ZipCode = (string)orgDetails["zip"];
+            organization.PhotoId = (string)orgDetails["photo_id"];
+            organization.City = (string)orgDetails["city"];
+            organization.Description = (string)orgDetails["description"];
             organization.McStatus = (bool)orgDetails["mc_status"];
             organization.GappsEnabled = (bool)orgDetails["gapps_enabled"];
-
+            organization.Street = (string)orgDetails["street"];
+            organization.Alias = (string)orgDetails["alias"];
+            organization.Currency = (string)orgDetails["currency"];
+            organization.State = (string)orgDetails["state"];
+            organization.Fax = (string)orgDetails["fax"];
+            organization.EmployeeCount = Convert.ToInt32(orgDetails["employee_count"].Type != JTokenType.Null ? orgDetails["employee_count"] : 0); //check the value is null/empty
+            organization.ZipCode = (string)orgDetails["zip"];
+            organization.Website = (string)orgDetails["website"];
+            organization.CurrencySymbol = (string)orgDetails["currency_symbol"];
+            organization.Mobile = (string)orgDetails["mobile"];
+            organization.CurrencyLocale = (string)orgDetails["currency_locale"];
+            organization.PrimaryZuid = (long)orgDetails["primary_zuid"];
+            organization.ZiaPortalId = (string)orgDetails["zia_portal_id"];
+            organization.Timezone = (string)orgDetails["time_zone"];
+            organization.Zgid = (long)orgDetails["zgid"];
+            organization.CountryCode = (string)orgDetails["country_code"];
+            if (orgDetails.ContainsKey("license_details") && orgDetails["license_details"].Type != JTokenType.Null)
+            {
+                JObject organizationJobj = (JObject)orgDetails["license_details"];
+                if (organizationJobj.ContainsKey("paid_expiry") && organizationJobj["paid_expiry"].Type != JTokenType.Null)
+                {
+                    organization.PaidExpiry = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(organizationJobj["paid_expiry"]));
+                }
+                if (organizationJobj.ContainsKey("users_license_purchased") && organizationJobj["users_license_purchased"].Type != JTokenType.Null)
+                {
+                    organization.UsersLicensePurchased = (int)organizationJobj["users_license_purchased"];
+                }
+                if (organizationJobj.ContainsKey("trial_type") && organizationJobj["trial_type"].Type != JTokenType.Null)
+                {
+                    organization.TrialType = (string)organizationJobj["trial_type"];
+                }
+                if (organizationJobj.ContainsKey("trial_expiry") && organizationJobj["trial_expiry"].Type != JTokenType.Null)
+                {
+                    organization.TrialType = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(organizationJobj["trial_expiry"]));
+                }
+                if (organizationJobj.ContainsKey("paid") && organizationJobj["paid"].Type != JTokenType.Null)
+                {
+                    organization.PaidAccount = (bool)organizationJobj["paid"];
+                }
+                if (organizationJobj.ContainsKey("paid_type") && organizationJobj["paid_type"].Type != JTokenType.Null)
+                {
+                    organization.PaidType = (string)organizationJobj["paid_type"];
+                }
+            }
+            organization.Phone = (string)orgDetails["phone"];
+            organization.PrivacySettings = (bool)orgDetails["privacy_settings"];
+            organization.PrimaryEmail = (string)orgDetails["primary_email"];
+            organization.IsoCode = (string)orgDetails["iso_code"];
             return organization;
         }
 
@@ -238,14 +270,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 JObject createdByObject = (JObject)userDetails["created_by"];
                 ZCRMUser createdUser = ZCRMUser.GetInstance((long)createdByObject["id"], (string)createdByObject["name"]);
                 user.CreatedBy = createdUser;
-                user.CreatedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(userDetails["created_time"]));
+                user.CreatedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(userDetails["created_time"]));
             }
             if (userDetails.ContainsKey("Modified_By") && userDetails["Modified_By"].Type != JTokenType.Null)
             {
                 JObject modifiedByObject = (JObject)userDetails["Modified_By"];
                 ZCRMUser modifiedByUser = ZCRMUser.GetInstance((long)modifiedByObject["id"], (string)modifiedByObject["name"]);
                 user.ModifiedBy = modifiedByUser;
-                user.ModifiedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(userDetails["Modified_Time"]));
+                user.ModifiedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(userDetails["Modified_Time"]));
             }
             if (userDetails.ContainsKey("Reporting_To") && userDetails["Reporting_To"].Type != JTokenType.Null)
             {
@@ -366,11 +398,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             ZCRMTerritory territoryIns = ZCRMTerritory.GetInstance(Convert.ToInt64(territory["id"]));
             if (territory.ContainsKey("created_time") && territory["created_time"].Type != JTokenType.Null)
             {
-                territoryIns.CreatedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(territory["created_time"]));
+                territoryIns.CreatedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(territory["created_time"]));
             }
             if (territory.ContainsKey("modified_time") && territory["modified_time"].Type != JTokenType.Null)
             {
-                territoryIns.ModifiedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(territory["modified_time"]));
+                territoryIns.ModifiedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(territory["modified_time"]));
             }
             if (territory.ContainsKey("manager") && territory["manager"].Type != JTokenType.Null)
             {
@@ -422,11 +454,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             ZCRMCriteria recordCriteria = ZCRMCriteria.GetInstance();
             if (criteria.ContainsKey("field") && criteria["field"].Type != JTokenType.Null)
             {
-                recordCriteria.Field = criteria["field"].ToString();
+                recordCriteria.FieldAPIName = criteria["field"].ToString();
             }
             if (criteria.ContainsKey("value") && criteria["value"].Type != JTokenType.Null)
             {
-                recordCriteria.Value = criteria["value"].ToString();
+                recordCriteria.Value = criteria["value"];
             }
             if (criteria.ContainsKey("group_operator") && criteria["group_operator"].Type != JTokenType.Null)
             {
@@ -693,14 +725,36 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         {
             ZCRMRole role = ZCRMRole.GetInstance((long)roleDetails["id"], (string)roleDetails["name"]);
             role.Label = (string)roleDetails["display_label"];
-            role.AdminUser = (bool)roleDetails["admin_user"];
+            if (roleDetails.ContainsKey("forecast_manager") && roleDetails["forecast_manager"].Type != JTokenType.Null)
+            {
+                JObject forecast_manager = (JObject)roleDetails["forecast_manager"];
+                ZCRMUser user = ZCRMUser.GetInstance();
+                if (forecast_manager.ContainsKey("id") && forecast_manager["id"].Type != JTokenType.Null)
+                {
+                    user.Id = (long)forecast_manager["id"];
+                }
+                if (forecast_manager.ContainsKey("name") && forecast_manager["name"].Type != JTokenType.Null)
+                {
+                    user.FullName = (string)forecast_manager["name"];
+                }
+                role.ForecastManager = user;
+            }
+            if (roleDetails.ContainsKey("share_with_peers") && roleDetails["share_with_peers"].Type != JTokenType.Null)
+            {
+                role.ShareWithPeers = (bool)roleDetails["share_with_peers"];
+            }
+            if (roleDetails.ContainsKey("description") && roleDetails["description"].Type != JTokenType.Null)
+            {
+                role.Description = (string)roleDetails["description"];
+            }
             ZCRMRole reportingTo = null;
-            if (roleDetails["reporting_to"].Type != JTokenType.Null)
+            if (roleDetails.ContainsKey("reporting_to") && roleDetails["reporting_to"].Type != JTokenType.Null)
             {
                 JObject reportingToObject = (JObject)roleDetails["reporting_to"];
                 reportingTo = ZCRMRole.GetInstance((long)reportingToObject["id"], (string)reportingToObject["name"]);
             }
             role.ReportingTo = reportingTo;
+            role.AdminUser = (bool)roleDetails["admin_user"];
             return role;
         }
 
@@ -763,7 +817,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 JObject createdByObject = (JObject)profileDetails["created_by"];
                 ZCRMUser createdBy = ZCRMUser.GetInstance((long)createdByObject["id"], (string)createdByObject["name"]);
                 profile.CreatedBy = createdBy;
-                profile.CreatedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(profileDetails["created_time"]));
+                profile.CreatedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(profileDetails["created_time"]));
             }
             profile.ModifiedBy = null;
             if (profileDetails["modified_by"].Type != JTokenType.Null)
@@ -771,9 +825,72 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 JObject modifiedByObject = (JObject)profileDetails["modified_by"];
                 ZCRMUser modifiedBy = ZCRMUser.GetInstance((long)modifiedByObject["id"], (string)modifiedByObject["name"]);
                 profile.ModifiedBy = modifiedBy;
-                profile.ModifiedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(profileDetails["modified_time"]));
+                profile.ModifiedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(profileDetails["modified_time"]));
             }
-
+            if (profileDetails.ContainsKey("permissions_details") && profileDetails["permissions_details"].Type != JTokenType.Null)
+            {
+                JArray permissionsJArr = (JArray)profileDetails["permissions_details"];
+                foreach (JObject permissionsJObj in permissionsJArr)
+                {
+                    ZCRMProfilePermissions profilePermissions = ZCRMProfilePermissions.GetInstance();
+                    if (permissionsJObj.ContainsKey("display_label") && permissionsJObj["display_label"].Type != JTokenType.Null)
+                    {
+                        profilePermissions.DisplayLabel = (string)permissionsJObj["display_label"];
+                    }
+                    if (permissionsJObj.ContainsKey("module") && permissionsJObj["module"].Type != JTokenType.Null)
+                    {
+                        profilePermissions.Module = (string)permissionsJObj["module"];
+                    }
+                    if (permissionsJObj.ContainsKey("name") && permissionsJObj["name"].Type != JTokenType.Null)
+                    {
+                        profilePermissions.Name = (string)permissionsJObj["name"];
+                    }
+                    if (permissionsJObj.ContainsKey("id") && permissionsJObj["id"].Type != JTokenType.Null)
+                    {
+                        profilePermissions.Id = (long)permissionsJObj["id"];
+                    }
+                    if (permissionsJObj.ContainsKey("enabled") && permissionsJObj["enabled"].Type != JTokenType.Null)
+                    {
+                        profilePermissions.Enabled = (bool)permissionsJObj["enabled"];
+                    }
+                    profile.SetPermissionsDetails(profilePermissions);
+                }
+            }
+            if (profileDetails.ContainsKey("sections") && profileDetails["sections"].Type != JTokenType.Null)
+            {
+                JArray sectionsJArr = (JArray)profileDetails["sections"];
+                foreach (JObject sectionsJObj in sectionsJArr)
+                {
+                    ZCRMProfileSection sectionIns = ZCRMProfileSection.GetInstance((string)sectionsJObj["name"]);
+                    if (sectionsJObj.ContainsKey("categories") && sectionsJObj["categories"].Type != JTokenType.Null)
+                    {
+                        JArray categoriesJArr = (JArray)sectionsJObj["categories"];
+                        foreach (JObject categoriesJObj in categoriesJArr)
+                        {
+                            ZCRMProfileCategory categoryIns = ZCRMProfileCategory.GetInstance((string)categoriesJObj["name"]);
+                            if (categoriesJObj.ContainsKey("display_label") && categoriesJObj["display_label"].Type != JTokenType.Null)
+                            {
+                                categoryIns.DisplayLabel = (string)categoriesJObj["display_label"];
+                            }
+                            if (categoriesJObj.ContainsKey("module") && categoriesJObj["module"].Type != JTokenType.Null)
+                            {
+                                categoryIns.Module = (string)categoriesJObj["module"];
+                            }
+                            if (categoriesJObj.ContainsKey("permissions_details") && categoriesJObj["permissions_details"].Type != JTokenType.Null && categoriesJObj["permissions_details"].HasValues)
+                            {
+                                List<long> permissionsIds = new List<long>();
+                                foreach (long id in categoriesJObj["permissions_details"])
+                                {
+                                    permissionsIds.Add(id);
+                                }
+                                categoryIns.PermissionIds = permissionsIds;
+                            }
+                            sectionIns.SetCategories(categoryIns);
+                        }
+                    }
+                    profile.SetProfileSection(sectionIns);
+                }
+            }
             return profile;
         }
 

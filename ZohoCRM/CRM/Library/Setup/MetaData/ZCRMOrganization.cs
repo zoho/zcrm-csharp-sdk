@@ -35,6 +35,17 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
         private bool mcStatus;
         private bool gappsEnabled;
 
+        private string photoId;
+        private string currency;
+        private string ziaPortalId;
+        private bool privacySettings;
+        private bool paidAccount;
+        private string paidExpiry;
+        private int usersLicensePurchased;
+        private string trialType;
+        private string trialExpiry;
+        private string paidType;
+
 
         private ZCRMOrganization(string orgName, long? orgId)
         {
@@ -468,6 +479,126 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
             set
             {
                 currencySymbol = value;
+            }
+        }
+
+        public string PhotoId
+        {
+            get
+            {
+                return photoId;
+            }
+            set
+            {
+                photoId = value;
+            }
+        }
+
+        public string Currency
+        {
+            get
+            {
+                return currency;
+            }
+            set
+            {
+                currency = value;
+            }
+        }
+
+        public string ZiaPortalId
+        {
+            get
+            {
+                return ziaPortalId;
+            }
+            set
+            {
+                ziaPortalId = value;
+            }
+        }
+
+        public bool PrivacySettings
+        {
+            get
+            {
+                return privacySettings;
+            }
+            set
+            {
+                privacySettings = value;
+            }
+        }
+
+        public bool PaidAccount
+        {
+            get
+            {
+                return paidAccount;
+            }
+            set
+            {
+                paidAccount = value;
+            }
+        }
+
+        public string PaidExpiry
+        {
+            get
+            {
+                return paidExpiry;
+            }
+            set
+            {
+                paidExpiry = value;
+            }
+        }
+
+        public int UsersLicensePurchased
+        {
+            get
+            {
+                return usersLicensePurchased;
+            }
+            set
+            {
+                usersLicensePurchased = value;
+            }
+        }
+
+        public string TrialType
+        {
+            get
+            {
+                return trialType;
+            }
+            set
+            {
+                trialType = value;
+            }
+        }
+
+        public string TrialExpiry
+        {
+            get
+            {
+                return trialExpiry;
+            }
+            set
+            {
+                trialExpiry = value;
+            }
+        }
+
+        public string PaidType
+        {
+            get
+            {
+                return paidType;
+            }
+            set
+            {
+                paidType = value;
             }
         }
 

@@ -20,6 +20,10 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private ZCRMRecord parentRecord;
         private ZCRMJunctionRecord junctionRecord;
 
+        private int sequenceNumber;
+        private string action;
+        private string href;
+
         private ZCRMModuleRelation(string parentModuleAPIName, string relatedListAPIName)
         {
             ParentModuleAPIName = parentModuleAPIName;
@@ -255,6 +259,42 @@ namespace ZCRMSDK.CRM.Library.CRUD
             set
             {
                 type = value;
+            }
+        }
+
+        public int SequenceNumber
+        {
+            get
+            {
+                return sequenceNumber;
+            }
+            set
+            {
+                sequenceNumber = value;
+            }
+        }
+
+        public string Action
+        {
+            get
+            {
+                return action;
+            }
+            set
+            {
+                action = value;
+            }
+        }
+
+        public string Href
+        {
+            get
+            {
+                return href;
+            }
+            set
+            {
+                href = value;
             }
         }
 

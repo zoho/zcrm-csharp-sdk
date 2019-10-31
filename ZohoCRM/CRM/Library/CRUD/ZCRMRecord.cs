@@ -31,6 +31,10 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private List<ZCRMTag> tags = new List<ZCRMTag>();
         private List<string> tagnames = new List<string>();
 
+        /** Bulk write API fields */
+        private string status;
+        private string error;
+        private int rowNumber;
 
         private ZCRMRecord(string module, long? id)
         {
@@ -350,7 +354,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <param name="value">value (Object) of the record property.</param>
         public void SetProperty(string name, object value)
         {
-            Properties.Add(name,value);
+            Properties.Add(name, value);
         }
 
         /// <summary>
@@ -380,9 +384,9 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <param name="fieldAPIName">APIName (String) of the record field.</param>
         public object GetFieldValue(string fieldAPIName)
         {
-            if(Data.ContainsKey(fieldAPIName))
+            if (Data.ContainsKey(fieldAPIName))
             {
-                if(Data[fieldAPIName] == null) { return null; }
+                if (Data[fieldAPIName] == null) { return null; }
                 return Data[fieldAPIName];
             }
             throw new ZCRMException("The given field is not present in this record - " + fieldAPIName);
@@ -425,23 +429,69 @@ namespace ZCRMSDK.CRM.Library.CRUD
         }
 
         /// <summary>
+        /// Gets or sets the record status 
+        /// </summary>
+        public string Status
+        {
+            get
+            {
+                return status;
+            }
+            set
+            {
+                status = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the record error
+        /// </summary>
+        public string Error
+        {
+            get
+            {
+                return error;
+            }
+            set
+            {
+                error = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the record row number
+        /// </summary>
+        public int RowNumber
+        {
+            get
+            {
+                return rowNumber;
+            }
+            set
+            {
+                rowNumber = value;
+            }
+        }
+
+
+        /// <summary>
         /// To create the record.
         /// </summary>
         /// <returns>APIResponse class instance</returns>
-        public APIResponse Create()
+        public APIResponse Create(List<string> trigger = null, string lar_id = null)
         {
-           if (EntityId != null) { throw new ZCRMException("Entity ID MUST be NUL for Create Operation"); }
-            return EntityAPIHandler.GetInstance(this).CreateRecord();
+            if (EntityId != null) { throw new ZCRMException("Entity ID MUST be NUL for Create Operation"); }
+            return EntityAPIHandler.GetInstance(this).CreateRecord(trigger, lar_id);
         }
 
         /// <summary>
         /// To update the record.
         /// </summary>
         /// <returns>APIResponse class instance.</returns>
-        public APIResponse Update()
+        public APIResponse Update(List<string> trigger = null)
         {
             if (EntityId == null) { throw new ZCRMException("Entity ID MUST NOT be NULl for update operation"); }
-            return EntityAPIHandler.GetInstance(this).UpdateRecord();
+            return EntityAPIHandler.GetInstance(this).UpdateRecord(trigger);
         }
 
         /// <summary>
@@ -726,7 +776,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
             ZCRMRecord newRecord = this.Clone() as ZCRMRecord;
             newRecord.EntityId = null;
             newRecord.Properties = null;
-            return newRecord; 
+            return newRecord;
         }
 
         /// <summary>
@@ -740,7 +790,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
             {
                 throw new ZCRMException("Record ID MUST NOT be null/empty for Add Tags to a Specific record operation");
             }
-            if (this.moduleAPIName == null || this.moduleAPIName == "")
+            if (string.IsNullOrEmpty(this.moduleAPIName))
             {
                 throw new ZCRMException("Module Api Name MUST NOT be null/empty for Add Tags to a Specific record operation");
             }

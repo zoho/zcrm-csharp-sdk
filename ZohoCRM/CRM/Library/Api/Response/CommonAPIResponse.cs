@@ -28,9 +28,9 @@ namespace ZCRMSDK.CRM.Library.Api.Response
         }
 
         //NOTE: Because of naming collision, the properties have been changed to properties;
-        public ResponseHeaders GetResponseHeaders() 
+        public ResponseHeaders GetResponseHeaders()
         {
-            return responseHeaders; 
+            return responseHeaders;
         }
 
         protected void SetResponseHeaders()
@@ -102,7 +102,7 @@ namespace ZCRMSDK.CRM.Library.Api.Response
 
         protected virtual void SetResponseJSON()
         {
-            if((APIConstants.ResponseCode.NO_CONTENT == HttpStatusCode) || (APIConstants.ResponseCode.NOT_MODIFIED == HttpStatusCode))
+            if ((APIConstants.ResponseCode.NO_CONTENT == HttpStatusCode) || (APIConstants.ResponseCode.NOT_MODIFIED == HttpStatusCode))
             {
                 ResponseJSON = new JObject();
             }
@@ -110,7 +110,7 @@ namespace ZCRMSDK.CRM.Library.Api.Response
             else
             {
                 responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
-                ResponseJSON = JObject.Parse(responseString);    
+                ResponseJSON = JObject.Parse(responseString);
             }
         }
 
@@ -123,7 +123,7 @@ namespace ZCRMSDK.CRM.Library.Api.Response
 
         public override string ToString()
         {
-            return APIConstants.STATUS_CODE + "=" + HttpStatusCode + "," + APIConstants.RESPONSE_JSON + "=" + responseString + "," + APIConstants.RESPONSE_HEADERS + "=" +  GetResponseHeaders();
+            return APIConstants.STATUS_CODE + "=" + HttpStatusCode + "," + APIConstants.RESPONSE_JSON + "=" + responseString + "," + APIConstants.RESPONSE_HEADERS + "=" + GetResponseHeaders();
         }
 
 
@@ -139,7 +139,7 @@ namespace ZCRMSDK.CRM.Library.Api.Response
             {
                 WebHeaderCollection collection = response.Headers;
                 string header = response.GetResponseHeader(APIConstants.ALLOWED_API_CALLS_PER_MINUTE);
-                if(header != null && header != "")
+                if (!string.IsNullOrEmpty(header))
                 {
                     AllowedAPICallsPerMinute = Convert.ToInt32(header);
                     RemainingAPICountForThisWindow = Convert.ToInt32(response.GetResponseHeader(APIConstants.REMAINING_COUNT_FOR_THIS_WINDOW));

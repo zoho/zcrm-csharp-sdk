@@ -30,6 +30,24 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private Dictionary<string, object> lookupDetails = new Dictionary<string, object>();
         private Dictionary<string, object> multiselectLookup = new Dictionary<string, object>();
 
+        private Dictionary<string, string> crypt = new Dictionary<string, string>();
+        private bool fieldReadOnly;
+        private string displayLabel;
+        private bool businesscardSupported;
+        private string roundingOption;
+        private string caseSensitive;
+        private bool uniqueField;
+        private bool historyTracking;
+        private string formulaExpression;
+        private bool massUpdate;
+        private bool bluePrintSupported;
+        private bool autoNumber;
+        private string prefix;
+        private string suffix;
+        private int startNumber;
+        private Dictionary<string, ZCRMField> associationDetails = new Dictionary<string, ZCRMField>();
+        private int? decimalPlace;
+
         private ZCRMField(string fieldAPIName)
         {
             ApiName = fieldAPIName;
@@ -502,5 +520,221 @@ namespace ZCRMSDK.CRM.Library.CRUD
             LookupDetails.Add(fieldName, value);
         }
 
+        /// <summary>
+        /// Gets or sets the field encryption details
+        /// </summary>
+        public Dictionary<string,string> Encrypt
+        {
+            get
+            {
+                return crypt;
+            }
+            set
+            {
+                crypt = value;
+            }
+        }
+
+        public void SetEncrypt(string key, string value)
+        {
+            Encrypt.Add(key, value);
+        }
+
+        public bool FieldReadOnly
+        {
+            get
+            {
+                return fieldReadOnly;
+            }
+            set
+            {
+                fieldReadOnly = value;
+            }
+        }
+
+        public string DisplayLabel
+        {
+            get
+            {
+                return displayLabel;
+            }
+            set
+            {
+                displayLabel = value;
+            }
+        }
+
+        public bool BusinesscardSupported
+        {
+            get
+            {
+                return businesscardSupported;
+            }
+            set
+            {
+                businesscardSupported = value;
+            }
+        }
+
+        public string RoundingOption
+        {
+            get
+            {
+                return roundingOption;
+            }
+            set
+            {
+                roundingOption = value;
+            }
+        }
+
+        public string CaseSensitive
+        {
+            get
+            {
+                return caseSensitive;
+            }
+            set
+            {
+                caseSensitive = value;
+            }
+        }
+
+        public bool UniqueField
+        {
+            get
+            {
+                return uniqueField;
+            }
+            set
+            {
+                uniqueField = value;
+            }
+        }
+        
+        public bool HistoryTracking
+        {
+            get
+            {
+                return historyTracking;
+            }
+            set
+            {
+                historyTracking = value;
+            }
+        }
+
+        public string FormulaExpression
+        {
+            get
+            {
+                return formulaExpression;
+            }
+            set
+            {
+                formulaExpression = value;
+            }
+        }
+
+        public bool MassUpdate
+        {
+            get
+            {
+                return massUpdate;
+            }
+            set
+            {
+                massUpdate = value;
+            }
+        }
+
+        public bool BluePrintSupported
+        {
+            get
+            {
+                return bluePrintSupported;
+            }
+            set
+            {
+                bluePrintSupported = value;
+            }
+        }
+
+        public bool AutoNumber
+        {
+            get
+            {
+                return autoNumber;
+            }
+            set
+            {
+                autoNumber = value;
+            }
+        }
+
+        public string Prefix
+        {
+            get
+            {
+                return prefix;
+            }
+            set
+            {
+                prefix = value;
+            }
+        }
+
+        public string Suffix
+        {
+            get
+            {
+                return suffix;
+            }
+            set
+            {
+                suffix = value;
+            }
+        }
+
+        public int StartNumber
+        {
+            get
+            {
+                return startNumber;
+            }
+            set
+            {
+                startNumber = value;
+            }
+        }
+
+        public Dictionary<string,ZCRMField> AssociationDetails
+        {
+            get
+            {
+                return associationDetails;
+            }
+            set
+            {
+                associationDetails = value;
+            }
+        }
+
+        public void SetAssociationDetails(string key, ZCRMField field)
+        {
+            AssociationDetails.Add(key, field);
+        }
+
+        public int? DecimalPlace
+        {
+            get
+            {
+                return decimalPlace;
+            }
+            set
+            {
+                decimalPlace = value;
+            }
+        }
     }
 }

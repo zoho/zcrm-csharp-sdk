@@ -8,7 +8,6 @@ namespace ZCRMSDK.CRM.Library.Api.Response
 {
     public class FileAPIResponse : APIResponse
     {
-        
         public FileAPIResponse(HttpWebResponse response) : base(response) { }
 
         public string GetFileName()
@@ -23,7 +22,6 @@ namespace ZCRMSDK.CRM.Library.Api.Response
             fileName = fileName.Trim('\"');
             return fileName;
         }
-
 
         protected override void SetResponseJSON()
         {
@@ -51,7 +49,5 @@ namespace ZCRMSDK.CRM.Library.Api.Response
             Stream outStream = Response.GetResponseStream();
             return outStream;
         }
-
-
     }
 }

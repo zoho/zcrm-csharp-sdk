@@ -20,6 +20,8 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private double netTotal;
         private List<ZCRMTax> lineTax = new List<ZCRMTax>();
 
+        private int quantityInStock;
+
         /// <summary>
         /// To get ZCRMInventoryLineItem instance by passing ZCRMRecord class instance.
         /// </summary>
@@ -274,6 +276,19 @@ namespace ZCRMSDK.CRM.Library.CRUD
         public void AddLineTax(ZCRMTax lineTax)
         {
             LineTax.Add(lineTax);
+        }
+
+
+        public int QuantityInStock
+        {
+            get
+            {
+                return quantityInStock;
+            }
+            set
+            {
+                quantityInStock = value;
+            }
         }
     }
 }

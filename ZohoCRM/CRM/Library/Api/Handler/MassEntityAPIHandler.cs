@@ -23,13 +23,13 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public static MassEntityAPIHandler GetInstance(ZCRMModule zcrmModule)
         {
-            return new MassEntityAPIHandler(zcrmModule);   
+            return new MassEntityAPIHandler(zcrmModule);
         }
 
 
-        public BulkAPIResponse<ZCRMRecord> CreateRecords(List<ZCRMRecord> records)
+        public BulkAPIResponse<ZCRMRecord> CreateRecords(List<ZCRMRecord> records, List<string> trigger, string lar_id)
         {
-            if(records.Count > 100)
+            if (records.Count > 100)
             {
                 throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
             }
@@ -37,9 +37,9 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             urlPath = module.ApiName;
             JObject requestBodyObject = new JObject();
             JArray dataArray = new JArray();
-            foreach(ZCRMRecord record in records)
+            foreach (ZCRMRecord record in records)
             {
-                if(record.EntityId == null)
+                if (record.EntityId == null)
                 {
                     dataArray.Add(EntityAPIHandler.GetInstance(record).GetZCRMRecordAsJSON());
                 }
@@ -49,6 +49,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
             }
             requestBodyObject.Add(APIConstants.DATA, dataArray);
+            if (trigger != null && trigger.Count > 0)
+            {
+                requestBodyObject.Add("trigger", JArray.FromObject(trigger));
+            }
+            if (lar_id != null)
+            {
+                requestBodyObject.Add("lar_id" , lar_id);
+            }
             requestBody = requestBodyObject;
 
             BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
@@ -59,7 +67,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             for (int i = 0; i < responseSize; i++)
             {
                 EntityResponse entityResponse = responses[i];
-                if(entityResponse.Status.Equals(APIConstants.CODE_SUCCESS))
+                if (entityResponse.Status.Equals(APIConstants.CODE_SUCCESS))
                 {
                     JObject responseData = entityResponse.ResponseJSON;
                     JObject recordDetails = (JObject)responseData[APIConstants.DETAILS];
@@ -68,7 +76,8 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                     createdRecords.Add(newRecord);
                     entityResponse.Data = newRecord;
                 }
-                else{
+                else
+                {
                     entityResponse.Data = null;
                 }
             }
@@ -76,7 +85,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             return response;
         }
 
-        public BulkAPIResponse<ZCRMRecord> UpdateRecords(List<ZCRMRecord> records)
+        public BulkAPIResponse<ZCRMRecord> UpdateRecords(List<ZCRMRecord> records, List<string> trigger)
         {
             if (records.Count > 100)
             {
@@ -95,6 +104,10 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 dataArray.Add(EntityAPIHandler.GetInstance(record).GetZCRMRecordAsJSON());
             }
             requestBodyObject.Add(APIConstants.DATA, dataArray);
+            if (trigger != null && trigger.Count > 0)
+            {
+                requestBodyObject.Add("trigger", JArray.FromObject(trigger));
+            }
             requestBody = requestBodyObject;
 
             BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
@@ -148,7 +161,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
             List<ZCRMRecord> updatedRecords = new List<ZCRMRecord>();
             List<EntityResponse> responses = response.BulkEntitiesResponse;
-            foreach(EntityResponse entityResponse in responses)
+            foreach (EntityResponse entityResponse in responses)
             {
                 if (entityResponse.Status.Equals(APIConstants.CODE_SUCCESS))
                 {
@@ -169,7 +182,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         }
 
-        public BulkAPIResponse<ZCRMRecord> UpsertRecords(List<ZCRMRecord> records,List<string> duplicate_check_fields)
+        public BulkAPIResponse<ZCRMRecord> UpsertRecords(List<ZCRMRecord> records, List<string> trigger, string lar_id, List<string> duplicate_check_fields)
         {
             if (records.Count > 100)
             {
@@ -185,11 +198,20 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 dataArray.Add(recordJSON);
             }
             requestBodyObject.Add(APIConstants.DATA, dataArray);
+            if (trigger != null && trigger.Count > 0)
+            {
+                requestBodyObject.Add("trigger", JArray.FromObject(trigger));
+            }
+            if (lar_id != null)
+            {
+                requestBodyObject.Add("lar_id", lar_id);
+            }
             if (duplicate_check_fields != null && duplicate_check_fields.Count > 0)
             {
                 requestBodyObject.Add("duplicate_check_fields", JArray.FromObject(duplicate_check_fields));
             }
             requestBody = requestBodyObject;
+
             BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
 
             List<ZCRMRecord> upsertedRecords = new List<ZCRMRecord>();
@@ -220,35 +242,35 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         {
             requestMethod = APIConstants.RequestMethod.GET;
             urlPath = module.ApiName;
-            if(cvId != null)
+            if (cvId != null)
             {
                 requestQueryParams.Add("cvid", cvId.ToString());
             }
-            if(sortByField != null)
+            if (sortByField != null)
             {
-                requestQueryParams.Add("sort_by", sortByField);    
+                requestQueryParams.Add("sort_by", sortByField);
             }
-            if(sortOrder != null)
+            if (sortOrder != null)
             {
                 requestQueryParams.Add("sort_order", sortOrder.ToString());
             }
             requestQueryParams.Add(APIConstants.PAGE, page.ToString());
             requestQueryParams.Add(APIConstants.PER_PAGE, perPage.ToString());
-            if(isApproved != null && isApproved != "")
+            if (isApproved != null && isApproved != "")
             {
                 requestQueryParams.Add("approved", isApproved);
             }
-            if(isConverted != null && isConverted != "")
+            if (isConverted != null && isConverted != "")
             {
-                requestQueryParams.Add("converted", isConverted);      
+                requestQueryParams.Add("converted", isConverted);
             }
-            if(fields != null)
+            if (fields != null)
             {
                 requestQueryParams.Add("fields", CommonUtil.CollectionToCommaDelimitedString(fields));
             }
-            if(modifiedSince != null && modifiedSince != "")
+            if (modifiedSince != null && modifiedSince != "")
             {
-                requestHeaders.Add("If-Modified-Since", modifiedSince);    
+                requestHeaders.Add("If-Modified-Since", modifiedSince);
             }
 
             BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
@@ -271,7 +293,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public BulkAPIResponse<ZCRMEntity> DeleteRecords(List<long> entityIds)
         {
-            if(entityIds.Count > 100)
+            if (entityIds.Count > 100)
             {
                 throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
             }
@@ -282,7 +304,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             BulkAPIResponse<ZCRMEntity> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMEntity>();
 
             List<EntityResponse> responses = response.BulkEntitiesResponse;
-            foreach(EntityResponse entityResponse in responses)
+            foreach (EntityResponse entityResponse in responses)
             {
                 JObject entityResponseJSON = entityResponse.ResponseJSON;
                 JObject recordJSON = (JObject)entityResponseJSON[APIConstants.DETAILS];
@@ -381,28 +403,28 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public void SetTrashRecordProperties(JObject trashRecordDetails)
         {
-            foreach(KeyValuePair<string, JToken> trashRecordDetail in trashRecordDetails)
+            foreach (KeyValuePair<string, JToken> trashRecordDetail in trashRecordDetails)
             {
                 string fieldAPIName = Convert.ToString(trashRecordDetail.Key);
-                if(fieldAPIName.Equals("created_by") && trashRecordDetail.Value.Type != JTokenType.Null)
+                if (fieldAPIName.Equals("created_by") && trashRecordDetail.Value.Type != JTokenType.Null)
                 {
                     JObject createdByObject = (JObject)trashRecordDetail.Value;
                     ZCRMUser createdUser = ZCRMUser.GetInstance(Convert.ToInt64(createdByObject["id"]), (string)createdByObject["name"]);
                     trashRecord.CreatedBy = createdUser;
                 }
-                else if(fieldAPIName.Equals("deleted_by") && trashRecordDetail.Value.Type != JTokenType.Null)
+                else if (fieldAPIName.Equals("deleted_by") && trashRecordDetail.Value.Type != JTokenType.Null)
                 {
                     JObject modifiedByObject = (JObject)trashRecordDetail.Value;
                     ZCRMUser DeletedByUser = ZCRMUser.GetInstance(Convert.ToInt64(modifiedByObject["id"]), (string)modifiedByObject["name"]);
                     trashRecord.DeletedBy = DeletedByUser;
                 }
-                else if(fieldAPIName.Equals("display_name"))
+                else if (fieldAPIName.Equals("display_name"))
                 {
                     trashRecord.DisplayName = Convert.ToString(trashRecordDetail.Value);
                 }
-                else if(fieldAPIName.Equals("deleted_time"))
+                else if (fieldAPIName.Equals("deleted_time"))
                 {
-                    trashRecord.DeletedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(trashRecordDetail.Value));
+                    trashRecord.DeletedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(trashRecordDetail.Value));
                 }
             }
         }

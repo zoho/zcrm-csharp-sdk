@@ -2,14 +2,11 @@
 using System.IO;
 using System.Collections.Generic;
 using ZCRMSDK.CRM.Library.Setup.RestClient;
-using ZCRMSDK.OAuth.Client;
 using ZCRMSDK.CRM.Library.CRMException;
 using ZCRMSDK.CRM.Library.Api;
-using System.Reflection;
 using ZCRMSDK.OAuth.Contract;
-using ZCRMSDK.OAuth.Common;
-using System.Threading;
-using System.Diagnostics;
+using System.Reflection;
+using ZCRMSDK.OAuth.Client;
 
 namespace ZCRMSDK.CRM.Library.Common
 {
@@ -114,16 +111,24 @@ namespace ZCRMSDK.CRM.Library.Common
             switch (domainSuffix)
             {
                 case "eu":
-                    ConfigProperties[APIConstants.APIBASEURL] = "https://www.zohoapis.eu";
+                    ConfigProperties[APIConstants.API_BASE_URL] = "https://www.zohoapis.eu";
+                    ConfigProperties[APIConstants.FILE_UPLOAD_URL] = "https://content.zohoapis.eu";
                     break;
                 case "cn":
-                    ConfigProperties[APIConstants.APIBASEURL] = "https://www.zohoapis.com.cn";
+                    ConfigProperties[APIConstants.API_BASE_URL] = "https://www.zohoapis.com.cn";
+                    ConfigProperties[APIConstants.FILE_UPLOAD_URL] = "https://content.zohoapis.com.cn";
                     break;
                 case "in":
-                    ConfigProperties[APIConstants.APIBASEURL] = "https://www.zohoapis.in";
+                    ConfigProperties[APIConstants.API_BASE_URL] = "https://www.zohoapis.in";
+                    ConfigProperties[APIConstants.FILE_UPLOAD_URL] = "https://content.zohoapis.in";
+                    break;
+                case "local":
+                    ConfigProperties[APIConstants.API_BASE_URL] = "https://crm.localzoho.com";
+                    ConfigProperties[APIConstants.FILE_UPLOAD_URL] = "http://upload.localzoho.com";
                     break;
                 default:
-                    ConfigProperties[APIConstants.APIBASEURL] = "https://www.zohoapis.com";
+                    ConfigProperties[APIConstants.API_BASE_URL] = "https://www.zohoapis.com";
+                    ConfigProperties[APIConstants.FILE_UPLOAD_URL] = "https://content.zohoapis.com";
                     break;
             }
         }        
@@ -132,13 +137,13 @@ namespace ZCRMSDK.CRM.Library.Common
         {
             string userMailId = ZCRMRestClient.GetCurrentUserEmail();
 
-            if ((userMailId == null) && (!(ConfigProperties.ContainsKey("currentUserEmail")) || (ConfigProperties["currentUserEmail"] == null)))
+            if ((userMailId == null) && (!(ConfigProperties.ContainsKey(APIConstants.CURRENT_USER_EMAIL)) || (ConfigProperties[APIConstants.CURRENT_USER_EMAIL] == null)))
             {
-                throw new ZCRMException("Current user must be either set in ZCRMRestClient or zcrm_configuration section in zoho_configuration.config");
+                throw new ZCRMException("Current user must be either set in ZCRMRestClient or zcrm_configuration dictionary");
             }
             if (userMailId == null)
             {
-                userMailId = ConfigProperties["currentUserEmail"];
+                userMailId = ConfigProperties[APIConstants.CURRENT_USER_EMAIL];
             }
             ZohoOAuthClient client = ZohoOAuthClient.GetInstance();
             return client.GetAccessToken(userMailId);
@@ -158,19 +163,24 @@ namespace ZCRMSDK.CRM.Library.Common
         }
 
         public static string GetApiBaseURL(){
-            return GetConfigValue("apiBaseUrl");
+            return GetConfigValue(APIConstants.API_BASE_URL);
+        }
+
+        public static string GetFileUploadURL()
+        {
+            return GetConfigValue(APIConstants.FILE_UPLOAD_URL);
         }
 
         public static string GetApiVersion(){
-            return GetConfigValue("apiVersion");
+            return GetConfigValue(APIConstants.APIVERSION);
         }
 
         public static string GetAuthenticationClass(){
-            return GetConfigValue("loginAuthClass");
+            return GetConfigValue(APIConstants.LOGIN_AUTH_CLASS);
         }
 
         public static string GetPhotoUrl(){
-            return GetConfigValue("photoUrl");
+            return GetConfigValue(APIConstants.PHOTOURL);
         }
     }
 

@@ -19,9 +19,9 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private int count;
         private string moduleApiName;
 
-        public ZCRMTag(long? entityId, string moduleApiName)
+        private ZCRMTag(long? tagId, string moduleApiName)
         {
-            this.id = entityId;
+            this.id = tagId;
             this.moduleApiName = moduleApiName;
         }
 
@@ -29,11 +29,11 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// To get ZCRMTag instance by passing tag Id and modules' APIName.
         /// </summary>
         /// <returns>ZCRMTag class instance.</returns>
-        /// <param name="Id">Id (Long) of the tag.</param>
+        /// <param name="tagId">Id (Long) of the tag.</param>
         /// <param name="moduleApiName">APIName (String) of the module</param>
-        public static ZCRMTag GetInstance(long? Id = null,string moduleApiName= null)
+        public static ZCRMTag GetInstance(long? tagId = null,string moduleApiName= null)
         {
-            return new ZCRMTag(Id, moduleApiName);
+            return new ZCRMTag(tagId, moduleApiName);
         }
 
         /// <summary>

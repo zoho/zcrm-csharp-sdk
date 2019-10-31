@@ -59,6 +59,8 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
         private Dictionary<string, object> fieldNameVsValue = new Dictionary<string, object>();
         public static List<string> defaultKeys = new List<string>() { "Reporting_To", "Currency", "Modified_Time", "created_time", "territories", "reporting_to", "Isonline", "created_by", "Modified_By", "country", "id", "name", "role", "customize_info", "city", "signature", "name_format", "language", "locale", "personal_account", "default_tab_group", "alias", "street", "theme", "state", "country_locale", "fax", "first_name", "email", "zip", "decimal_separator", "website", "time_format", "profile", "mobile", "last_name", "time_zone", "zuid", "confirm", "full_name", "phone", "dob", "date_format", "status", "microsoft" };
 
+        private ZCRMUser() { }
+
         private ZCRMUser(long userId, string fullName)
         {
             Id = userId;
@@ -81,6 +83,15 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
         public static ZCRMUser GetInstance(long userId, string fullName)
         {
             return new ZCRMUser(userId, fullName);
+        }
+
+        /// <summary>
+        /// To get ZohoCRM user instance
+        /// </summary>
+        /// <returns>ZCRMUser class instance.</returns>
+        public static ZCRMUser GetInstance()
+        {
+            return new ZCRMUser();
         }
 
         /// <summary>
@@ -115,7 +126,7 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
             {
                 return id;
             }
-            private set
+            set
             {
                 id = value;
             }

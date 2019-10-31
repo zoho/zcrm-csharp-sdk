@@ -15,5 +15,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         Dictionary<string, string> GetRequestHeaders();
 
         Dictionary<string, string> GetRequestQueryParams();
+
+        bool IsBulk();
     }
 }

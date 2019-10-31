@@ -17,7 +17,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <PackageId>ZCRMSDK</PackageId>
-    <PackageVersion>2.0.5</PackageVersion>
+    <PackageVersion>2.0.6</PackageVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Authors>Zoho CRM API Team</Authors>
     <Description>Provides C# SDK support for Zoho CRM APIs.</Description>
@@ -26,7 +26,7 @@
     <Summary>C# SDK offers a way to create client C# applications that can be integrated with Zoho CRM. This SDK makes the access and use of necessary CRM APIs with ease.</Summary>
     <PackageTags>ZCRMSDK,zohocrm,sdk,zcrmsdk,zoho</PackageTags>
     <Title>ZCRMSDK</Title>
-    <PackageReleaseNotes>Supported duplicate_check_fields in upsert records.</PackageReleaseNotes>
+    <PackageReleaseNotes>Provided Bulk API support in SDK.</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -61,11 +61,19 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="MySql.Data">
       <HintPath>packages\MySql.Data.6.9.12\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression">
+      <HintPath>packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.ZipFile">
+      <HintPath>packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +147,23 @@
     <Compile Include="CRM\Library\CRUD\ZCRMTerritory.cs" />
     <Compile Include="CRM\Library\Setup\Users\ZCRMUserCustomizeInfo.cs" />
     <Compile Include="CRM\Library\Setup\Users\ZCRMUserTheme.cs" />
+    <Compile Include="CRM\Library\BulkAPI\Handler\BulkAPIHandler.cs" />
+    <Compile Include="CRM\Library\BulkAPI\Handler\BulkReadAPIHandler.cs" />
+    <Compile Include="CRM\Library\BulkAPI\Handler\BulkWriteAPIHandler.cs" />
+    <Compile Include="CRM\Library\BulkAPI\Response\BulkResponse.cs" />
+    <Compile Include="CRM\Library\BulkCRUD\ZCRMBulkCallBack.cs" />
+    <Compile Include="CRM\Library\BulkCRUD\ZCRMBulkQuery.cs" />
+    <Compile Include="CRM\Library\BulkCRUD\ZCRMBulkRead.cs" />
+    <Compile Include="CRM\Library\BulkCRUD\ZCRMBulkResult.cs" />
+    <Compile Include="CRM\Library\BulkCRUD\ZCRMBulkWrite.cs" />
+    <Compile Include="CRM\Library\BulkCRUD\ZCRMBulkWriteFieldMapping.cs" />
+    <Compile Include="CRM\Library\BulkCRUD\ZCRMBulkWriteFileStatus.cs" />
+    <Compile Include="CRM\Library\BulkCRUD\ZCRMBulkWriteResource.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMRelatedListProperties.cs" />
+    <Compile Include="CRM\Library\CRUD\ZCRMWebTabArguments.cs" />
+    <Compile Include="CRM\Library\Setup\Users\ZCRMProfilePermissions.cs" />
+    <Compile Include="CRM\Library\Setup\Users\ZCRMProfileSection.cs" />
+    <Compile Include="CRM\Library\Setup\Users\ZCRMProfileCategory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -148,6 +173,12 @@
     <EmbeddedResource Include="Resources\configuration.txt" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="CRM\Library\BulkAPI\" />
+    <Folder Include="CRM\Library\BulkAPI\Handler\" />
+    <Folder Include="CRM\Library\BulkAPI\Response\" />
+    <Folder Include="CRM\Library\BulkCRUD\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

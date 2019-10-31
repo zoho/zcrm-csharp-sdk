@@ -12,6 +12,7 @@ using ZCRMSDK.CRM.Library.Api;
 using ZCRMSDK.OAuth.Common;
 using ZCRMSDK.OAuth.Contract;
 using System;
+using ZCRMSDK.CRM.Library.BulkCRUD;
 
 namespace ZCRMSDK.CRM.Library.Setup.RestClient
 {
@@ -175,6 +176,57 @@ namespace ZCRMSDK.CRM.Library.Setup.RestClient
         public APIResponse GetModule(string moduleName)
         {
             return MetaDataAPIHandler.GetInstance().GetModule(moduleName);
+        }
+
+        /// <summary>
+        /// Method to get the bulk read instance.
+        /// </summary>
+        /// <param name="moduleName"></param>
+        /// <param name="jobId"></param>
+        /// <returns>Instance of ZCRMBulkRead.</returns>
+        public ZCRMBulkRead GetBulkReadInstance(string moduleName, long? jobId = null)
+        {
+            return ZCRMBulkRead.GetInstance(moduleName, jobId);
+        }
+
+        /// <summary>
+        /// Method to get the bulk read instance.
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns>Instance of ZCRMBulkRead.</returns>
+        public ZCRMBulkRead GetBulkReadInstance(long jobId)
+        {
+            return ZCRMBulkRead.GetInstance(jobId);
+        }
+
+        /// <summary>
+        /// Method to get the bulk read instance
+        /// </summary>
+        /// <returns>Instance of ZCRMBulkRead.</returns>
+        public ZCRMBulkWrite GetBulkWriteInstance()
+        {
+            return ZCRMBulkWrite.GetInstance();
+        }
+
+        /// <summary>
+        /// Method to get the bulk write instance
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <returns>Instance of ZCRMBulkWrite.</returns>
+        public ZCRMBulkWrite GetBulkWriteInstance(string operation)
+        {
+            return ZCRMBulkWrite.GetInstance(operation);
+        }
+
+        /// <summary>
+        /// Method to get the bulk write instance
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <param name="moduleAPIName"></param>
+        /// <returns>Instance of ZCRMBulkWrite</returns>
+        public ZCRMBulkWrite GetBulkWriteInstance(long jobId, string moduleAPIName = null)
+        {
+            return ZCRMBulkWrite.GetInstance(jobId, moduleAPIName);
         }
     }
 }

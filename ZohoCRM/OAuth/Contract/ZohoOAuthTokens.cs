@@ -47,9 +47,12 @@ namespace ZCRMSDK.OAuth.Contract
             }
         }
 
-        public string AccessToken { 
-            get {
-                 if(IsAccessTokenValid()){
+        public string AccessToken
+        { 
+            get
+            {
+                if(IsAccessTokenValid())
+                {
                     return accessToken;
                 }
                 throw new ZohoOAuthException("Access token expired");
@@ -60,19 +63,20 @@ namespace ZCRMSDK.OAuth.Contract
             }
         }
 
-        private bool IsAccessTokenValid(){
-            if(GetExpiryLapseInMillis() > 10L){
+        private bool IsAccessTokenValid()
+        {
+            if(GetExpiryLapseInMillis() > 15L)
+            {
                 return true;
             }
             return false;
         }
 
-        public long GetExpiryLapseInMillis() {
+        public long GetExpiryLapseInMillis()
+        {
             long time = (ExpiryTime - (long)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds);
             return (time);
         }
-
         //NOTE: Omitted JsonObject to Json Method();
-
     }
 }

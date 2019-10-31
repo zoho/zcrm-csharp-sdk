@@ -17,7 +17,8 @@ namespace ZCRMSDK.CRM.Library.Api
 {
     public class APIRequest
     {
-        private string url = ZCRMConfigUtil.GetApiBaseURL() + "/crm/" + ZCRMConfigUtil.GetApiVersion()+"/";
+        private string url = ZCRMConfigUtil.GetApiBaseURL() + "/crm/" + ZCRMConfigUtil.GetApiVersion() + "/";
+        private string bulkurl = ZCRMConfigUtil.GetApiBaseURL() + "/crm/bulk/" + ZCRMConfigUtil.GetApiVersion() + "/";
         private APIConstants.RequestMethod requestMethod;
         private Dictionary<string, string> requestHeaders = new Dictionary<string, string>();
         private Dictionary<string, string> requestParams = new Dictionary<string, string>();
@@ -64,20 +65,21 @@ namespace ZCRMSDK.CRM.Library.Api
 
         private APIRequest(IAPIHandler handler)
         {
-            url = handler.GetUrlPath().Contains("http") ? handler.GetUrlPath() : url + handler.GetUrlPath();
+            url = handler.GetUrlPath().Contains("http") ? handler.GetUrlPath() : handler.IsBulk() ? bulkurl + handler.GetUrlPath() : url + handler.GetUrlPath();
             requestMethod = handler.GetRequestMethod();
             RequestHeaders = handler.GetRequestHeaders();
             RequestParams = handler.GetRequestQueryParams();
             RequestBody = handler.GetRequestBody();
         }
 
-        public static APIRequest GetInstance(IAPIHandler handler){
+        public static APIRequest GetInstance(IAPIHandler handler)
+        {
             return new APIRequest(handler);
         }
 
         public void SetHeader(string name, string value)
         {
-            RequestHeaders.Add(name, value);    
+            RequestHeaders.Add(name, value);
         }
 
         public void SetRequestParam(string name, string value)
@@ -85,7 +87,8 @@ namespace ZCRMSDK.CRM.Library.Api
             RequestParams.Add(name, value);
         }
 
-        private string GetHeader(string name){
+        private string GetHeader(string name)
+        {
             return RequestHeaders[name];
         }
 
@@ -96,13 +99,13 @@ namespace ZCRMSDK.CRM.Library.Api
 
         private void SetQueryParams()
         {
-            if(RequestParams.Count == 0) { return; }
+            if (RequestParams.Count == 0) { return; }
             url += "?";
-            foreach(KeyValuePair<string, string> keyValuePairs in RequestParams)
+            foreach (KeyValuePair<string, string> keyValuePairs in RequestParams)
             {
                 if (keyValuePairs.Value != null && keyValuePairs.Value != "")
                 {
-                    url = url.EndsWith("?", StringComparison.InvariantCulture) ? url + keyValuePairs.Key + "=" + keyValuePairs.Value : url + "&" + keyValuePairs.Key + "=" + keyValuePairs.Value; 
+                    url = url.EndsWith("?", StringComparison.InvariantCulture) ? url + keyValuePairs.Key + "=" + keyValuePairs.Value : url + "&" + keyValuePairs.Key + "=" + keyValuePairs.Value;
                 }
             }
             url = url.EndsWith("?", StringComparison.InvariantCulture) ? url.TrimEnd('?') : url;
@@ -110,7 +113,7 @@ namespace ZCRMSDK.CRM.Library.Api
 
         private void SetHeaders(ref HttpWebRequest request)
         {
-            foreach(KeyValuePair<string, string> keyValuePairs in RequestHeaders)
+            foreach (KeyValuePair<string, string> keyValuePairs in RequestHeaders)
             {
                 if (!string.IsNullOrEmpty(keyValuePairs.Value))
                 {
@@ -118,7 +121,7 @@ namespace ZCRMSDK.CRM.Library.Api
                     {
                         if (keyValuePairs.Key == "If-Modified-Since")
                         {
-                            DateTime dateConversion = XmlConvert.ToDateTime(CommonUtil.removeEscaping(JsonConvert.SerializeObject(keyValuePairs.Value)), XmlDateTimeSerializationMode.Utc);
+                            DateTime dateConversion = XmlConvert.ToDateTime(CommonUtil.RemoveEscaping(JsonConvert.SerializeObject(keyValuePairs.Value)), XmlDateTimeSerializationMode.Utc);
                             request.IfModifiedSince = dateConversion;
                         }
                     }
@@ -157,7 +160,7 @@ namespace ZCRMSDK.CRM.Library.Api
                 }
                 throw new ZCRMException(e.GetBaseException());
             }
-            catch(Exception e) when(e is TargetException || e is MethodAccessException)
+            catch (Exception e) when (e is TargetException || e is MethodAccessException)
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(e);
@@ -177,11 +180,11 @@ namespace ZCRMSDK.CRM.Library.Api
             try
             {
                 GetResponseFromServer();
-                BulkAPIResponse < T > bulkAPIResponse = new BulkAPIResponse<T>(response);
+                BulkAPIResponse<T> bulkAPIResponse = new BulkAPIResponse<T>(response);
                 response.Close();
                 return bulkAPIResponse;
             }
-            catch (Exception e) when(!(e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 if (e is ZCRMException) { throw; }
                 ZCRMLogger.LogError(e);
@@ -199,25 +202,27 @@ namespace ZCRMSDK.CRM.Library.Api
                     PopulateRequestHeaders(ZCRMRestClient.GetDynamicHeaders());
                 }
                 else
-                { 
+                {
                     AuthenticateRequest();
                 }
                 SetQueryParams();
                 HttpWebRequest request = GetHttpWebRequestClient();
                 SetHeaders(ref request);
                 SetRequestMethod(request);
-             
+
                 ZCRMLogger.LogInfo(ToString());
                 try
                 {
                     response = (HttpWebResponse)request.GetResponse();
-                }catch(WebException e)
+                }
+                catch (WebException e)
                 {
                     if (e.Response == null) { throw; }
                     response = (HttpWebResponse)e.Response;
                 }
-				APIStats.UpdateStats(response);
-            }catch(WebException e)
+                APIStats.UpdateStats(response);
+            }
+            catch (WebException e)
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(e);
@@ -226,7 +231,7 @@ namespace ZCRMSDK.CRM.Library.Api
 
         private void SetRequestMethod(HttpWebRequest request)
         {
-            switch(requestMethod)
+            switch (requestMethod)
             {
                 case APIConstants.RequestMethod.GET:
                     request.Method = APIConstants.RequestMethod.GET.ToString();
@@ -265,7 +270,7 @@ namespace ZCRMSDK.CRM.Library.Api
                 else
                 {
                     requestStream = new MemoryStream();
-                    String multiPartHeader = "\r\n--"+boundary;
+                    String multiPartHeader = "\r\n--" + boundary;
                     byte[] multiPartHeaderBytes = Encoding.UTF8.GetBytes(multiPartHeader);
                     requestStream.Write(multiPartHeaderBytes, 0, multiPartHeaderBytes.Length);
 
@@ -280,7 +285,7 @@ namespace ZCRMSDK.CRM.Library.Api
                     }
                     requestStream.Position = 0;
 
-                    request.ContentType = "multipart/form-data; boundary="+boundary;
+                    request.ContentType = "multipart/form-data; boundary=" + boundary;
                     request.ContentLength = requestStream.Length;
                     using (var writer = request.GetRequestStream())
                     {
@@ -291,7 +296,7 @@ namespace ZCRMSDK.CRM.Library.Api
                     }
                 }
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(e);
@@ -316,7 +321,7 @@ namespace ZCRMSDK.CRM.Library.Api
 
         private void PopulateRequestHeaders(Dictionary<string, string> dict)
         {
-            foreach(KeyValuePair<string, string> keyValuePair in dict)
+            foreach (KeyValuePair<string, string> keyValuePair in dict)
             {
                 RequestHeaders.Add(keyValuePair.Key, keyValuePair.Value);
             }
@@ -332,7 +337,7 @@ namespace ZCRMSDK.CRM.Library.Api
                 response.Close();
                 return apiResponse;
             }
-            catch(Exception e) when(!(e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(e);
@@ -341,7 +346,8 @@ namespace ZCRMSDK.CRM.Library.Api
 
         public FileAPIResponse DownloadFile()
         {
-            try{
+            try
+            {
                 GetResponseFromServer();
                 FileAPIResponse fileAPIResponse = new FileAPIResponse(response);
                 return fileAPIResponse;
@@ -362,7 +368,7 @@ namespace ZCRMSDK.CRM.Library.Api
                 FileInfo fileInfo = new FileInfo(filePath);
 
                 //File Content-Disposition header excluding the boundary header;
-                string fileHeader = string.Format("\r\nContent-Disposition: form-data; name=\"file\"; filename=\""+fileInfo.Name+"\"\r\nContent-Type: application/octet-stream\r\n\r\n");
+                string fileHeader = string.Format("\r\nContent-Disposition: form-data; name=\"file\"; filename=\"" + fileInfo.Name + "\"\r\nContent-Type: application/octet-stream\r\n\r\n");
                 byte[] fileHeaderBytes = Encoding.UTF8.GetBytes(fileHeader);
                 fileDataStream.Write(fileHeaderBytes, 0, fileHeaderBytes.Length);
 
@@ -383,7 +389,8 @@ namespace ZCRMSDK.CRM.Library.Api
                 fileDataStream.Position = 0;
                 return fileDataStream;
             }
-            catch(IOException e){
+            catch (IOException e)
+            {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(e);
             }

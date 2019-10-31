@@ -8,12 +8,12 @@ namespace ZCRMSDK.CRM.Library.CRUD
     {
         private string comparator;
         private string field;
-        private string value;
+        private object value;
         private string groupOperator;
         private string pattern;
         private int index;
         private string criteria;
-        private List<ZCRMCriteria> group;
+        private List<ZCRMCriteria> group = new List<ZCRMCriteria>();
 
         private ZCRMCriteria()
         {
@@ -94,7 +94,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// Gets or sets the field.
         /// </summary>
         /// <value>The field.</value>
-        public string Field
+        public string FieldAPIName
         {
             get
             {
@@ -110,7 +110,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// Gets or sets the value.
         /// </summary>
         /// <value>The value.</value>
-        public string Value
+        public object Value
         {
             get
             {

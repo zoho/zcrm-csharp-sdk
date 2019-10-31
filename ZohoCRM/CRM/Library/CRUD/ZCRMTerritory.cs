@@ -17,6 +17,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private long id;
         private ZCRMUser createdBy;
         private bool isManager;
+        private bool subordinates;
 
         private ZCRMTerritory(long id)
         {
@@ -201,6 +202,18 @@ namespace ZCRMSDK.CRM.Library.CRUD
             set
             {
                 isManager = value;
+            }
+        }
+
+        public bool Subordinates
+        {
+            get
+            {
+                return subordinates;
+            }
+            set
+            {
+                subordinates = value;
             }
         }
     }

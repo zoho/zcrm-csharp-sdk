@@ -1,4 +1,5 @@
-﻿using ZCRMSDK.CRM.Library.Common;
+﻿using System.Collections.Generic;
+using ZCRMSDK.CRM.Library.Common;
 
 
 namespace ZCRMSDK.CRM.Library.Setup.Users
@@ -15,6 +16,8 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
         private bool category;
         private string description;
         private bool isDefault;
+        private List<ZCRMProfilePermissions> permissionsDetails = new List<ZCRMProfilePermissions>();
+        private List<ZCRMProfileSection> section = new List<ZCRMProfileSection>();
 
         private ZCRMProfile(long profileId, string profileName)
         {
@@ -183,6 +186,40 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
             {
                 isDefault = value;
             }
+        }
+
+        public List<ZCRMProfilePermissions> PermissionsDetails
+        {
+            get
+            {
+                return permissionsDetails;
+            }
+            set
+            {
+                permissionsDetails = value;
+            }
+        }
+
+        public void SetPermissionsDetails(ZCRMProfilePermissions permission)
+        {
+            PermissionsDetails.Add(permission);
+        }
+
+        public List<ZCRMProfileSection> Section
+        {
+            get
+            {
+                return section;
+            }
+            set
+            {
+                section = value;
+            }
+        }
+
+        public void SetProfileSection(ZCRMProfileSection section)
+        {
+            Section.Add(section);
         }
     }
 }

@@ -30,6 +30,35 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private List<string> bussinessCardFields = new List<string>();
         private List<ZCRMProfile> accessibleProfiles = new List<ZCRMProfile>();
 
+        private bool globalSearchSupported;
+        private bool kanbanView;
+        private bool filterStatus;
+        private bool inventoryTemplateSupported;
+        private bool presenceSubMenu;
+        private ZCRMRelatedListProperties relatedListProperties;
+        private List<string> properties = new List<string>();
+        private int perPage;
+        private int visibility;
+        private bool emailTemplateSupport;
+        private bool filterSupported;
+        private string displayField;
+        private List<string> searchLayoutFields = new List<string>();
+        private bool kanbanViewSupported;
+        private string webLink;
+        private int sequenceNumber;
+        private bool quickCreate;
+        private bool feedsRequired;
+        private bool scoringSupported;
+        private bool webformSupported;
+        private List<ZCRMWebTabArguments> webTabArguments = new List<ZCRMWebTabArguments>();
+        private int businessCardFieldLimit;
+        private ZCRMModule parentModule;
+        private ZCRMTerritory territory;
+        private ZCRMCustomView customView;
+
+        private List<ZCRMField> fields = new List<ZCRMField>();
+
+
         protected ZCRMModule(string apiName)
         {
             ApiName = apiName;
@@ -341,6 +370,318 @@ namespace ZCRMSDK.CRM.Library.CRUD
             }
         }
 
+        public bool GlobalSearchSupported
+        {
+            get
+            {
+                return globalSearchSupported;
+            }
+            set
+            {
+                globalSearchSupported = value;
+            }
+        }
+
+        public bool KanbanView
+        {
+            get
+            {
+                return kanbanView;
+            }
+            set
+            {
+                kanbanView = value;
+            }
+        }
+
+        public bool FilterStatus
+        {
+            get
+            {
+                return filterStatus;
+            }
+            set
+            {
+                filterStatus = value;
+            }
+        }
+
+        public bool InventoryTemplateSupported
+        {
+            get
+            {
+                return inventoryTemplateSupported;
+            }
+            set
+            {
+                inventoryTemplateSupported = value;
+            }
+        }
+
+        public bool PresenceSubMenu
+        {
+            get
+            {
+                return presenceSubMenu;
+            }
+            set
+            {
+                presenceSubMenu = value;
+            }
+        }
+
+        public ZCRMRelatedListProperties RelatedListProperties
+        {
+            get
+            {
+                return relatedListProperties;
+            }
+            set
+            {
+                relatedListProperties = value;
+            }
+        }
+
+        public List<string> Properties
+        {
+            get
+            {
+                return properties;
+            }
+            set
+            {
+                properties = value;
+            }
+        }
+
+        public int PerPage
+        {
+            get
+            {
+                return perPage;
+            }
+            set
+            {
+                perPage = value;
+            }
+        }
+
+        public int Visibility
+        {
+            get
+            {
+                return visibility;
+            }
+            set
+            {
+                visibility = value;
+            }
+        }
+
+        public bool EmailTemplateSupport
+        {
+            get
+            {
+                return emailTemplateSupport;
+            }
+            set
+            {
+                emailTemplateSupport = value;
+            }
+        }
+
+        public bool FilterSupported
+        {
+            get
+            {
+                return filterSupported;
+            }
+            set
+            {
+                filterSupported = value;
+            }
+        }
+
+        public string DisplayField
+        {
+            get
+            {
+                return displayField;
+            }
+            set
+            {
+                displayField = value;
+            }
+        }
+
+        public List<string> SearchLayoutFields
+        {
+            get
+            {
+                return searchLayoutFields;
+            }
+            set
+            {
+                searchLayoutFields = value;
+            }
+        }
+
+        public bool KanbanViewSupported
+        {
+            get
+            {
+                return kanbanViewSupported;
+            }
+            set
+            {
+                kanbanViewSupported = value;
+            }
+        }
+
+        public string WebLink
+        {
+            get
+            {
+                return webLink;
+            }
+            set
+            {
+                webLink = value;
+            }
+        }
+
+        public int SequenceNumber
+        {
+            get
+            {
+                return sequenceNumber;
+            }
+            set
+            {
+                sequenceNumber = value;
+            }
+        }
+
+        public bool QuickCreate
+        {
+            get
+            {
+                return quickCreate;
+            }
+            set
+            {
+                quickCreate = value;
+            }
+        }
+
+        public bool FeedsRequired
+        {
+            get
+            {
+                return feedsRequired;
+            }
+            set
+            {
+                feedsRequired = value;
+            }
+        }
+
+        public bool ScoringSupported
+        {
+            get
+            {
+                return scoringSupported;
+            }
+            set
+            {
+                scoringSupported = value;
+            }
+        }
+
+        public bool WebformSupported
+        {
+            get
+            {
+                return webformSupported;
+            }
+            set
+            {
+                webformSupported = value;
+            }
+        }
+
+        public List<ZCRMWebTabArguments> WebTabArguments
+        {
+            get
+            {
+                return webTabArguments;
+            }
+            set
+            {
+                webTabArguments = value;
+            }
+        }
+
+        public int BusinessCardFieldLimit
+        {
+            get
+            {
+                return businessCardFieldLimit;
+            }
+            set
+            {
+                businessCardFieldLimit = value;
+            }
+        }
+
+        public ZCRMModule ParentModule
+        {
+            get
+            {
+                return parentModule;
+            }
+            set
+            {
+                parentModule = value;
+            }
+        }
+
+        public ZCRMTerritory Territory
+        {
+            get
+            {
+                return territory;
+            }
+            set
+            {
+                territory = value;
+            }
+        }
+
+        public ZCRMCustomView CustomView
+        {
+            get
+            {
+                return customView;
+            }
+            set
+            {
+                customView = value;
+            }
+        }
+
+        public List<ZCRMField> Fields
+        {
+            get
+            {
+                return fields;
+            }
+            set
+            {
+                fields = value;
+            }
+        }
+
         /// <summary>
         /// To get related lists of the module.
         /// </summary>
@@ -348,6 +689,16 @@ namespace ZCRMSDK.CRM.Library.CRUD
         public BulkAPIResponse<ZCRMModuleRelation> GetRelatedLists()
         {
             return ModuleAPIHandler.GetInstance(this).GetAllRelatedLists();
+        }
+
+        /// <summary>
+        /// To get RealtedList details based on RealtedList Id of the module.
+        /// </summary>
+        /// <returns>APIResponse class instance.</returns>
+        /// <param name="realtedListId">RealtedList Id (Long) of the module.</param>
+        public APIResponse GetRelatedList(long realtedListId)
+        {
+            return ModuleAPIHandler.GetInstance(this).GetRelatedList(realtedListId);
         }
 
         /// <summary>
@@ -367,6 +718,16 @@ namespace ZCRMSDK.CRM.Library.CRUD
         public BulkAPIResponse<ZCRMField> GetAllFields(string modifiedSince)
         {
             return ModuleAPIHandler.GetInstance(this).GetAllFields(modifiedSince);
+        }
+
+        /// <summary>
+        /// To get field details based on field Id of the module.
+        /// </summary>
+        /// <returns>APIResponse class instance.</returns>
+        /// <param name="fieldId">Field Id (Long) of the module.</param>
+        public APIResponse GetField(long fieldId)
+        {
+            return ModuleAPIHandler.GetInstance(this).GetField(fieldId);
         }
 
         /// <summary>
@@ -432,13 +793,13 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <returns>BulkAPIResponse&lt;ZCRMRecord&gt; class instance.</returns>
         /// <param name="records">List of ZCRMRecord class instances</param>
-        public BulkAPIResponse<ZCRMRecord> CreateRecords(List<ZCRMRecord> records)
+        public BulkAPIResponse<ZCRMRecord> CreateRecords(List<ZCRMRecord> records, List<string> trigger = null, string lar_id = null)
         {
             if (records == null || records.Count == 0)
             {
                 throw new ZCRMException(" Records list MUST NOT be null for Create operation");
             }
-            return MassEntityAPIHandler.GetInstance(this).CreateRecords(records);
+            return MassEntityAPIHandler.GetInstance(this).CreateRecords(records, trigger, lar_id);
         }
 
         /// <summary>
@@ -462,13 +823,13 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <returns>BulkAPIResponse&lt;ZCRMRecord&gt; class instance.</returns>
         /// <param name="records">List of ZCRMRecord class instance</param>
-        public BulkAPIResponse<ZCRMRecord> UpdateRecords(List<ZCRMRecord> records)
+        public BulkAPIResponse<ZCRMRecord> UpdateRecords(List<ZCRMRecord> records, List<string> trigger = null)
         {
             if (records == null || records.Count == 0)
             {
                 throw new ZCRMException("Entity ID list MUST NOT be null/empty for update operation");
             }
-            return MassEntityAPIHandler.GetInstance(this).UpdateRecords(records);
+            return MassEntityAPIHandler.GetInstance(this).UpdateRecords(records, trigger);
         }
 
         /// <summary>
@@ -476,13 +837,13 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <returns>BulkAPIResponse&lt;ZCRMRecord&gt; class instance.</returns>
         /// <param name="records">List of ZCRMRecord class instance.</param>
-        public BulkAPIResponse<ZCRMRecord> UpsertRecords(List<ZCRMRecord> records,List<string> duplicate_check_fields = null)
+        public BulkAPIResponse<ZCRMRecord> UpsertRecords(List<ZCRMRecord> records,List<string> duplicate_check_fields = null, List<string> trigger = null, string lar_id = null)
         {
             if (records == null || records.Count == 0)
             {
                 throw new ZCRMException("Record ID list MUST NOT be null/empty for upsert operation");
             }
-            return MassEntityAPIHandler.GetInstance(this).UpsertRecords(records,duplicate_check_fields);
+            return MassEntityAPIHandler.GetInstance(this).UpsertRecords(records, trigger, lar_id, duplicate_check_fields);
         }
 
         /// <summary>

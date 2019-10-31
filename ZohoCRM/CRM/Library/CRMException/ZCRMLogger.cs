@@ -28,14 +28,14 @@ namespace ZCRMSDK.CRM.Library.CRMException
             else if(APIConstants.LOGGER_LEVELS.ContainsKey(minLoglevel)){
                 logSwitch.Level = APIConstants.LOGGER_LEVELS[minLoglevel];
             }
-            string logFile = ZCRMConfigUtil.GetConfigValue("logFilePath");
+            string logFile = ZCRMConfigUtil.GetConfigValue(APIConstants.LOG_FILE_PATH);
             if(string.IsNullOrEmpty(logFile))
             {
-                logFile = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location) + Path.DirectorySeparatorChar + "LogFile.log";
+                logFile = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location) + Path.DirectorySeparatorChar + APIConstants.LOG_FILE_NAME;
             }
             else
             {
-                logFile += "LogFile.log";
+                logFile += APIConstants.LOG_FILE_NAME;
             }
             DefaultTraceListener defaultTrace = new DefaultTraceListener
             {

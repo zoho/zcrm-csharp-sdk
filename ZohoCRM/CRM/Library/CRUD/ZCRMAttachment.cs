@@ -23,6 +23,8 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private string se_module;
         private string link_url;
 
+        private ZCRMAttachment() { }
+
         private ZCRMAttachment(ZCRMRecord parentRecord, long attachmentId)
         {
             ParentRecord = parentRecord;
@@ -47,6 +49,11 @@ namespace ZCRMSDK.CRM.Library.CRUD
         public static ZCRMAttachment GetInstance(ZCRMRecord parentRecord, long attachmentId)
         {
             return new ZCRMAttachment(parentRecord, attachmentId);
+        }
+
+        public static ZCRMAttachment GetInstance()
+        {
+            return new ZCRMAttachment();
         }
 
         /// <summary>

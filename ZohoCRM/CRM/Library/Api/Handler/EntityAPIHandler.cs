@@ -31,7 +31,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.GET;
-                urlPath = record.ModuleAPIName+"/"+record.EntityId;
+                urlPath = record.ModuleAPIName + "/" + record.EntityId;
 
                 APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
 
@@ -41,14 +41,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 response.Data = record;
                 return response;
             }
-            catch(Exception e) when ((e is ZCRMException))
+            catch (Exception e) when ((e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
 
-        public APIResponse CreateRecord()
+        public APIResponse CreateRecord(List<string> trigger, string lar_id)
         {
             try
             {
@@ -58,6 +58,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 JArray dataArray = new JArray();
                 dataArray.Add(GetZCRMRecordAsJSON());
                 requestBodyObject.Add(APIConstants.DATA, dataArray);
+                if (trigger != null && trigger.Count > 0)
+                {
+                    requestBodyObject.Add("trigger", JArray.FromObject(trigger));
+                }
+                if (lar_id != null)
+                {
+                    requestBodyObject.Add("lar_id", lar_id);
+                }
                 requestBody = requestBodyObject;
 
                 APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
@@ -69,14 +77,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 response.Data = record;
                 return response;
             }
-            catch (Exception e) when((e is ZCRMException))
+            catch (Exception e) when ((e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
 
-        public APIResponse UpdateRecord()
+        public APIResponse UpdateRecord(List<string> trigger)
         {
             try
             {
@@ -86,8 +94,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 JArray dataArray = new JArray();
                 dataArray.Add(GetZCRMRecordAsJSON());
                 requestBodyObject.Add(APIConstants.DATA, dataArray);
+                if (trigger != null && trigger.Count > 0)
+                {
+                    requestBodyObject.Add("trigger", JArray.FromObject(trigger));
+                }
                 requestBody = requestBodyObject;
+
                 APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
+
                 JArray responseDataArray = (JArray)response.ResponseJSON[APIConstants.DATA];
                 JObject responseData = (JObject)responseDataArray[0];
                 JObject responseDetails = (JObject)responseData[APIConstants.DETAILS];
@@ -129,11 +143,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 JObject requestBodyObject = new JObject();
                 JArray dataArray = new JArray();
                 JObject dataObject = new JObject();
-                if(assignToUser != null)
+                if (assignToUser != null)
                 {
                     dataObject.Add("assign_to", assignToUser.Id.ToString());
                 }
-                if(potential != null)
+                if (potential != null)
                 {
                     dataObject.Add(APIConstants.DEALS, GetInstance(potential).GetZCRMRecordAsJSON());
                 }
@@ -146,7 +160,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
                 Dictionary<string, long> convertedIds = new Dictionary<string, long>();
                 convertedIds.Add(APIConstants.CONTACTS, Convert.ToInt64(convertedIdsJSON[APIConstants.CONTACTS]));
-                if(convertedIdsJSON[APIConstants.ACCOUNTS].Type != JTokenType.Null)
+                if (convertedIdsJSON[APIConstants.ACCOUNTS].Type != JTokenType.Null)
                 {
                     convertedIds.Add(APIConstants.ACCOUNTS, Convert.ToInt64(convertedIdsJSON[APIConstants.ACCOUNTS]));
                 }
@@ -154,7 +168,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     convertedIds.Add(APIConstants.DEALS, Convert.ToInt64(convertedIdsJSON[APIConstants.DEALS]));
                 }
-
                 return convertedIds;
             }
             catch (Exception e) when (!(e is ZCRMException))
@@ -177,13 +190,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
                 return APIRequest.GetInstance(this).UploadFile(filePath);
             }
-            catch (Exception e) when(!(e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
-
 
         public FileAPIResponse DownloadPhoto()
         {
@@ -214,7 +226,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
                 return APIRequest.GetInstance(this).GetAPIResponse();
             }
-            catch (Exception e) when(!(e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
@@ -238,15 +250,15 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     record.EntityId = Convert.ToInt64(token.Value);
                 }
-                else if (fieldAPIName.Equals("Product_Details"))
+                else if (fieldAPIName.Equals("Product_Details") && token.Value.Type != JTokenType.Null)
                 {
                     SetInventoryLineItems(token.Value);
                 }
-                else if (fieldAPIName.Equals("Participants"))
+                else if (fieldAPIName.Equals("Participants") && token.Value.Type != JTokenType.Null)
                 {
                     SetParticipants(token.Value);
                 }
-                else if (fieldAPIName.Equals("Pricing_Details"))
+                else if (fieldAPIName.Equals("Pricing_Details") && token.Value.Type != JTokenType.Null)
                 {
                     SetPriceDetails((JArray)token.Value);
                 }
@@ -264,11 +276,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
                 else if (fieldAPIName.Equals("Created_Time"))
                 {
-                    record.CreatedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(token.Value));
+                    record.CreatedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(token.Value));
                 }
                 else if (fieldAPIName.Equals("Modified_Time"))
                 {
-                    record.ModifiedTime = CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(token.Value));
+                    record.ModifiedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(token.Value));
                 }
                 else if (fieldAPIName.Equals("Owner") && token.Value.Type != JTokenType.Null)
                 {
@@ -386,9 +398,9 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
                 else
                 {
-                    if(token.Value.Type.ToString().Equals("Date"))
+                    if (token.Value.Type.ToString().Equals("Date"))
                     {
-                        record.SetFieldValue(fieldAPIName, CommonUtil.removeEscaping((string)JsonConvert.SerializeObject(token.Value)));
+                        record.SetFieldValue(fieldAPIName, CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(token.Value)));
                     }
                     else
                     {
@@ -432,18 +444,24 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
             ZCRMRecord product = ZCRMRecord.GetInstance("Products", Convert.ToInt64(productDetails["id"]));
             product.LookupLabel = (string)productDetails["name"];
+            if(productDetails.ContainsKey("Product_Code") && productDetails["Product_Code"].Type != JTokenType.Null)
+            {
+                product.SetFieldValue("Product_Code", (string)productDetails["name"]);
+            }
             lineItem.Product = product;
-            lineItem.Description = (string)lineItemJSON["product_description"];
             lineItem.Quantity = Convert.ToDouble(lineItemJSON["quantity"]);
+            lineItem.Discount = Convert.ToDouble(lineItemJSON["Discount"]);
+            lineItem.TotalAfterDiscount = Convert.ToDouble(lineItemJSON["total_after_discount"]);
+            lineItem.NetTotal = Convert.ToDouble(lineItemJSON["net_total"]);
+            lineItem.TaxAmount = Convert.ToDouble(lineItemJSON["Tax"]);
             lineItem.ListPrice = Convert.ToDouble(lineItemJSON["list_price"]);
             if(lineItemJSON.ContainsKey("unit_price") && lineItemJSON["unit_price"].Type != JTokenType.Null)
             {
                 lineItem.UnitPrice = Convert.ToDouble(lineItemJSON["unit_price"]);
             }
+            lineItem.QuantityInStock = Convert.ToInt32(lineItemJSON["quantity_in_stock"]);
             lineItem.Total = Convert.ToDouble(lineItemJSON["total"]);
-            lineItem.Discount = Convert.ToDouble(lineItemJSON["Discount"]);
-            lineItem.TotalAfterDiscount = Convert.ToDouble(lineItemJSON["total_after_discount"]);
-            lineItem.TaxAmount = Convert.ToDouble(lineItemJSON["Tax"]);
+            lineItem.Description = (string)lineItemJSON["product_description"];
             JArray lineTaxes = (JArray)lineItemJSON["line_tax"];
             foreach (JObject lineTax in lineTaxes)
             {
@@ -452,7 +470,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 tax.Value = Convert.ToDouble(lineTax["value"]);
                 lineItem.AddLineTax(tax);
             }
-            lineItem.NetTotal = Convert.ToDouble(lineItemJSON["net_total"]);
             return lineItem;
         }
 
