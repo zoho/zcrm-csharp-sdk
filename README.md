@@ -21,11 +21,11 @@ Setting Up
 C# SDK is available as a `Nuget` Package. The `ZCRMSDK` Assembly can be installed through `Nuget Package Manager` and through the following options:
 Package Manager:
 
-	>Install-Package ZCRMSDK --version 2.0.5/
+	>Install-Package ZCRMSDK --version 2.0.6/
 
 .NET CLI:
 
-	>dotnet add package ZCRMSDK --version 2.0.5/
+	>dotnet add package ZCRMSDK --version 2.0.6/
 
 >**Note:** The C# SDK is built against for .net standard 2.0.
 
@@ -48,6 +48,7 @@ public static Dictionary<string, string> config = new Dictionary<string, string>
     {"mysql_port","3306"},
     {"apiBaseUrl","https://www.zohoapis.com"},
     {"iamURL","https://accounts.zoho.com"},
+    {"fileUploadUrl","https://content.zohoapis.com"}
     {"photoUrl","{photo_url}"},
     {"apiVersion","v2"},
     {"logFilePath","{log_file_path}" },
@@ -128,7 +129,8 @@ The following are the supported configurations in the zcrm_configuration section
 	- `https://www.zohoapis.eu` for European countries.
 	- `https://www.zohoapis.in` for India.
 	- `https://www.zohoapis.com.cn` for China.
-
+- `fileUploadUrl` - URL to be used when uploading the zip file.
+	- `https://content.zohoapis.com` for US.
 - `photoUrl` - Url for the image representing the record. The domain might be different based on the apiBaseUrl. Url may be 
 	- `https://profile.zoho.com/api/v1/user/self/photo` for US.
 	- `https://profile.zoho.eu/api/v1/user/self/photo` for European countries.
