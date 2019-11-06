@@ -74,7 +74,7 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
                 urlPath = APIConstants.WRITE;
                 requestBody = this.GetZCRMBulkWriteAsJSON();
                 isBulk = true;
-
+                
                 APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
                 JObject responseData = response.ResponseJSON;
                 JObject recordDetails = (JObject)responseData[APIConstants.DETAILS];
@@ -209,7 +209,7 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
             {
                 resourceJSON.Add("find_by", resourceObj.FindBy);
             }
-            if (resourceObj.FieldMapping != null)
+            if (resourceObj.FieldMapping != null && resourceObj.FieldMapping.Count > 0)
             {
                 resourceJSON.Add("field_mappings", this.GetZCRMBulkWriteFieldMappingAsJSONArray(resourceObj.FieldMapping));
             }

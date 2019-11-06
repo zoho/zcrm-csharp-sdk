@@ -157,16 +157,16 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
             this.fileName = null;
-            BulkResponse csvFileResponse = new BulkResponse(ModuleAPIName, streamReader, checkFailed, fileType);
-            csvFileResponse.FieldAPINames = fieldAPINames;
-            csvFileResponse.APIHandlerIns = this;
+            BulkResponse bulkResponse = new BulkResponse(ModuleAPIName, streamReader, checkFailed, fileType);
+            bulkResponse.FieldAPINames = fieldAPINames;
+            bulkResponse.APIHandlerIns = this;
             if(fileType.Equals("ics"))
             {
-                EventsData["EventsData"] = csvFileResponse;
+                EventsData["EventsData"] = bulkResponse;
                 EventsData["END"] = (string)EventsData["BEGIN"];
-                csvFileResponse.Data = EventsData;
+                bulkResponse.Data = EventsData;
             }
-            return csvFileResponse;
+            return bulkResponse;
         }
 
         protected bool WriteStreamtoZipFile(FileAPIResponse fileResponse, string filePath)

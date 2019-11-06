@@ -249,7 +249,7 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
             if (this.readRecord.Query != null)
             {
                 ZCRMBulkQuery query = this.readRecord.Query;
-                if (query.Fields != null)
+                if (query.Fields != null && query.Fields.Count > 0)
                 {
                     recordJSON.Add("fields", this.GetFieldsAsJSONArray(query.Fields));
                 }

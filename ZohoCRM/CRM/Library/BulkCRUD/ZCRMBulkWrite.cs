@@ -218,7 +218,7 @@ namespace ZCRMSDK.CRM.Library.BulkCRUD
         /// </summary>
         /// <param name="filePath">file path to store the downloaded file.</param>
         /// <param name="downloadFileURL">The download URL from which you can download the result(CSV file) of the bulk write job.</param>
-        /// <returns>CSVFileResponse - CSVFileResponse instance of the CSVFileResponse class which holds the response.</returns>
+        /// <returns>BulkResponse - BulkResponse instance of the BulkResponse class which holds the response.</returns>
         public BulkResponse DownloadANDGetRecords(string filePath, string downloadFileURL)
         {
             if (downloadFileURL == null)
@@ -237,7 +237,7 @@ namespace ZCRMSDK.CRM.Library.BulkCRUD
         /// </summary>
         /// <param name="filePath">file path of the downloaded file.</param>
         /// <param name="fileName">file name of the downloaded file.</param>
-        /// <returns>CSVFileResponse - CSVFileResponse instance of the CSVFileResponse class which holds the response.</returns>
+        /// <returns>BulkResponse - BulkResponse instance of the BulkResponse class which holds the response.</returns>
         public BulkResponse GetRecords(string filePath, string fileName)
         {
             if (fileName == null)
@@ -256,7 +256,7 @@ namespace ZCRMSDK.CRM.Library.BulkCRUD
         /// </summary>
         /// <param name="filePath">file path to store the downloaded file.</param>
         /// <param name="downloadFileURL">The download URL from which you can download the result(CSV file) of the bulk write job.</param>
-        /// <returns>CSVFileResponse - CSVFileResponse instance of the CSVFileResponse class which holds the response.</returns>
+        /// <returns>BulkResponse - BulkResponse instance of the BulkResponse class which holds the response.</returns>
         public BulkResponse DownloadANDGetFailedRecords(string filePath, string downloadFileURL)
         {
             if (downloadFileURL == null)
@@ -275,7 +275,7 @@ namespace ZCRMSDK.CRM.Library.BulkCRUD
         /// </summary>
         /// <param name="filePath">file path of the downloaded file.</param>
         /// <param name="fileName">file name of the downloaded file.</param>
-        /// <returns>CSVFileResponse - CSVFileResponse instance of the CSVFileResponse class which holds the response.</returns>
+        /// <returns>BulkResponse - BulkResponse instance of the BulkResponse class which holds the response.</returns>
         public BulkResponse GetFailedRecords(string filePath, string fileName)
         {
             if (fileName == null)

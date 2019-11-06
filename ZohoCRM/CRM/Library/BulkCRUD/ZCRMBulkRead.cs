@@ -191,7 +191,7 @@ namespace ZCRMSDK.CRM.Library.BulkCRUD
         /// Method to get download the result of the bulk read job and get CSV file as ZCRMRecord instance.
         /// </summary>
         /// <param name="filePath">file path to store the Downloaded file.</param>
-        /// <returns>CSVFileResponse - CSVFileResponse instance of the CSVFileResponse class which holds the response.</returns>
+        /// <returns>BulkResponse - BulkResponse instance of the BulkResponse class which holds the response.</returns>
         public BulkResponse DownloadANDGetRecords(string filePath)
         {
             if (filePath == null)
@@ -206,7 +206,7 @@ namespace ZCRMSDK.CRM.Library.BulkCRUD
         /// </summary>
         /// <param name="filePath">file path of the downloaded file.</param>
         /// <param name="fileName">file name of the downloaded file.</param>
-        /// <returns>CSVFileResponse instance of the CSVFileResponse class which holds the response.</returns>
+        /// <returns>BulkResponse instance of the BulkResponse class which holds the response.</returns>
         public BulkResponse GetRecords(string filePath, string fileName)
         {
             if (fileName == null)
