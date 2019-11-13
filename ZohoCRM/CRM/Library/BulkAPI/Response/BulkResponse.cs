@@ -11,7 +11,7 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Response
 {
     public class BulkResponse
     {
-        private StreamReader csvFilePointer;
+        private StreamReader filePointer;
         private string moduleAPIName;
         private List<string> fieldAPINames = new List<string>();
         private Dictionary<string, object> fieldvsValue = new Dictionary<string, object>();
@@ -24,10 +24,10 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Response
 
         public BulkResponse() { }
 
-        public BulkResponse(string moduleAPIName, StreamReader csvFilePointer, bool checkFailedRecord,string fileType)
+        public BulkResponse(string moduleAPIName, StreamReader filePointer, bool checkFailedRecord,string fileType)
         {
             this.ModuleAPIName = moduleAPIName;
-            this.CSVFilePointer = csvFilePointer;
+            this.FilePointer = filePointer;
             this.checkFailedRecord = checkFailedRecord;
             this.fileType = fileType;
         }
@@ -68,15 +68,15 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Response
             }
         }
 
-        public StreamReader CSVFilePointer
+        public StreamReader FilePointer
         {
             get
             {
-                return this.csvFilePointer;
+                return this.filePointer;
             }
             set
             {
-                this.csvFilePointer = value;
+                this.filePointer = value;
             }
         }
 
@@ -122,17 +122,20 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Response
         public bool HasNext()
         {
             this.fieldvsValue = new Dictionary<string, object>(); string line = null;
+            if(this.FilePointer.BaseStream == null)
+            {
+                return false;
+            }
             try
             {
                 if(this.fileType.Equals("ics"))
                 {
-                    while (!this.CSVFilePointer.EndOfStream)
+                    while (!this.FilePointer.EndOfStream)
                     {
-                        line = this.CSVFilePointer.ReadLine();
-                        //var value = Regex.Match(line, "(.*)?(:|;)(.*)$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
-                        var value = line.Split(new[] { ':' }, 2);
+                        line = this.FilePointer.ReadLine();
                         if(line.Contains(":"))
                         {
+                            var value = line.Split(new[] { ':' }, 2);
                             if (value[0].Equals("END") && this.FieldvsValues.Count > 0)
                             {
                                 this.FieldvsValues[value[0]] = value[1];
@@ -144,10 +147,14 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Response
                             }
                         }
                     }
+                    if(this.FilePointer.EndOfStream)
+                    {
+                        this.FilePointer.Close();
+                    }
                 }
                 else
                 {
-                    line = this.CSVFilePointer.ReadLine();
+                    line = this.FilePointer.ReadLine();
                     if (this.checkFailedRecord)
                     {
                         this.rowNumber++;
@@ -163,10 +170,10 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Response
                                     return true;
                                 }
                             }
-                            line = this.CSVFilePointer.ReadLine();
+                            line = this.FilePointer.ReadLine();
                         }
                         this.rowNumber = 0;
-                        this.csvFilePointer.Close();
+                        this.FilePointer.Close();
                     }
                     else
                     {
@@ -180,7 +187,7 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Response
                         else
                         {
                             this.rowNumber = 0;
-                            this.csvFilePointer.Close();
+                            this.FilePointer.Close();
                         }
                     }
                 }
@@ -196,7 +203,7 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Response
         public void Close()
         {
             this.rowNumber = 0;
-            this.csvFilePointer.Close();
+            this.FilePointer.Close();
         }
     }
 }
