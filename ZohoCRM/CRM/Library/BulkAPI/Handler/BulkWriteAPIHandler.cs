@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ZCRMSDK.CRM.Library.Api;
@@ -27,13 +28,35 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
             return new BulkWriteAPIHandler(writeRecord);
         }
 
-        public APIResponse UploadFile(string filePath, Dictionary<string, string> headers)
+        public APIResponse UploadFile(string filePath,Dictionary<string, string> headers)
         {
             if (filePath == null)
             {
                 throw new ZCRMException("File path must not be null for file upload operation.");
             }
             CommonUtil.ValidateFile(filePath);
+            FileInfo fileInfo = new FileInfo(filePath);
+            return this.UploadFile(fileInfo.OpenRead(), fileInfo.Name, headers);
+        }
+
+        public APIResponse UploadFile(Stream fileContent,string fileName, Dictionary<string, string> headers)
+        {
+            if (fileContent == null || fileName == null)
+            {
+                throw new ZCRMException("Give valid input for file upload operation.");
+            }
+            this.SetURLDetails(headers);
+
+            //Fire Request
+            APIResponse response = APIRequest.GetInstance(this).UploadFile(fileContent, fileName);
+            JObject responseData = response.ResponseJSON;
+            JObject details = (JObject)responseData[APIConstants.DETAILS];
+            response.Data = this.GetZCRMAttachmentObject(details);
+            return response;
+        }
+
+        public void SetURLDetails(Dictionary<string, string> headers)
+        { 
             try
             {
                 if (headers.Count <= 0)
@@ -47,13 +70,6 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
                 {
                     requestHeaders.Add(header.Key, header.Value);
                 }
-
-                //Fire Request
-                APIResponse response = APIRequest.GetInstance(this).UploadFile(filePath);
-                JObject responseData = response.ResponseJSON;
-                JObject details = (JObject)responseData[APIConstants.DETAILS];
-                response.Data = this.GetZCRMAttachmentObject(details);
-                return response;
             }
             catch (Exception e) when ((e is ZCRMException))
             {

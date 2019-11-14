@@ -7,6 +7,7 @@ using ZCRMSDK.CRM.Library.CRMException;
 using ZCRMSDK.CRM.Library.CRUD;
 using ZCRMSDK.CRM.Library.Setup.Users;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace ZCRMSDK.CRM.Library.Api.Handler
 {
@@ -252,7 +253,8 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + relatedList.ApiName;
 
                 ZCRMLogger.LogInfo("urlPath : " + urlPath);
-                APIResponse response = APIRequest.GetInstance(this).UploadFile(filePath);
+                FileInfo fileInfo = new FileInfo(filePath);
+                APIResponse response = APIRequest.GetInstance(this).UploadFile(fileInfo.OpenRead(), fileInfo.Name);
 
                 JArray responseDataArray = (JArray)response.ResponseJSON[APIConstants.DATA];
                 JObject responseData = (JObject)responseDataArray[0];

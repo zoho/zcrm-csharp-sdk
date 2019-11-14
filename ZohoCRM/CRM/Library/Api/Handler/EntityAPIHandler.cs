@@ -7,6 +7,7 @@ using ZCRMSDK.CRM.Library.Api.Response;
 using ZCRMSDK.CRM.Library.CRMException;
 using ZCRMSDK.CRM.Library.Common;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace ZCRMSDK.CRM.Library.Api.Handler
 {
@@ -188,7 +189,8 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 requestMethod = APIConstants.RequestMethod.POST;
                 urlPath = record.ModuleAPIName + "/" + record.EntityId + "/photo";
 
-                return APIRequest.GetInstance(this).UploadFile(filePath);
+                FileInfo fileInfo = new FileInfo(filePath);
+                return APIRequest.GetInstance(this).UploadFile(fileInfo.OpenRead(), fileInfo.Name);
             }
             catch (Exception e) when (!(e is ZCRMException))
             {

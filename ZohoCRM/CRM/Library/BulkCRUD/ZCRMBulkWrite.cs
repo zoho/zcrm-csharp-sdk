@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using ZCRMSDK.CRM.Library.Api;
 using ZCRMSDK.CRM.Library.Api.Response;
 using ZCRMSDK.CRM.Library.BulkAPI.Handler;
@@ -183,6 +184,18 @@ namespace ZCRMSDK.CRM.Library.BulkCRUD
         public APIResponse UploadFile(string filePath, Dictionary<string, string> headers)
         {
             return BulkWriteAPIHandler.GetInstance(this).UploadFile(filePath, headers);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileContent">uploaded file stream</param>
+        /// <param name="fileName">uploaded file name</param>
+        /// <param name="headers">uploaded file request headers</param>
+        /// <returns>APIResponse - APIResponse instance of the APIResponse class which holds the API response.</returns>
+        public APIResponse UploadFile(Stream fileContent, string fileName, Dictionary<string, string> headers)
+        {
+            return BulkWriteAPIHandler.GetInstance(this).UploadFile(fileContent, fileName, headers);
         }
 
         /// <summary>

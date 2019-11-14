@@ -327,11 +327,11 @@ namespace ZCRMSDK.CRM.Library.Api
             }
         }
 
-        public APIResponse UploadFile(string filePath)
+        public APIResponse UploadFile(Stream fileContent, string fileName)
         {
             try
             {
-                fileRequestBody = GetFileRequestBodyStream(filePath);
+                fileRequestBody = GetFileRequestBodyStream(fileContent, fileName);
                 GetResponseFromServer();
                 APIResponse apiResponse = new APIResponse(response);
                 response.Close();
@@ -359,28 +359,23 @@ namespace ZCRMSDK.CRM.Library.Api
             }
         }
 
-        private Stream GetFileRequestBodyStream(string filePath)
+        private Stream GetFileRequestBodyStream(Stream fileContent, string fileName)
         {
             try
             {
                 Stream fileDataStream = new MemoryStream();
 
-                FileInfo fileInfo = new FileInfo(filePath);
-
                 //File Content-Disposition header excluding the boundary header;
-                string fileHeader = string.Format("\r\nContent-Disposition: form-data; name=\"file\"; filename=\"" + fileInfo.Name + "\"\r\nContent-Type: application/octet-stream\r\n\r\n");
+                string fileHeader = string.Format("\r\nContent-Disposition: form-data; name=\"file\"; filename=\"" + fileName + "\"\r\nContent-Type: application/octet-stream\r\n\r\n");
                 byte[] fileHeaderBytes = Encoding.UTF8.GetBytes(fileHeader);
                 fileDataStream.Write(fileHeaderBytes, 0, fileHeaderBytes.Length);
 
                 //File content 
                 byte[] buffer = new byte[1024];
                 int bytesRead = 0;
-                using (FileStream fileStream = fileInfo.OpenRead())
+                while ((bytesRead = fileContent.Read(buffer, 0, buffer.Length)) != 0)
                 {
-                    while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
-                    {
-                        fileDataStream.Write(buffer, 0, bytesRead);
-                    }
+                    fileDataStream.Write(buffer, 0, bytesRead);
                 }
 
                 //Footer
