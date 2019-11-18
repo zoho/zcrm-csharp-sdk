@@ -162,7 +162,15 @@ namespace ZCRMSDK.OAuth.Client
             try
             {
                 ZohoOAuthTokens tokens = new ZohoOAuthTokens();
-                long expiresIn = Convert.ToInt64(responseJSON[ZohoOAuthConstants.EXPIRES_IN]);
+                long expiresIn = 0;
+                if (!responseJSON.ContainsKey("expires_in_sec"))
+                {
+                    expiresIn = Convert.ToInt64(responseJSON[ZohoOAuthConstants.EXPIRES_IN]) * 1000;
+                }
+                else
+                {
+                    expiresIn = Convert.ToInt64(responseJSON[ZohoOAuthConstants.EXPIRES_IN]);
+                }
                 tokens.ExpiryTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + expiresIn - 600000;
                 tokens.AccessToken = (string)responseJSON[ZohoOAuthConstants.ACCESS_TOKEN];
                 if (responseJSON.ContainsKey(ZohoOAuthConstants.REFRESH_TOKEN))
