@@ -21,11 +21,11 @@ Setting Up
 C# SDK is available as a `Nuget` Package. The `ZCRMSDK` Assembly can be installed through `Nuget Package Manager` and through the following options:
 Package Manager:
 
-	>Install-Package ZCRMSDK --version 2.0.7/
+	>Install-Package ZCRMSDK --version 2.0.9/
 
 .NET CLI:
 
-	>dotnet add package ZCRMSDK --version 2.0.7/
+	>dotnet add package ZCRMSDK --version 2.0.9/
 
 >**Note:** The C# SDK is built against for .net standard 2.0.
 
