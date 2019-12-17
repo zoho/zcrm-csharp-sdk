@@ -4,6 +4,7 @@ using ZCRMSDK.CRM.Library.Api.Response;
 using ZCRMSDK.CRM.Library.Api.Handler;
 using ZCRMSDK.CRM.Library.Setup.Users;
 using ZCRMSDK.CRM.Library.CRMException;
+using ZCRMSDK.CRM.Library.Api;
 
 namespace ZCRMSDK.CRM.Library.CRUD
 {
@@ -1066,7 +1067,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <param name="value">Search word (String).This will return the record details based on word.</param>
         public BulkAPIResponse<ZCRMRecord> SearchByWord(string value)
         {
-            return MassEntityAPIHandler.GetInstance(this).SearchByWord(value, 1, 200);
+            return SearchByWord(value, 1, 200);
         }
 
         /// <summary>
@@ -1078,7 +1079,23 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <param name="perPage">Number of records per page (Integer)</param>
         public BulkAPIResponse<ZCRMRecord> SearchByWord(string value, int page, int perPage)
         {
-            return MassEntityAPIHandler.GetInstance(this).SearchByWord(value, page, perPage);
+            Dictionary<string, string> methodParams = new Dictionary<string, string>()
+            {
+                {APIConstants.PAGE , page.ToString()},
+                {APIConstants.PER_PAGE , perPage.ToString()}
+            };
+            return SearchByWord(value, methodParams);
+        }
+
+        /// <summary>
+        /// To search the records based on word with methodParams.
+        /// </summary>
+        /// <param name="value">Search word (String).This will return the record details based on word.</param>
+        /// <param name="methodParams"></param>
+        /// <returns></returns>
+        public BulkAPIResponse<ZCRMRecord> SearchByWord(string value, Dictionary<string, string> methodParams)
+        {
+            return MassEntityAPIHandler.GetInstance(this).SearchByWord(value,methodParams);
         }
 
         /// <summary>
@@ -1088,7 +1105,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <param name="value">Search criteria (String).This will return the record details based on criteria.</param>
         public BulkAPIResponse<ZCRMRecord> SearchByCriteria(string value)
         {
-            return MassEntityAPIHandler.GetInstance(this).SearchByCriteria(value, 1, 200);
+            return SearchByCriteria(value, 1, 200);
         }
 
         /// <summary>
@@ -1100,7 +1117,23 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <param name="perPage">Number of records per page (Integer)</param>
         public BulkAPIResponse<ZCRMRecord> SearchByCriteria(string value, int page, int perPage)
         {
-            return MassEntityAPIHandler.GetInstance(this).SearchByCriteria(value, page, perPage);
+            Dictionary<string, string> methodParams = new Dictionary<string, string>()
+            {
+                {APIConstants.PAGE , page.ToString()},
+                {APIConstants.PER_PAGE , perPage.ToString()}
+            };
+            return SearchByCriteria(value, methodParams);
+        }
+
+        /// <summary>
+        /// To search the records based on criteria with methodParams. 
+        /// </summary>
+        /// <param name="value">Search criteria (String). This will return the record details based on criteria.</param>
+        /// <param name="methodParams"></param>
+        /// <returns>BulkAPIResponse&lt;ZCRMRecord&gt; class instance.</returns>
+        public BulkAPIResponse<ZCRMRecord> SearchByCriteria(string value, Dictionary<string, string> methodParams)
+        {
+            return MassEntityAPIHandler.GetInstance(this).SearchByCriteria(value, methodParams);
         }
 
         /// <summary>
@@ -1110,7 +1143,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <param name="value">Search phone number (String). This will return the record details based on phone number.</param>
         public BulkAPIResponse<ZCRMRecord> SearchByPhone(string value)
         {
-            return MassEntityAPIHandler.GetInstance(this).SearchByPhone(value, 1, 200);
+            return SearchByPhone(value, 1, 200);
         }
 
         /// <summary>
@@ -1122,7 +1155,23 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <param name="perPage">Number of records per page (Integer)</param>
         public BulkAPIResponse<ZCRMRecord> SearchByPhone(string value, int page, int perPage)
         {
-            return MassEntityAPIHandler.GetInstance(this).SearchByPhone(value, page, perPage);
+            Dictionary<string, string> methodParams = new Dictionary<string, string>()
+            {
+                {APIConstants.PAGE , page.ToString()},
+                {APIConstants.PER_PAGE , perPage.ToString()}
+            };
+            return SearchByPhone(value, methodParams);
+        }
+
+        /// <summary>
+        /// To search the record based on phone with methodParams.
+        /// </summary>
+        /// <param name="value">Search phone number (String). This will return the record details based on phone number.</param>
+        /// <param name="methodParams"></param>
+        /// <returns>BulkAPIResponse&lt;ZCRMRecord&gt; class instance.</returns>
+        public BulkAPIResponse<ZCRMRecord> SearchByPhone(string value, Dictionary<string, string> methodParams)
+        {
+            return MassEntityAPIHandler.GetInstance(this).SearchByPhone(value, methodParams);
         }
 
         /// <summary>
@@ -1132,7 +1181,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <param name="value">Search email id (String).This will return the record details based on email id.</param>
         public BulkAPIResponse<ZCRMRecord> SearchByEmail(string value)
         {
-            return MassEntityAPIHandler.GetInstance(this).SearchByEmail(value, 1, 200);
+            return SearchByEmail(value, 1, 200);
         }
 
         /// <summary>
@@ -1144,7 +1193,23 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <param name="perPage">Number of records per page (Integer)</param>
         public BulkAPIResponse<ZCRMRecord> SearchByEmail(string value, int page, int perPage)
         {
-            return MassEntityAPIHandler.GetInstance(this).SearchByEmail(value, page, perPage);
+            Dictionary<string, string> methodParams = new Dictionary<string, string>()
+            {
+                {APIConstants.PAGE , page.ToString()},
+                {APIConstants.PER_PAGE , perPage.ToString()}
+            };
+            return SearchByEmail(value, methodParams);
+        }
+
+        /// <summary>
+        /// To search the record based on email with methodParams.
+        /// </summary>
+        /// <param name="value">Search email id (String). This will return the record details based on email id.</param>
+        /// <param name="methodParams"></param>
+        /// <returns>BulkAPIResponse&lt;ZCRMRecord&gt; class instance.</returns>
+        public BulkAPIResponse<ZCRMRecord> SearchByEmail(string value, Dictionary<string, string> methodParams)
+        {
+            return MassEntityAPIHandler.GetInstance(this).SearchByEmail(value, methodParams);
         }
 
         /// <summary>

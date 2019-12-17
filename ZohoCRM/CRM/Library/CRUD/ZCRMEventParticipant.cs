@@ -11,7 +11,6 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private string status;
         private string participant;
 
-
         private ZCRMEventParticipant(string type, long id)
         {
             Type = type;

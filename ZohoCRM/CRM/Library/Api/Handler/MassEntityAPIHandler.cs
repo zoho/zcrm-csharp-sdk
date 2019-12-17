@@ -353,36 +353,38 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             return response;
         }
 
-        public BulkAPIResponse<ZCRMRecord> SearchByWord(string searchText, int page, int perPage)
+        public BulkAPIResponse<ZCRMRecord> SearchByWord(string searchText, Dictionary<string,string> methodParams)
         {
-            return SearchRecords("word", searchText, page, perPage);
+            return SearchRecords("word", searchText, methodParams);
         }
 
-        public BulkAPIResponse<ZCRMRecord> SearchByCriteria(string searchCriteria, int page, int perPage)
+        public BulkAPIResponse<ZCRMRecord> SearchByCriteria(string searchCriteria, Dictionary<string, string> methodParams)
         {
-            return SearchRecords("criteria", searchCriteria, page, perPage);
-        }
-
-
-        public BulkAPIResponse<ZCRMRecord> SearchByEmail(string searchValue, int page, int perPage)
-        {
-            return SearchRecords("email", searchValue, page, perPage);
+            return SearchRecords("criteria", searchCriteria, methodParams);
         }
 
 
-        public BulkAPIResponse<ZCRMRecord> SearchByPhone(string searchValue, int page, int perPage)
+        public BulkAPIResponse<ZCRMRecord> SearchByEmail(string searchValue, Dictionary<string, string> methodParams)
         {
-            return SearchRecords("phone", searchValue, page, perPage);
+            return SearchRecords("email", searchValue, methodParams);
         }
 
-        private BulkAPIResponse<ZCRMRecord> SearchRecords(string searchKey, string searchValue, int page, int perPage)
+
+        public BulkAPIResponse<ZCRMRecord> SearchByPhone(string searchValue, Dictionary<string, string> methodParams)
+        {
+            return SearchRecords("phone", searchValue, methodParams);
+        }
+
+        private BulkAPIResponse<ZCRMRecord> SearchRecords(string searchKey, string searchValue, Dictionary<string,string> methodParams)
         {
             requestMethod = APIConstants.RequestMethod.GET;
             urlPath = module.ApiName + "/search";
             requestQueryParams.Add(searchKey, searchValue);
-            requestQueryParams.Add(APIConstants.PAGE, page.ToString());
-            requestQueryParams.Add(APIConstants.PER_PAGE, perPage.ToString());
-
+            foreach(KeyValuePair<string,string> methodParam in methodParams)
+            {
+                requestQueryParams.Add(methodParam.Key, methodParam.Value);
+            }
+            
             BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
 
             List<ZCRMRecord> recordsList = new List<ZCRMRecord>();

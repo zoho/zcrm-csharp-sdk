@@ -196,7 +196,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             return GetUsers("ConfirmedUsers", null, page, perPage);
         }
 
-
         public BulkAPIResponse<ZCRMUser> GetAllUnConfirmedUsers(int page, int perPage)
         {
             return GetUsers("NotConfirmedUsers", null, page, perPage);
@@ -212,7 +211,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             return GetUsers("ActiveConfirmedUsers", null, page, perPage);
         }
 
-
         public BulkAPIResponse<ZCRMUser> GetAllAdminUsers(int page, int perPage)
         {
             return GetUsers("AdminUsers", null, page, perPage);
@@ -222,8 +220,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         {
             return GetUsers("ActiveConfirmedAdmins", null, page, perPage);
         }
-
-
 
         private ZCRMUser GetZCRMUser(JObject userDetails)
         {
@@ -449,6 +445,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             return territoryIns;
 
         }
+
         private ZCRMCriteria SetZCRMCriteriaObject(JObject criteria)
         {
             ZCRMCriteria recordCriteria = ZCRMCriteria.GetInstance();
@@ -691,8 +688,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
         }
 
-
-
         public BulkAPIResponse<ZCRMRole> GetAllRoles()
         {
             try
@@ -718,7 +713,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
-
 
         //TODO: Handle exceptions;
         private ZCRMRole GetZCRMRole(JObject roleDetails)

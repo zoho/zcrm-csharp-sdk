@@ -441,7 +441,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
         }
 
-
         public JObject GetZCRMTagAsJSON(ZCRMTag tagvalue)
         {
             JObject TagJSON = new JObject();

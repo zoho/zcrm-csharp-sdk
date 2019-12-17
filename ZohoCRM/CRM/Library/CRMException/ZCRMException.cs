@@ -67,9 +67,6 @@ namespace ZCRMSDK.CRM.Library.CRMException
 
         public ZCRMException(Exception ex) : this(null, ex) { }
 
-
-
-
         public override string ToString()
         {
             string returnMsg = typeof(ZCRMException).FullName + ". Caused by : ";

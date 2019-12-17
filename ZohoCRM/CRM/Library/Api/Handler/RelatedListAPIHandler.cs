@@ -310,8 +310,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             return APIRequest.GetInstance(this).GetAPIResponse();
         }
 
-
-
         private ZCRMNote GetZCRMNote(JObject noteDetails, ZCRMNote note)
         {
             if (note == null)
