@@ -339,7 +339,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 requestMethod = APIConstants.RequestMethod.POST;
                 urlPath = "" + record.ModuleAPIName + "/" + record.EntityId + "/actions/remove_tags";
                 requestQueryParams.Add("tag_names",string.Join(",", JToken.FromObject(tagNames)));
-                Console.WriteLine(JsonConvert.SerializeObject(requestQueryParams));
                 APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
                 JArray responseDataArray = (JArray)response.ResponseJSON[APIConstants.DATA];
                 JObject responseData = (JObject)responseDataArray[0];

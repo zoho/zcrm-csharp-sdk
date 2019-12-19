@@ -320,7 +320,6 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
                 return false;
             }
             return true;
