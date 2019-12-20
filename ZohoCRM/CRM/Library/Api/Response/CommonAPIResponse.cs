@@ -66,18 +66,11 @@ namespace ZCRMSDK.CRM.Library.Api.Response
 
         public CommonAPIResponse(HttpWebResponse response)
         {
-            try
-            {
-                Response = response;
-                Init();
-                ProcessResponse();
-                SetResponseHeaders();
-                ZCRMLogger.LogInfo(ToString());
-            }
-            catch (Exception)
-            {
-                ZCRMLogger.LogInfo(ToString());
-            }
+            Response = response;
+            Init();
+            ProcessResponse();
+            SetResponseHeaders();
+            ZCRMLogger.LogInfo(ToString());
         }
 
         protected void Init()
@@ -106,7 +99,6 @@ namespace ZCRMSDK.CRM.Library.Api.Response
             {
                 ResponseJSON = new JObject();
             }
-
             else
             {
                 responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();

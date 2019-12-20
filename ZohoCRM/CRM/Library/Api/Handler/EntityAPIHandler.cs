@@ -42,7 +42,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 response.Data = record;
                 return response;
             }
-            catch (Exception e) when ((e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
@@ -78,7 +78,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 response.Data = record;
                 return response;
             }
-            catch (Exception e) when ((e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
@@ -117,7 +117,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
-
 
         public APIResponse DeleteRecord()
         {
@@ -177,7 +176,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
-
 
         public APIResponse UploadPhoto(string filePath)
         {
@@ -525,8 +523,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 recordJSON.Add("$line_tax", GetTaxAsJSONArray());
             return recordJSON;
         }
-
-
 
         private void MapAsJSON(Dictionary<string, object> recordData, JObject recordJSON)
         {

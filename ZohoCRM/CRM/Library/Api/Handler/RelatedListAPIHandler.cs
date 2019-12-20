@@ -246,13 +246,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public APIResponse UploadAttachment(string filePath)
         {
-            CommonUtil.ValidateFile(filePath);
             try
             {
+                CommonUtil.ValidateFile(filePath);
                 requestMethod = APIConstants.RequestMethod.POST;
                 urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + relatedList.ApiName;
 
-                ZCRMLogger.LogInfo("urlPath : " + urlPath);
                 FileInfo fileInfo = new FileInfo(filePath);
                 APIResponse response = APIRequest.GetInstance(this).UploadFile(fileInfo.OpenRead(), fileInfo.Name);
 
@@ -291,23 +290,38 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
-
         }
 
         public FileAPIResponse DownloadAttachment(long attachmentId)
         {
-            requestMethod = APIConstants.RequestMethod.GET;
-            urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + relatedList.ApiName + "/" + attachmentId;
+            try
+            {
+                requestMethod = APIConstants.RequestMethod.GET;
+                urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + relatedList.ApiName + "/" + attachmentId;
 
-            return APIRequest.GetInstance(this).DownloadFile();
+                return APIRequest.GetInstance(this).DownloadFile();
+            }
+            catch (Exception e) when (!(e is ZCRMException))
+            {
+                ZCRMLogger.LogError(e);
+                throw new ZCRMException(APIConstants.SDK_ERROR, e);
+            }
         }
 
 
         public APIResponse DeleteAttachment(long attachmentId)
         {
-            requestMethod = APIConstants.RequestMethod.DELETE;
-            urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + relatedList.ApiName + "/" + attachmentId;
-            return APIRequest.GetInstance(this).GetAPIResponse();
+            try
+            {
+                requestMethod = APIConstants.RequestMethod.DELETE;
+                urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + relatedList.ApiName + "/" + attachmentId;
+                return APIRequest.GetInstance(this).GetAPIResponse();
+            }
+            catch (Exception e) when (!(e is ZCRMException))
+            {
+                ZCRMLogger.LogError(e);
+                throw new ZCRMException(APIConstants.SDK_ERROR, e);
+            }
         }
 
         private ZCRMNote GetZCRMNote(JObject noteDetails, ZCRMNote note)
@@ -356,9 +370,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             return note;
         }
 
-
-
-
         private JObject GetZCRMNoteAsJSON(ZCRMNote note)
         {
             JObject noteJSON = new JObject();
@@ -376,7 +387,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
             return noteJSON;
         }
-
 
         private ZCRMAttachment GetZCRMAttachment(JObject attachmentDetails)
         {
@@ -452,21 +462,28 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                     attachment.Link_url = Convert.ToString(attachmentDetails["$link_url"]);
                 }
             }
-
             return attachment;
         }
 
         public APIResponse AddRelation()
         {
-            requestMethod = APIConstants.RequestMethod.PUT;
-            urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + junctionRecord.ApiName + "/" + junctionRecord.Id;
-            JObject requestBodyObject = new JObject();
-            JArray dataArray = new JArray();
-            dataArray.Add(GetRelationDetailsAsJSON(junctionRecord.RelatedDetails));
-            requestBodyObject.Add(APIConstants.DATA, dataArray);
-            requestBody = requestBodyObject;
+            try
+            {
+                requestMethod = APIConstants.RequestMethod.PUT;
+                urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + junctionRecord.ApiName + "/" + junctionRecord.Id;
+                JObject requestBodyObject = new JObject();
+                JArray dataArray = new JArray();
+                dataArray.Add(GetRelationDetailsAsJSON(junctionRecord.RelatedDetails));
+                requestBodyObject.Add(APIConstants.DATA, dataArray);
+                requestBody = requestBodyObject;
 
-            return APIRequest.GetInstance(this).GetAPIResponse();
+                return APIRequest.GetInstance(this).GetAPIResponse();
+            }
+            catch (Exception e) when (!(e is ZCRMException))
+            {
+                ZCRMLogger.LogError(e);
+                throw new ZCRMException(APIConstants.SDK_ERROR, e);
+            }
         }
 
         private JObject GetRelationDetailsAsJSON(Dictionary<string, object> relatedDetails)
@@ -480,14 +497,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     relatedDetailsJSON.Add(keyValuePairs.Key, JToken.Parse(null));
                 }
-                // else if (value is long)
-                // {
-                //     relatedDetailsJSON.Add(keyValuePairs.Key, Convert.ToInt64(value));
-                // }
-                // else if (value is int)
-                // {
-                //     relatedDetailsJSON.Add(keyValuePairs.Key, Convert.ToInt32(value));
-                // }
                 else
                 {
                     relatedDetailsJSON.Add(keyValuePairs.Key, JToken.FromObject(value));
@@ -499,10 +508,18 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public APIResponse DeleteRelation()
         {
-            requestMethod = APIConstants.RequestMethod.DELETE;
-            urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + junctionRecord.ApiName + "/" + junctionRecord.Id;
+            try
+            {
+                requestMethod = APIConstants.RequestMethod.DELETE;
+                urlPath = parentRecord.ModuleAPIName + "/" + parentRecord.EntityId + "/" + junctionRecord.ApiName + "/" + junctionRecord.Id;
 
-            return APIRequest.GetInstance(this).GetAPIResponse();
+                return APIRequest.GetInstance(this).GetAPIResponse();
+            }
+            catch (Exception e) when (!(e is ZCRMException))
+            {
+                ZCRMLogger.LogError(e);
+                throw new ZCRMException(APIConstants.SDK_ERROR, e);
+            }
         }
     }
 }

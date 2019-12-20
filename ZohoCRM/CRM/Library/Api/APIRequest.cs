@@ -169,10 +169,18 @@ namespace ZCRMSDK.CRM.Library.Api
 
         public APIResponse GetAPIResponse()
         {
-            GetResponseFromServer();
-            APIResponse apiResponse = new APIResponse(response);
-            response.Close();
-            return apiResponse;
+            try
+            {
+                GetResponseFromServer();
+                APIResponse apiResponse = new APIResponse(response);
+                response.Close();
+                return apiResponse;
+            }
+            catch (Exception e) when (!(e is ZCRMException))
+            {
+                ZCRMLogger.LogError(e);
+                throw new ZCRMException(e);
+            }
         }
 
         public BulkAPIResponse<T> GetBulkAPIResponse<T>() where T : ZCRMEntity
@@ -186,7 +194,6 @@ namespace ZCRMSDK.CRM.Library.Api
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
-                if (e is ZCRMException) { throw; }
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(e);
             }

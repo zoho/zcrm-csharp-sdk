@@ -56,7 +56,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         {
             try
             {
-
                 requestMethod = APIConstants.RequestMethod.GET;
                 urlPath = "settings/layouts";
                 requestQueryParams.Add("module", module.ApiName);
@@ -103,7 +102,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         {
             try
             {
-
                 requestMethod = APIConstants.RequestMethod.GET;
                 urlPath = "settings/fields";
                 requestQueryParams.Add("module", module.ApiName);
@@ -129,7 +127,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         {
             try
             {
-
                 requestMethod = APIConstants.RequestMethod.GET;
                 urlPath = "settings/custom_views";
                 requestQueryParams.Add("module", module.ApiName);
@@ -196,7 +193,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         {
             try
             {
-
                 requestMethod = APIConstants.RequestMethod.GET;
                 urlPath = "settings/related_lists";
                 requestQueryParams.Add("module", module.ApiName);

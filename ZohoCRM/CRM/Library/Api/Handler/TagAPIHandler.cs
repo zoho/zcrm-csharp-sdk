@@ -46,7 +46,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 response.BulkData = tags;
                 return response;
             }
-            catch (Exception e) when ((e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
@@ -77,12 +77,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public BulkAPIResponse<ZCRMTag> CreateTags(List<ZCRMTag> tags)
         {
-            if (tags.Count > 50)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_TAGS_MSG);
-            }
             try
             {
+                if (tags.Count > 50)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_TAGS_MSG);
+                }
                 requestMethod = APIConstants.RequestMethod.POST;
                 urlPath = "settings/tags";
                 requestQueryParams.Add("module", module.ApiName);
@@ -122,7 +122,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 response.BulkData = createtags;
                 return response;
             }
-            catch (Exception e) when ((e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
@@ -131,12 +131,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public BulkAPIResponse<ZCRMTag> UpdateTags(List<ZCRMTag> tags)
         {
-            if (tags.Count > 50)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_TAGS_MSG);
-            }
             try
             {
+                if (tags.Count > 50)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_TAGS_MSG);
+                }
                 requestMethod = APIConstants.RequestMethod.PUT;
                 urlPath = "settings/tags";
                 requestQueryParams.Add("module", module.ApiName);
@@ -172,7 +172,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 response.BulkData = updatetags;
                 return response;
             }
-            catch (Exception e) when ((e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
@@ -258,12 +258,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public APIResponse AddTags(ZCRMRecord record, List<string> tagNames)
         {
-            if (tagNames.Count > 10)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
-            }
             try
             {
+                if (tagNames.Count > 10)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
+                }
                 requestMethod = APIConstants.RequestMethod.POST;
                 urlPath = record.ModuleAPIName + "/" + record.EntityId + "/actions/add_tags";
                 requestQueryParams.Add("tag_names", string.Join(",", JToken.FromObject(tagNames)));
@@ -285,16 +285,16 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public BulkAPIResponse<ZCRMRecord> AddTagsToRecords(List<long> recordId, List<string> tagNames)
         {
-            if (tagNames.Count > 10)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
-            }
-            if (recordId.Count > 100)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
-            }
             try
             {
+                if (tagNames.Count > 10)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
+                }
+                if (recordId.Count > 100)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
+                }
                 requestMethod = APIConstants.RequestMethod.POST;
                 urlPath = module.ApiName + "/actions/add_tags";
                 requestQueryParams.Add("ids", string.Join(",", JToken.FromObject(recordId)));
@@ -330,12 +330,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public APIResponse RemoveTags(ZCRMRecord record, List<string> tagNames)
         {
-            if (tagNames.Count > 10)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
-            }
             try
             {
+                if (tagNames.Count > 10)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
+                }
                 requestMethod = APIConstants.RequestMethod.POST;
                 urlPath = "" + record.ModuleAPIName + "/" + record.EntityId + "/actions/remove_tags";
                 requestQueryParams.Add("tag_names",string.Join(",", JToken.FromObject(tagNames)));
@@ -357,16 +357,16 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public BulkAPIResponse<ZCRMRecord> RemoveTagsFromRecords(List<long> recordId, List<string> tagNames)
         {
-            if (tagNames.Count > 10)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
-            }
-            if (recordId.Count > 100)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
-            }
             try
             {
+                if (tagNames.Count > 10)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
+                }
+                if (recordId.Count > 100)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
+                }
                 requestMethod = APIConstants.RequestMethod.POST;
                 urlPath = "" + module.ApiName + "/actions/remove_tags";
                 requestQueryParams.Add("ids", string.Join(",", JToken.FromObject(recordId)));

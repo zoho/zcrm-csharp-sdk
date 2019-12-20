@@ -146,27 +146,28 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
                     }
 
                 }
-                catch (Exception ex)
+                catch (Exception e) when (!(e is ZCRMException))
                 {
-                    throw new ZCRMException(APIConstants.SDK_ERROR, ex);
+                    ZCRMLogger.LogError(e);
+                    throw new ZCRMException(APIConstants.SDK_ERROR, e);
                 }
+                this.fileName = null;
+                BulkResponse bulkResponse = new BulkResponse(ModuleAPIName, streamReader, checkFailed, fileType);
+                bulkResponse.FieldAPINames = fieldAPINames;
+                bulkResponse.APIHandlerIns = this;
+                if(fileType.Equals("ics"))
+                {
+                    EventsData["EventsData"] = bulkResponse;
+                    EventsData["END"] = (string)EventsData["BEGIN"];
+                    bulkResponse.Data = EventsData;
+                }
+                return bulkResponse;
             }
-            catch (ZCRMException e)
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
-            this.fileName = null;
-            BulkResponse bulkResponse = new BulkResponse(ModuleAPIName, streamReader, checkFailed, fileType);
-            bulkResponse.FieldAPINames = fieldAPINames;
-            bulkResponse.APIHandlerIns = this;
-            if(fileType.Equals("ics"))
-            {
-                EventsData["EventsData"] = bulkResponse;
-                EventsData["END"] = (string)EventsData["BEGIN"];
-                bulkResponse.Data = EventsData;
-            }
-            return bulkResponse;
         }
 
         protected bool WriteStreamtoZipFile(FileAPIResponse fileResponse, string filePath)
@@ -320,6 +321,7 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
             }
             catch (Exception ex)
             {
+                ZCRMLogger.LogError(ex);
                 return false;
             }
             return true;

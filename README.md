@@ -27,7 +27,7 @@ Package Manager:
 
 	>dotnet add package ZCRMSDK --version 2.1.0/
 
->**Note:** The C# SDK is built against for .net standard 2.0.
+>**Note:** The C# SDK is built against .net framework v4.6.1.
 
 Configurations
 --------------

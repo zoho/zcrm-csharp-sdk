@@ -973,12 +973,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public BulkAPIResponse<ZCRMOrgTax> CreateTaxes(List<ZCRMOrgTax> taxes)
         {
-            if (taxes.Count > 100)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
-            }
             try
             {
+                if (taxes.Count > 100)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
+                }
                 requestMethod = APIConstants.RequestMethod.POST;
                 urlPath = "org/taxes";
                 JObject requestBodyObject = new JObject();
@@ -1021,12 +1021,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public BulkAPIResponse<ZCRMOrgTax> UpdateTaxes(List<ZCRMOrgTax> taxes)
         {
-            if (taxes.Count > 100)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
-            }
             try
             {
+                if (taxes.Count > 100)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
+                }
                 requestMethod = APIConstants.RequestMethod.PUT;
                 urlPath = "org/taxes";
                 JObject requestBodyObject = new JObject();
@@ -1068,13 +1068,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public BulkAPIResponse<ZCRMOrgTax> DeleteTaxes(List<long> taxIds)
         {
-            if (taxIds.Count > 100)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
-            }
-
             try
             {
+                if (taxIds.Count > 100)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
+                }
                 requestMethod = APIConstants.RequestMethod.DELETE;
                 urlPath = "org/taxes";
                 requestQueryParams.Add("ids", CommonUtil.CollectionToCommaDelimitedString(taxIds));

@@ -49,7 +49,7 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
                 response.Data = this.readRecord;
                 return response;
             }
-            catch (Exception e) when ((e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
@@ -78,7 +78,7 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
                 response.Data = this.readRecord;
                 return response;
             }
-            catch (Exception e) when ((e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);

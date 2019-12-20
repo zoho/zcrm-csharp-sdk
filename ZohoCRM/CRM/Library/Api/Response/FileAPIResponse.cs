@@ -25,21 +25,22 @@ namespace ZCRMSDK.CRM.Library.Api.Response
 
         protected override void SetResponseJSON()
         {
-            if(HttpStatusCode == APIConstants.ResponseCode.OK || HttpStatusCode == APIConstants.ResponseCode.NO_CONTENT)
+            string contentType = Response.GetResponseHeader("Content-Type");
+            if (!String.IsNullOrEmpty(contentType) && !String.IsNullOrWhiteSpace(contentType) && contentType.Contains("json"))
+            {
+                string responseString = new StreamReader(Response.GetResponseStream()).ReadToEnd();
+                if (responseString != null && responseString != "")
+                {
+                    ResponseJSON = JObject.Parse(responseString);
+                }
+            }
+            else
             {
                 ResponseJSON = new JObject();
                 string contentDisposition = Response.GetResponseHeader("Content-Disposition");
                 if (HttpStatusCode == APIConstants.ResponseCode.OK && !string.IsNullOrEmpty(contentDisposition)) 
                 {
                     Status = APIConstants.CODE_SUCCESS;
-                }
-                else
-                {
-                    string responseString = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                    if (responseString != null && responseString != "")
-                    {
-                        ResponseJSON = JObject.Parse(responseString);
-                    }
                 }
             }
         }

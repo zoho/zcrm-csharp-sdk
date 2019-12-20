@@ -118,13 +118,12 @@ namespace ZCRMSDK.CRM.Library.Api.Response
         {
             if((HttpStatusCode == APIConstants.ResponseCode.NO_CONTENT) || (HttpStatusCode == APIConstants.ResponseCode.NOT_MODIFIED))
             {
-                ResponseJSON = new JObject();
-                BulkData = new List<T>();
+                throw new ZCRMException(true, (int)HttpStatusCode.Value, HttpStatusCode.Value.ToString());
             }
             else
             {
                 ZCRMLogger.LogError(ResponseJSON[APIConstants.CODE]+" "+ResponseJSON[APIConstants.MESSAGE]);
-                throw new ZCRMException((string)ResponseJSON[APIConstants.CODE], (string)ResponseJSON[APIConstants.MESSAGE]);     
+                throw new ZCRMException(true, (int)HttpStatusCode.Value, (string)ResponseJSON[APIConstants.CODE], (string)ResponseJSON[APIConstants.MESSAGE]);     
             }
         }
 

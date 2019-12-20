@@ -30,29 +30,46 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
 
         public APIResponse UploadFile(string filePath,Dictionary<string, string> headers)
         {
-            if (filePath == null)
+            try
             {
-                throw new ZCRMException("File path must not be null for file upload operation.");
+                if (filePath == null)
+                {
+                    throw new ZCRMException("File path must not be null for file upload operation.");
+                }
+                CommonUtil.ValidateFile(filePath);
+                FileInfo fileInfo = new FileInfo(filePath);
+                return this.UploadFile(fileInfo.OpenRead(), fileInfo.Name, headers);
             }
-            CommonUtil.ValidateFile(filePath);
-            FileInfo fileInfo = new FileInfo(filePath);
-            return this.UploadFile(fileInfo.OpenRead(), fileInfo.Name, headers);
+            catch (Exception e) when (!(e is ZCRMException))
+            {
+                ZCRMLogger.LogError(e);
+                throw new ZCRMException(APIConstants.SDK_ERROR, e);
+            }
         }
 
         public APIResponse UploadFile(Stream fileContent,string fileName, Dictionary<string, string> headers)
         {
-            if (fileContent == null || fileName == null)
+            try
             {
-                throw new ZCRMException("Give valid input for file upload operation.");
-            }
-            this.SetURLDetails(headers);
+                if (fileContent == null || fileName == null)
+                {
+                    throw new ZCRMException("Give valid input for file upload operation.");
+                }
+                this.SetURLDetails(headers);
 
-            //Fire Request
-            APIResponse response = APIRequest.GetInstance(this).UploadFile(fileContent, fileName);
-            JObject responseData = response.ResponseJSON;
-            JObject details = (JObject)responseData[APIConstants.DETAILS];
-            response.Data = this.GetZCRMAttachmentObject(details);
-            return response;
+                //Fire Request
+                APIResponse response = APIRequest.GetInstance(this).UploadFile(fileContent, fileName);
+                JObject responseData = response.ResponseJSON;
+                JObject details = (JObject)responseData[APIConstants.DETAILS];
+                response.Data = this.GetZCRMAttachmentObject(details);
+                return response;
+            }
+            catch (Exception e) when (!(e is ZCRMException))
+            {
+                ZCRMLogger.LogError(e);
+                throw new ZCRMException(APIConstants.SDK_ERROR, e);
+            }
+
         }
 
         public void SetURLDetails(Dictionary<string, string> headers)
@@ -66,12 +83,13 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
                 //Process Request JSON
                 this.requestMethod = APIConstants.RequestMethod.POST;
                 this.urlPath = ZCRMConfigUtil.GetFileUploadURL() + "/crm/" + ZCRMConfigUtil.GetApiVersion() + "/" + APIConstants.UPLOAD;
+
                 foreach (KeyValuePair<string, string> header in headers)
                 {
                     requestHeaders.Add(header.Key, header.Value);
                 }
             }
-            catch (Exception e) when ((e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
@@ -98,7 +116,7 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
                 response.Data = this.writeRecord;
                 return response;
             }
-            catch (Exception e) when ((e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
@@ -123,7 +141,7 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
                 response.Data = this.writeRecord;
                 return response;
             }
-            catch (Exception e) when ((e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
@@ -138,7 +156,7 @@ namespace ZCRMSDK.CRM.Library.BulkAPI.Handler
                 urlPath = downloadURL ?? throw new ZCRMException("Download File URL must not be null for download operation.");
                 return APIRequest.GetInstance(this).DownloadFile();
             }
-            catch (Exception e) when ((e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);

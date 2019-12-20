@@ -21,46 +21,61 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             return new MetaDataAPIHandler();
         }
 
-
         public BulkAPIResponse<ZCRMModule> GetAllModules(string modifiedSince)
         {
-            requestMethod = APIConstants.RequestMethod.GET;
-            urlPath = "settings/modules";
-            if (!string.IsNullOrEmpty(modifiedSince))
+            try
             {
-                requestHeaders.Add("If-Modified-Since", modifiedSince);
-            }
-
-            BulkAPIResponse<ZCRMModule> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMModule>();
-
-            JObject responseJSON = response.ResponseJSON;
-            List<ZCRMModule> allModules = new List<ZCRMModule>();
-
-            if (responseJSON.ContainsKey("modules"))
-            {
-                JArray modulesArray = (JArray)responseJSON["modules"];
-                foreach (JObject moduleDetails in modulesArray)
+                requestMethod = APIConstants.RequestMethod.GET;
+                urlPath = "settings/modules";
+                if (!string.IsNullOrEmpty(modifiedSince))
                 {
-                    allModules.Add(GetZCRMModule(moduleDetails));
+                    requestHeaders.Add("If-Modified-Since", modifiedSince);
                 }
-                response.BulkData = allModules;
+
+                BulkAPIResponse<ZCRMModule> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMModule>();
+
+                JObject responseJSON = response.ResponseJSON;
+                List<ZCRMModule> allModules = new List<ZCRMModule>();
+
+                if (responseJSON.ContainsKey("modules"))
+                {
+                    JArray modulesArray = (JArray)responseJSON["modules"];
+                    foreach (JObject moduleDetails in modulesArray)
+                    {
+                        allModules.Add(GetZCRMModule(moduleDetails));
+                    }
+                    response.BulkData = allModules;
+                }
+                return response;
             }
-            return response;
+            catch (Exception e) when (!(e is ZCRMException))
+            {
+                ZCRMLogger.LogError(e);
+                throw new ZCRMException(APIConstants.SDK_ERROR, e);
+            }
         }
 
 
         public APIResponse GetModule(string apiName)
         {
-            requestMethod = APIConstants.RequestMethod.GET;
-            urlPath = "settings/modules/" + apiName;
+            try
+            {
+                requestMethod = APIConstants.RequestMethod.GET;
+                urlPath = "settings/modules/" + apiName;
 
-            APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
+                APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
 
-            JArray modulesArray = (JArray)response.ResponseJSON["modules"];
-            JObject moduleDetails = (JObject)modulesArray[0];
-            response.Data = GetZCRMModule(moduleDetails);
+                JArray modulesArray = (JArray)response.ResponseJSON["modules"];
+                JObject moduleDetails = (JObject)modulesArray[0];
+                response.Data = GetZCRMModule(moduleDetails);
 
-            return response;
+                return response;
+            }
+            catch (Exception e) when (!(e is ZCRMException))
+            {
+                ZCRMLogger.LogError(e);
+                throw new ZCRMException(APIConstants.SDK_ERROR, e);
+            }
         }
 
 
@@ -358,6 +373,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
             return customView;
         }
+
         private ZCRMCriteria SetZCRMCriteriaObject(JObject criteria)
         {
             ZCRMCriteria recordCriteria = ZCRMCriteria.GetInstance();

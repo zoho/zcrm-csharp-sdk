@@ -84,33 +84,44 @@ namespace ZCRMSDK.CRM.Library.Api.Response
                     if(msgJSON.ContainsKey(APIConstants.DETAILS))
                     {
                         //TODO: Inspect the working of this part;
-                        throw new ZCRMException(msgJSON.GetValue(APIConstants.CODE).ToString(), Message, msgJSON.GetValue(APIConstants.DETAILS) as JObject);
+                        throw new ZCRMException(true, (int)HttpStatusCode.Value, msgJSON.GetValue(APIConstants.CODE).ToString(), Message, msgJSON.GetValue(APIConstants.DETAILS) as JObject);
                     }
-                    throw new ZCRMException(msgJSON.GetValue(APIConstants.CODE).ToString(), Message);
+                    throw new ZCRMException(true, (int)HttpStatusCode.Value, msgJSON.GetValue(APIConstants.CODE).ToString(), Message);
                 }
             }
             //NOTE: For the user photo download method.
             else if(msgJSON.ContainsKey("status_code"))
             {
                 Status = msgJSON["status_code"].ToString();
-                if(msgJSON.ContainsKey("errors"))
+                if (msgJSON.ContainsKey("errors"))
                 {
                     JArray errorDetails = (JArray)msgJSON["errors"];
-                    throw new ZCRMException("Status_code :" + (string)msgJSON["status_code"] + ", Error details: " + errorDetails[0]["code"] + ", Resource :" + errorDetails[0]["resource"]);
+                    throw new ZCRMException(true, (int)HttpStatusCode.Value, HttpStatusCode.Value.ToString(), "Status_code :" + (string)msgJSON["status_code"] + ", Error details: " + errorDetails[0]["code"] + ", Resource :" + errorDetails[0]["resource"]);
                 }
-                throw new ZCRMException("Status_code :" + (string)msgJSON["status_code"] + msgJSON.ToString());
-
+                throw new ZCRMException(true, (int)HttpStatusCode.Value, HttpStatusCode.Value.ToString(), "Status_code :" + (string)msgJSON["status_code"] + msgJSON.ToString());
+            }
+            //NOTE : while uploading the file if the org id is wrong the below else-if block will handle it.
+            else if(msgJSON.ContainsKey("x-error"))
+            {
+                ZCRMLogger.LogInfo(ToString());
+                JToken infoMessageToken = msgJSON.GetValue("info");
+                string infoMessage = null;
+                if(infoMessageToken != null && infoMessageToken.Type != JTokenType.Null)
+                {
+                    infoMessage = infoMessageToken.ToString();
+                }
+                throw new ZCRMException(true, (int)HttpStatusCode.Value, HttpStatusCode.Value.ToString(), infoMessage , msgJSON);
             }
         }
 
         protected override void HandleFaultyResponse()
         {
-            if(HttpStatusCode == APIConstants.ResponseCode.NO_CONTENT)
+            if ((HttpStatusCode == APIConstants.ResponseCode.NO_CONTENT) || (HttpStatusCode == APIConstants.ResponseCode.NOT_MODIFIED))
             {
-                throw new ZCRMException(APIConstants.INVALID_DATA, APIConstants.INVALID_ID_MSG);
+                throw new ZCRMException(true, (int)HttpStatusCode.Value, ResponseJSON[APIConstants.CODE].ToString());
             }
             ZCRMLogger.LogError(ResponseJSON[APIConstants.CODE] + " " + ResponseJSON[APIConstants.MESSAGE]);
-            throw new ZCRMException(ResponseJSON.GetValue(APIConstants.CODE).ToString(), ResponseJSON.GetValue(APIConstants.MESSAGE).ToString());
+            throw new ZCRMException(true, (int)HttpStatusCode.Value, ResponseJSON.GetValue(APIConstants.CODE).ToString(), ResponseJSON.GetValue(APIConstants.MESSAGE).ToString(), ResponseJSON);
         }
     }
 }
