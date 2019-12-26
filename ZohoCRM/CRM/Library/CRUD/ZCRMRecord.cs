@@ -377,12 +377,22 @@ namespace ZCRMSDK.CRM.Library.CRUD
             Data.Add(fieldAPIName, value);
         }
 
-        /// <summary>
-        /// To get field value of the record based on field APIName.
-        /// </summary>
-        /// <returns>value (Object) of record field.</returns>
-        /// <param name="fieldAPIName">APIName (String) of the record field.</param>
-        public object GetFieldValue(string fieldAPIName)
+		/// <summary>
+		/// To add fields based on field APIName and value.
+		/// </summary>
+		/// <param name="fieldAPIName">APIName (String) of the record field.</param>
+		/// <param name="value">value (Object) of the record field.</param>
+		public void AddFieldValue(string fieldAPIName, object value)
+		{
+			Data[fieldAPIName]  = value;
+		}
+
+		/// <summary>
+		/// To get field value of the record based on field APIName.
+		/// </summary>
+		/// <returns>value (Object) of record field.</returns>
+		/// <param name="fieldAPIName">APIName (String) of the record field.</param>
+		public object GetFieldValue(string fieldAPIName)
         {
             if (Data.ContainsKey(fieldAPIName))
             {

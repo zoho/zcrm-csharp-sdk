@@ -118,7 +118,7 @@ namespace ZCRMSDK.CRM.Library.Api.Response
         {
             if ((HttpStatusCode == APIConstants.ResponseCode.NO_CONTENT) || (HttpStatusCode == APIConstants.ResponseCode.NOT_MODIFIED))
             {
-                throw new ZCRMException(true, (int)HttpStatusCode.Value, ResponseJSON[APIConstants.CODE].ToString());
+                throw new ZCRMException(true, (int)HttpStatusCode.Value, HttpStatusCode.Value.ToString());
             }
             ZCRMLogger.LogError(ResponseJSON[APIConstants.CODE] + " " + ResponseJSON[APIConstants.MESSAGE]);
             throw new ZCRMException(true, (int)HttpStatusCode.Value, ResponseJSON.GetValue(APIConstants.CODE).ToString(), ResponseJSON.GetValue(APIConstants.MESSAGE).ToString(), ResponseJSON);
