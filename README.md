@@ -21,11 +21,11 @@ Setting Up
 C# SDK is available as a `Nuget` Package. The `ZCRMSDK` Assembly can be installed through `Nuget Package Manager` and through the following options:
 Package Manager:
 
-	>Install-Package ZCRMSDK --version 2.1.0/
+	>Install-Package ZCRMSDK --version 2.1.1/
 
 .NET CLI:
 
-	>dotnet add package ZCRMSDK --version 2.1.0/
+	>dotnet add package ZCRMSDK --version 2.1.1/
 
 >**Note:** The C# SDK is built against .net framework v4.6.1.
 
@@ -324,7 +324,20 @@ Exceptions
 -----------
 All unexpected behaviors like faulty API responses, SDK anomalies are handled by the SDK and are converted and are thrown only as a single exception — `ZCRMException`. Hence, it's enough to catch this exception alone in the client app code.
 
-
+    try
+		{
+			 // code block;
+		}
+		catch (ZCRMException ex)
+		{
+		    Console.WriteLine(ex.HttpStatusCode);
+		    Console.WriteLine(ex.Code);
+		    Console.WriteLine(ex.IsAPIException);
+		    Console.WriteLine(ex.IsSDKException);
+		    Console.WriteLine(ex.Message);
+		    Console.WriteLine(ex.ErrorDetails);
+		    Console.WriteLine(ex.ErrorMsg);
+		}
 Examples
 ---------
 ```
