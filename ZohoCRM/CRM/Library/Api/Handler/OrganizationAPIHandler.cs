@@ -57,7 +57,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             organization.Currency = (string)orgDetails["currency"];
             organization.State = (string)orgDetails["state"];
             organization.Fax = (string)orgDetails["fax"];
-            organization.EmployeeCount = Convert.ToInt32(orgDetails["employee_count"].Type != JTokenType.Null ? orgDetails["employee_count"] : 0); //check the value is null/empty
+            organization.EmployeeCountLong = Convert.ToInt64(orgDetails["employee_count"].Type != JTokenType.Null ? orgDetails["employee_count"] : 0); //check the value is null/empty
             organization.ZipCode = (string)orgDetails["zip"];
             organization.Website = (string)orgDetails["website"];
             organization.CurrencySymbol = (string)orgDetails["currency_symbol"];

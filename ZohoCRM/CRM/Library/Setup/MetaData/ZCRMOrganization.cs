@@ -20,7 +20,7 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
         private string mobile;
         private string phone;
         private string fax;
-        private int employeeCount;
+        private long employeeCount;
         private string description;
         private string timezone;
         private string isoCode;
@@ -252,7 +252,7 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
         {
             get
             {
-                return employeeCount;
+                return (int)employeeCount;
             }
             set
             {
@@ -260,6 +260,18 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
             }
         }
 
+        public long EmployeeCountLong
+        {
+            get
+            {
+                return employeeCount;
+            }
+            set
+            {
+                employeeCount = value;
+            }
+        }
+        
         /// <summary>
         /// Gets or sets the description of/for the Organization.
         /// </summary>
