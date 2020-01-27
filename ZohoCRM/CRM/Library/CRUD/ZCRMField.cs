@@ -47,6 +47,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private int startNumber;
         private Dictionary<string, ZCRMField> associationDetails = new Dictionary<string, ZCRMField>();
         private int? decimalPlace;
+        private ZCRMToolTip fieldToolTip;
 
         private ZCRMField(string fieldAPIName)
         {
@@ -734,6 +735,18 @@ namespace ZCRMSDK.CRM.Library.CRUD
             set
             {
                 decimalPlace = value;
+            }
+        }
+
+        public ZCRMToolTip FieldToolTip
+        {
+            get
+            {
+                return this.fieldToolTip;
+            }
+            set
+            {
+                this.fieldToolTip = value;
             }
         }
     }

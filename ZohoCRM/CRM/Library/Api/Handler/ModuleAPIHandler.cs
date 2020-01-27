@@ -287,7 +287,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
             }
             field.DisplayName = (string)(fieldJSON["field_label"]);
-            field.ToolTip = (string)(fieldJSON["tooltip"]);
+            if (fieldJSON["tooltip"].HasValues)
+            {
+                JObject tool_tip = (JObject)fieldJSON["tooltip"];
+                field.FieldToolTip = ZCRMToolTip.GetInstance((string)(tool_tip["name"]), (string)(tool_tip["value"]));
+                field.ToolTip = (string)(tool_tip["name"]);
+            }
             field.CreatedSource = (string)(fieldJSON["created_source"]);
             field.FieldReadOnly = (bool)(fieldJSON["field_read_only"]);
             field.DisplayLabel = (string)(fieldJSON["display_label"]);
