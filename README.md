@@ -143,7 +143,7 @@ The following are the supported configurations in the zcrm_configuration section
 - `currentUserEmail` - In case of single user, this configuration can be set. This user email is use fetch the corresponding access token from the persistance.
 - `domainSuffix` - Optional configuraion. Provides Multi-DC Support. Ex: com, eu or cn.
 
-	> **Note:** If the file path for "logFilePath" is not specified, then the "logFile.log" is created in the "{Project}/bin/Debug/netcoreapp2.1/" folder of the project.
+	> **Note:** If the file path for "logFilePath" is not specified, then the "LogFile.log" is created in the "{Project}/bin/Debug/" folder of the project.
 
 OAuth Persistence
 ----------
