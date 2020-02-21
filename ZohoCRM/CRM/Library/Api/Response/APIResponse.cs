@@ -16,7 +16,7 @@ namespace ZCRMSDK.CRM.Library.Api.Response
 
         public APIResponse() { }
 
-        public APIResponse(HttpWebResponse response) : base(response) { }
+        public APIResponse(int statusCode, string responseString, WebHeaderCollection headers) : base(statusCode, responseString, headers) { }
 
         public ZCRMEntity Data
         {

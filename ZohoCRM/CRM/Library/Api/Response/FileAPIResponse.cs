@@ -6,30 +6,46 @@ using ZCRMSDK.CRM.Library.CRMException;
 
 namespace ZCRMSDK.CRM.Library.Api.Response
 {
-    public class FileAPIResponse : APIResponse
+    public class FileAPIResponse : APIResponse, IDisposable
     {
-        public FileAPIResponse(HttpWebResponse response) : base(response) { }
+        private readonly HttpWebResponse response;
+
+
+        private HttpWebResponse Response
+        {
+            get
+            {
+                return this.response;
+            }
+        }
+        public FileAPIResponse(HttpWebResponse response)
+        {
+            this.response = response;
+        }
+
+        public FileAPIResponse(HttpWebResponse response, int statusCode, string responseString, WebHeaderCollection headers) : base(statusCode, responseString, headers)
+        {
+            this.response = response;
+        }
 
         public string GetFileName()
         {
-            string fileMetaData = Response.Headers["Content-Disposition"];
+            string fileMetaData = responseHeaders.ContentDisposition;
             string fileName = fileMetaData.Split(new string[] { "=" }, StringSplitOptions.None)[1];
             if(fileName.Contains("''"))
             {
                 fileName = fileName.Split(new string[] {"''"}, StringSplitOptions.None)[1];
-
             }
             fileName = fileName.Trim('\"');
             return fileName;
         }
 
-        protected override void SetResponseJSON()
+        protected override void SetResponseJSON(string responseString)
         {
-            string contentType = Response.GetResponseHeader("Content-Type");
-            if (!String.IsNullOrEmpty(contentType) && !String.IsNullOrWhiteSpace(contentType) && contentType.Contains("json"))
+            string contentType = responseHeaders.ContentType;
+            if (!string.IsNullOrEmpty(contentType) && !string.IsNullOrWhiteSpace(contentType) && contentType.Contains("json"))
             {
-                string responseString = new StreamReader(Response.GetResponseStream()).ReadToEnd();
-                if (responseString != null && responseString != "")
+                if (!string.IsNullOrEmpty(responseString) && !string.IsNullOrWhiteSpace(responseString))
                 {
                     ResponseJSON = JObject.Parse(responseString);
                 }
@@ -37,8 +53,7 @@ namespace ZCRMSDK.CRM.Library.Api.Response
             else
             {
                 ResponseJSON = new JObject();
-                string contentDisposition = Response.GetResponseHeader("Content-Disposition");
-                if (HttpStatusCode == APIConstants.ResponseCode.OK && !string.IsNullOrEmpty(contentDisposition)) 
+                if (HttpStatusCode == APIConstants.ResponseCode.OK && !string.IsNullOrEmpty(responseHeaders.ContentDisposition))
                 {
                     Status = APIConstants.CODE_SUCCESS;
                 }
@@ -49,6 +64,11 @@ namespace ZCRMSDK.CRM.Library.Api.Response
         {
             Stream outStream = Response.GetResponseStream();
             return outStream;
+        }
+
+        public void Dispose()
+        {
+            response.Dispose();
         }
     }
 }

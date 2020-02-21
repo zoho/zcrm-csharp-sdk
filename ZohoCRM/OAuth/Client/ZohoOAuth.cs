@@ -27,7 +27,7 @@ namespace ZCRMSDK.OAuth.Client
                 {
                     AddConfigurationData(configData);
                 }
-                List<string> MandatoryKeys = new List<string>() { ZohoOAuthConstants.CLIENT_ID, ZohoOAuthConstants.CLIENT_SECRET, ZohoOAuthConstants.PERSISTENCE_HANDLER_CLASS, ZohoOAuthConstants.REDIRECT_URL };
+                List<string> MandatoryKeys = new List<string>() { ZohoOAuthConstants.CLIENT_ID, ZohoOAuthConstants.CLIENT_SECRET, ZohoOAuthConstants.PERSISTENCE_HANDLER_CLASS};
                 foreach (string key in MandatoryKeys)
                 {
                     if (ConfigProperties.ContainsKey(key))
@@ -36,10 +36,11 @@ namespace ZCRMSDK.OAuth.Client
                         {
                             throw new ZCRMException(key + " value is not set");
                         }
-                    }else{
+                    }
+                    else
+                    {
                         throw new ZCRMException(key + " is Mandatory");
                     }
-                   
                 }
                 //set iamURL from ConfigProperties  
                 if (ConfigProperties.ContainsKey(ZohoOAuthConstants.IAM_URL))
@@ -84,6 +85,9 @@ namespace ZCRMSDK.OAuth.Client
                     break;
                 case "in":
                     ConfigProperties[ZohoOAuthConstants.IAM_URL] = "https://accounts.zoho.in";
+                    break;
+                case "au":
+                    ConfigProperties[ZohoOAuthConstants.IAM_URL] = "https://accounts.zoho.com.au";
                     break;
                 default:
                     ConfigProperties[ZohoOAuthConstants.IAM_URL]= "https://accounts.zoho.com";

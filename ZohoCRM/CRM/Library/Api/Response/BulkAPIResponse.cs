@@ -18,7 +18,7 @@ namespace ZCRMSDK.CRM.Library.Api.Response
 
         public BulkAPIResponse() { }
 
-        public BulkAPIResponse(HttpWebResponse response) : base(response)
+        public BulkAPIResponse(int statusCode, string responseString, WebHeaderCollection headers) : base(statusCode, responseString, headers)
         {
             SetInfo();
         }
@@ -122,7 +122,7 @@ namespace ZCRMSDK.CRM.Library.Api.Response
             }
             else
             {
-                ZCRMLogger.LogError(ResponseJSON[APIConstants.CODE]+" "+ResponseJSON[APIConstants.MESSAGE]);
+                ZCRMLogger.LogError(ResponseJSON[APIConstants.CODE]+ " " + ResponseJSON[APIConstants.MESSAGE]);
                 throw new ZCRMException(true, (int)HttpStatusCode.Value, (string)ResponseJSON[APIConstants.CODE], (string)ResponseJSON[APIConstants.MESSAGE]);     
             }
         }

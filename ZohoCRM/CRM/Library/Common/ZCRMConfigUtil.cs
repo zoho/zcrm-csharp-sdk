@@ -55,7 +55,6 @@ namespace ZCRMSDK.CRM.Library.Common
             if(configStream == null && configData == null)
             {
                 Dictionary<string, string> keyValuePairs = CommonUtil.GetConfigFileAsDict("zcrm_configuration");
-
                 foreach (KeyValuePair<string, string> keyValues in keyValuePairs)
                 {
                     ConfigProperties[keyValues.Key] = keyValues.Value;
@@ -125,6 +124,10 @@ namespace ZCRMSDK.CRM.Library.Common
                 case "local":
                     ConfigProperties[APIConstants.API_BASE_URL] = "https://crm.localzoho.com";
                     ConfigProperties[APIConstants.FILE_UPLOAD_URL] = "http://upload.localzoho.com";
+                    break;
+                case "au":
+                    ConfigProperties[APIConstants.API_BASE_URL] = "https://www.zohoapis.com.au";
+                    ConfigProperties[APIConstants.FILE_UPLOAD_URL] = "https://content.zohoapis.com.au";
                     break;
                 default:
                     ConfigProperties[APIConstants.API_BASE_URL] = "https://www.zohoapis.com";
