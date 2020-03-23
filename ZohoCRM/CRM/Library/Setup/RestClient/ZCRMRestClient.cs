@@ -228,5 +228,15 @@ namespace ZCRMSDK.CRM.Library.Setup.RestClient
         {
             return ZCRMBulkWrite.GetInstance(jobId, moduleAPIName);
         }
+
+        public APIResponse UploadFileToRepository(string filePath)
+        {
+            return OrganizationAPIHandler.GetInstance().UploadFile(filePath);
+        }
+
+        public APIResponse UploadFileToRepository(Stream fileContent, string fileName)
+        {
+            return OrganizationAPIHandler.GetInstance().UploadFile(fileContent, fileName);
+        }
     }
 }

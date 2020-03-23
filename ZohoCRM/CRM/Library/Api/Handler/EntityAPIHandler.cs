@@ -381,20 +381,40 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 else if (token.Value is JArray)
                 {
                     JArray jsonArray = (JArray)token.Value;
+
+                    List<ZCRMFiles> fileValues = new List<ZCRMFiles>();
+
                     List<object> values = new List<object>();
 
                     foreach (Object obj in jsonArray)
                     {
                         if (obj is JObject)
                         {
-                            values.Add((JObject)obj);
+                            JObject value = (JObject)obj;
+
+                            if (value.ContainsKey("file_Id") && value.ContainsKey("attachment_Id"))
+                            {
+                                fileValues.Add(this.GetZCRMFileObject(value));
+                            }
+                            else
+                            {
+                                values.Add(values);
+                            }
                         }
                         else
                         {
                             values.Add(obj);
                         }
                     }
-                    record.SetFieldValue(fieldAPIName, values);
+                    if(fileValues.Count > 0)
+                    {
+                        record.SetFieldValue(fieldAPIName, fileValues);
+                    }
+                    else
+                    {
+                        record.SetFieldValue(fieldAPIName, values);
+                    }
+                   
                 }
                 else
                 {
@@ -408,6 +428,70 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                     }
                 }
             }
+        }
+
+        private ZCRMFiles GetZCRMFileObject(JObject file)
+        {
+            ZCRMFiles files = ZCRMFiles.GetInstance(null,null);
+
+            if (file.ContainsKey("extn") && file["extn"].Type != JTokenType.Null)
+            {
+                files.Extn = file["extn"].ToString();
+            }
+            if (file.ContainsKey("is_Preview_Available") && file["is_Preview_Available"].Type != JTokenType.Null)
+            {
+                files.IsPreviewAvailable = (bool)file["is_Preview_Available"];
+            }
+            if (file.ContainsKey("download_Url") && file["download_Url"].Type != JTokenType.Null)
+            {
+                files.DownloadUrl = file["download_Url"].ToString();
+            }
+            if (file.ContainsKey("delete_Url") && file["delete_Url"].Type != JTokenType.Null)
+            {
+                files.DeleteUrl = file["delete_Url"].ToString();
+            }
+            if (file.ContainsKey("entity_Id") && file["entity_Id"].Type != JTokenType.Null)
+            {
+                files.EntityId = Convert.ToInt64(file["entity_Id"]);
+            }
+            if (file.ContainsKey("mode") && file["mode"].Type != JTokenType.Null)
+            {
+                files.Mode = file["mode"].ToString();
+            }
+            if (file.ContainsKey("original_Size_Byte") && file["original_Size_Byte"].Type != JTokenType.Null)
+            {
+                files.OriginalSizeByte = Convert.ToInt64(file["original_Size_Byte"]);
+            }
+            if (file.ContainsKey("preview_Url") && file["preview_Url"].Type != JTokenType.Null)
+            {
+                files.PreviewUrl = file["preview_Url"].ToString();
+            }
+            if (file.ContainsKey("file_Name") && file["file_Name"].Type != JTokenType.Null)
+            {
+                files.FileName = file["file_Name"].ToString();
+            }
+            if (file.ContainsKey("file_Id") && file["file_Id"].Type != JTokenType.Null)
+            {
+                files.FileId = file["file_Id"].ToString();
+            }
+            if (file.ContainsKey("attachment_Id") && file["attachment_Id"].Type != JTokenType.Null)
+            {
+                files.AttachmentId = file["attachment_Id"].ToString();
+            }
+            if (file.ContainsKey("file_Size") && file["file_Size"].Type != JTokenType.Null)
+            {
+                files.FileSize = file["file_Size"].ToString();
+            }
+            if (file.ContainsKey("creator_Id") && file["creator_Id"].Type != JTokenType.Null)
+            {
+                files.CreatorId = Convert.ToInt64(file["creator_Id"]);
+            }
+            if (file.ContainsKey("link_Docs") && file["link_Docs"].Type != JTokenType.Null)
+            {
+                files.LinkDocs = (int)file["link_Docs"];
+            }
+
+            return files;
         }
 
         private void SetParticipants(JToken participants)
@@ -501,16 +585,21 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         public JObject GetZCRMRecordAsJSON()
         {
             JObject recordJSON = new JObject();
+
             Dictionary<string, object> recordData = record.Data;
+
             if (record.Owner != null)
             {
                 recordJSON.Add("Owner", record.Owner.Id);
             }
+
             if (record.Layout != null)
             {
                 recordJSON.Add("Layout", record.Layout.Id);
             }
+
             MapAsJSON(recordData, recordJSON);
+
             if (GetLineItemsAsJSONArray() != null)
                 recordJSON.Add("Product_Details", GetLineItemsAsJSONArray());
             if (GetParticipantsAsJSONArray() != null)
@@ -541,9 +630,23 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     value = ((ZCRMUser)value).Id;
                 }
+                else if(value is List<ZCRMFiles>)
+                {
+                    JArray jsonArray = new JArray();
+
+                    List<ZCRMFiles> files = (List<ZCRMFiles>)value;
+
+                    foreach (ZCRMFiles valueObject in files)
+                    {
+                        jsonArray.Add(GetFilesAsJSON(valueObject));
+                    }
+                   
+                    value = jsonArray;
+                }
                 else if (value is List<object>)
                 {
                     JArray jsonArray = new JArray();
+
                     foreach (object valueObject in (List<object>)value)
                     {
                         if (valueObject is ZCRMSubform)
@@ -555,10 +658,32 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                             jsonArray.Add(valueObject);
                         }
                     }
+
                     value = jsonArray;
                 }
+
                 recordJSON.Add(data.Key, JToken.FromObject(value));
             }
+        }
+
+        private JObject GetFilesAsJSON(ZCRMFiles files)
+        {
+            JObject fileJSON = new JObject();
+
+            if(!string.IsNullOrEmpty(files.FileId) && !string.IsNullOrWhiteSpace(files.FileId))
+            {
+                fileJSON.Add("file_id", files.FileId);
+            }
+            if (!string.IsNullOrEmpty(files.AttachmentId) && !string.IsNullOrWhiteSpace(files.AttachmentId))
+            {
+                fileJSON.Add("attachment_id", files.AttachmentId);
+            }
+            if(files.Delete)
+            {
+                fileJSON.Add("_delete", null);
+            }
+
+            return fileJSON;
         }
 
         private JObject GetSubformAsJSON(ZCRMSubform subform)

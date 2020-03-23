@@ -122,8 +122,11 @@ namespace ZCRMSDK.CRM.Library.Api.Response
             }
             else
             {
-                ZCRMLogger.LogError(ResponseJSON[APIConstants.CODE]+ " " + ResponseJSON[APIConstants.MESSAGE]);
-                throw new ZCRMException(true, (int)HttpStatusCode.Value, (string)ResponseJSON[APIConstants.CODE], (string)ResponseJSON[APIConstants.MESSAGE]);     
+                string code = null, message = null;
+                code = ResponseJSON.ContainsKey(APIConstants.CODE) ? ResponseJSON[APIConstants.CODE].ToString() : "ERROR";
+                message = ResponseJSON.ContainsKey(APIConstants.MESSAGE) ? ResponseJSON[APIConstants.MESSAGE].ToString() : "Empty response";
+                ZCRMLogger.LogError(code + " " + message);
+                throw new ZCRMException(true, (int)HttpStatusCode.Value, code, message);
             }
         }
 

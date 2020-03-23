@@ -83,6 +83,8 @@ namespace ZCRMSDK.CRM.Library.Api
         public static readonly Dictionary<string, TraceLevel> LOGGER_LEVELS;
         public static readonly Dictionary<string, string> ACCESS_TYPE;
 
+        public static readonly string FILES = "files";
+
         static APIConstants()
         {
             FaultyResponseCodes = new List<ResponseCode?>

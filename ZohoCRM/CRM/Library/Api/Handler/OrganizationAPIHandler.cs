@@ -8,6 +8,7 @@ using ZCRMSDK.CRM.Library.Setup.MetaData;
 using ZCRMSDK.CRM.Library.Setup.Users;
 using ZCRMSDK.CRM.Library.Common;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace ZCRMSDK.CRM.Library.Api.Handler
 {
@@ -1104,6 +1105,75 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
+        }
+
+        public APIResponse UploadFile(string filePath)
+        {
+            try
+            {
+                if (filePath == null)
+                {
+                    throw new ZCRMException("File path must not be null for zoho crm file upload operation.");
+                }
+
+                CommonUtil.ValidateFile(filePath);
+
+                FileInfo fileInfo = new FileInfo(filePath);
+
+                return this.UploadFile(fileInfo.OpenRead(), fileInfo.Name);
+            }
+            catch (Exception e) when (!(e is ZCRMException))
+            {
+                ZCRMLogger.LogError(e);
+
+                throw new ZCRMException(APIConstants.SDK_ERROR, e);
+            }
+        }
+
+        public APIResponse UploadFile(Stream fileContent, string fileName)
+        {
+            try
+            {
+                if (fileContent == null || fileName == null)
+                {
+                    throw new ZCRMException("Give valid input for zoho crm file upload operation.");
+                }
+
+                this.requestMethod = APIConstants.RequestMethod.POST;
+
+                this.urlPath = APIConstants.FILES;
+
+                //Fire Request
+                APIResponse response = APIRequest.GetInstance(this).UploadFile(fileContent, fileName);
+
+                JArray responseDataArray = (JArray)response.ResponseJSON[APIConstants.DATA];
+
+                JObject responseData = (JObject)responseDataArray[0];
+
+                JObject details = (JObject)responseData[APIConstants.DETAILS];
+
+                response.Data = this.GetZCRMFilesObject(details);
+
+                return response;
+            }
+            catch (Exception e) when (!(e is ZCRMException))
+            {
+                ZCRMLogger.LogError(e);
+
+                throw new ZCRMException(APIConstants.SDK_ERROR, e);
+            }
+
+        }
+
+        private ZCRMFiles GetZCRMFilesObject(JObject uploadDetails)
+        {
+
+            if (uploadDetails.ContainsKey("name") && uploadDetails.ContainsKey("id"))
+            {
+                return ZCRMFiles.GetInstance((string)uploadDetails["id"], (string)uploadDetails["name"]);
+            }
+
+            return null;
         }
     }
 }

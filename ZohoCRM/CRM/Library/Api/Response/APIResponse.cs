@@ -84,7 +84,7 @@ namespace ZCRMSDK.CRM.Library.Api.Response
                     if(msgJSON.ContainsKey(APIConstants.DETAILS))
                     {
                         //TODO: Inspect the working of this part;
-                        throw new ZCRMException(true, (int)HttpStatusCode.Value, msgJSON.GetValue(APIConstants.CODE).ToString(), Message, msgJSON.GetValue(APIConstants.DETAILS) as JObject);
+                        throw new ZCRMException(true, (int)HttpStatusCode.Value, msgJSON.ContainsKey(APIConstants.CODE) ? msgJSON.GetValue(APIConstants.CODE).ToString():null, Message, msgJSON.GetValue(APIConstants.DETAILS) as JObject);
                     }
                     throw new ZCRMException(true, (int)HttpStatusCode.Value, msgJSON.GetValue(APIConstants.CODE).ToString(), Message);
                 }
@@ -116,12 +116,15 @@ namespace ZCRMSDK.CRM.Library.Api.Response
 
         protected override void HandleFaultyResponse()
         {
+            string code = null, message = null;
             if ((HttpStatusCode == APIConstants.ResponseCode.NO_CONTENT) || (HttpStatusCode == APIConstants.ResponseCode.NOT_MODIFIED))
             {
                 throw new ZCRMException(true, (int)HttpStatusCode.Value, HttpStatusCode.Value.ToString());
             }
-            ZCRMLogger.LogError(ResponseJSON[APIConstants.CODE] + " " + ResponseJSON[APIConstants.MESSAGE]);
-            throw new ZCRMException(true, (int)HttpStatusCode.Value, ResponseJSON.GetValue(APIConstants.CODE).ToString(), ResponseJSON.GetValue(APIConstants.MESSAGE).ToString(), ResponseJSON);
+            code = ResponseJSON.ContainsKey(APIConstants.CODE) ? ResponseJSON[APIConstants.CODE].ToString() : "ERROR";
+            message = ResponseJSON.ContainsKey(APIConstants.MESSAGE) ? ResponseJSON[APIConstants.MESSAGE].ToString() : "Empty response";
+            ZCRMLogger.LogError(code + " " + message);
+            throw new ZCRMException(true, (int)HttpStatusCode.Value, code, message, ResponseJSON);
         }
     }
 }
