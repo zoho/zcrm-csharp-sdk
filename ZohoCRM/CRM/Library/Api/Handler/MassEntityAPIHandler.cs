@@ -158,36 +158,51 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
                 }
+
                 //NOTE: null value is not converted to JObject of type null;
                 requestMethod = APIConstants.RequestMethod.PUT;
+
                 urlPath = module.ApiName;
+
                 JObject requestBodyObject = new JObject();
+
                 JArray dataArray = new JArray();
+
                 foreach (long id in entityIds)
                 {
                     JObject updateJSON = new JObject
-                {
-                    { fieldAPIName, value.ToString() },
-                    { "id", Convert.ToString(id) }
-                };
+                    {
+                        { fieldAPIName, JToken.FromObject(EntityAPIHandler.GetInstance(new ZCRMRecord(module.ApiName)).ObjectToJSONData(value)) },
+                        { "id", Convert.ToString(id) }
+                    };
+
                     dataArray.Add(updateJSON);
                 }
+
                 requestBodyObject.Add(APIConstants.DATA, dataArray);
+
                 requestBody = requestBodyObject;
 
                 BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
 
                 List<ZCRMRecord> updatedRecords = new List<ZCRMRecord>();
+
                 List<EntityResponse> responses = response.BulkEntitiesResponse;
+
                 foreach (EntityResponse entityResponse in responses)
                 {
                     if (entityResponse.Status.Equals(APIConstants.CODE_SUCCESS))
                     {
                         JObject responseData = entityResponse.ResponseJSON;
+
                         JObject recordDetails = (JObject)responseData[APIConstants.DETAILS];
+
                         ZCRMRecord updatedRecord = ZCRMRecord.GetInstance(module.ApiName, Convert.ToInt64(recordDetails["id"]));
+
                         EntityAPIHandler.GetInstance(updatedRecord).SetRecordProperties(recordDetails);
+
                         updatedRecords.Add(updatedRecord);
+
                         entityResponse.Data = updatedRecord;
                     }
                     else
@@ -195,12 +210,15 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                         entityResponse.Data = null;
                     }
                 }
+
                 response.BulkData = updatedRecords;
+
                 return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }

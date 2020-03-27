@@ -600,16 +600,31 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
             MapAsJSON(recordData, recordJSON);
 
-            if (GetLineItemsAsJSONArray() != null)
-                recordJSON.Add("Product_Details", GetLineItemsAsJSONArray());
-            if (GetParticipantsAsJSONArray() != null)
-                recordJSON.Add("Participants", GetParticipantsAsJSONArray());
-            if (GetPriceDetailsAsJSONArray() != null)
-                recordJSON.Add("Pricing_Details", GetPriceDetailsAsJSONArray());
-            if (GetTaxAsJSONArray() != null && record.ModuleAPIName.Equals("Products"))
-                recordJSON.Add("Tax", GetTaxAsJSONArray());
-            if (GetTaxAsJSONArray() != null)
-                recordJSON.Add("$line_tax", GetTaxAsJSONArray());
+            if (record.LineItems != null)
+            {
+                recordJSON.Add("Product_Details", GetLineItemsAsJSONArray(record.LineItems));
+            }
+                
+            if (record.Participants != null)
+            {
+                recordJSON.Add("Participants", GetParticipantsAsJSONArray(record.Participants));
+            }
+
+            if (record.PriceDetails != null)
+            {
+                recordJSON.Add("Pricing_Details", GetPriceDetailsAsJSONArray(record.PriceDetails));
+            }
+
+            if (record.TaxList != null && record.ModuleAPIName.Equals("Products"))
+            {
+                recordJSON.Add("Tax", GetTaxAsJSONArray(record.TaxList));
+            }
+
+            if (record.TaxList != null)
+            {
+                recordJSON.Add("$line_tax", GetTaxAsJSONArray(record.TaxList));
+            }
+
             return recordJSON;
         }
 
@@ -617,53 +632,73 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         {
             foreach (KeyValuePair<string, object> data in recordData)
             {
-                object value = data.Value;
-                if (value == null)
-                {
-                    value = null;
-                }
-                else if (value is ZCRMRecord)
-                {
-                    value = ((ZCRMRecord)value).EntityId;
-                }
-                else if (value is ZCRMUser)
-                {
-                    value = ((ZCRMUser)value).Id;
-                }
-                else if(value is List<ZCRMFiles>)
-                {
-                    JArray jsonArray = new JArray();
-
-                    List<ZCRMFiles> files = (List<ZCRMFiles>)value;
-
-                    foreach (ZCRMFiles valueObject in files)
-                    {
-                        jsonArray.Add(GetFilesAsJSON(valueObject));
-                    }
-                   
-                    value = jsonArray;
-                }
-                else if (value is List<object>)
-                {
-                    JArray jsonArray = new JArray();
-
-                    foreach (object valueObject in (List<object>)value)
-                    {
-                        if (valueObject is ZCRMSubform)
-                        {
-                            jsonArray.Add(GetSubformAsJSON((ZCRMSubform)valueObject));
-                        }
-                        else
-                        {
-                            jsonArray.Add(valueObject);
-                        }
-                    }
-
-                    value = jsonArray;
-                }
-
-                recordJSON.Add(data.Key, JToken.FromObject(value));
+                recordJSON.Add(data.Key, JToken.FromObject(ObjectToJSONData(data.Value)));
             }
+        }
+
+        public object ObjectToJSONData(object value)
+        {
+            if (value == null)
+            {
+                value = null;
+            }
+            else if (value is ZCRMRecord)
+            {
+                value = ((ZCRMRecord)value).EntityId;
+            }
+            else if (value is ZCRMUser)
+            {
+                value = ((ZCRMUser)value).Id;
+            }
+            else if (value is List<ZCRMFiles>)
+            {
+                JArray jsonArray = new JArray();
+
+                List<ZCRMFiles> files = (List<ZCRMFiles>)value;
+
+                foreach (ZCRMFiles valueObject in files)
+                {
+                    jsonArray.Add(GetFilesAsJSON(valueObject));
+                }
+
+                value = jsonArray;
+            }
+            else if(value is List<ZCRMInventoryLineItem>)
+            {
+                value = GetLineItemsAsJSONArray((List<ZCRMInventoryLineItem>)value);
+            }
+            else if(value is List<ZCRMEventParticipant>)
+            {
+                value = GetParticipantsAsJSONArray((List<ZCRMEventParticipant>)value);
+            }
+            else if(value is List<ZCRMPriceBookPricing>)
+            {
+                value = GetPriceDetailsAsJSONArray((List<ZCRMPriceBookPricing>)value);
+            }
+            else if(value is List<ZCRMTax>)
+            {
+                value = GetTaxAsJSONArray((List<ZCRMTax>)value);
+            }
+            else if (value is List<object>)
+            {
+                JArray jsonArray = new JArray();
+
+                foreach (object valueObject in (List<object>)value)
+                {
+                    if (valueObject is ZCRMSubform)
+                    {
+                        jsonArray.Add(GetSubformAsJSON((ZCRMSubform)valueObject));
+                    }
+                    else
+                    {
+                        jsonArray.Add(valueObject);
+                    }
+                }
+
+                value = jsonArray;
+            }
+
+            return value;
         }
 
         private JObject GetFilesAsJSON(ZCRMFiles files)
@@ -689,6 +724,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         private JObject GetSubformAsJSON(ZCRMSubform subform)
         {
             JObject subformJSON = new JObject();
+
             Dictionary<string, object> subformData = subform.Data;
             if (subform.EntityId != null)
             {
@@ -702,19 +738,19 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             {
                 subformJSON.Add("Layout", subform.Layout.Id.ToString());
             }
+
             MapAsJSON(subformData, subformJSON);
 
             return subformJSON;
         }
 
-        private JArray GetLineItemsAsJSONArray()
+        private JArray GetLineItemsAsJSONArray(List<ZCRMInventoryLineItem> lineItemsList )
         {
-            if (record.LineItems.Count == 0)
+            if (lineItemsList.Count == 0)
             {
                 return null;
             }
             JArray lineItems = new JArray();
-            List<ZCRMInventoryLineItem> lineItemsList = record.LineItems;
             foreach (ZCRMInventoryLineItem inventoryLineItem in lineItemsList)
             {
                 lineItems.Add(GetZCRMInventoryLineItemAsJSON(inventoryLineItem));
@@ -762,14 +798,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             return lineItem;
         }
 
-        private JArray GetParticipantsAsJSONArray()
+        private JArray GetParticipantsAsJSONArray(List<ZCRMEventParticipant> participantsList)
         {
-            if (record.Participants.Count == 0)
+            if (participantsList.Count == 0)
             {
                 return null;
             }
             JArray participants = new JArray();
-            List<ZCRMEventParticipant> participantsList = record.Participants;
+            
             foreach (ZCRMEventParticipant participant in participantsList)
             {
                 participants.Add(GetZCRMParticipantsAsJSON(participant));
@@ -792,12 +828,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             return participantJSON;
         }
 
-        private JArray GetPriceDetailsAsJSONArray()
+        private JArray GetPriceDetailsAsJSONArray(List<ZCRMPriceBookPricing> priceDetailsList)
         {
-            if (record.PriceDetails.Count == 0) { return null; }
+            if (priceDetailsList.Count == 0) { return null; }
 
             JArray priceDetails = new JArray();
-            List<ZCRMPriceBookPricing> priceDetailsList = record.PriceDetails;
+
             foreach (ZCRMPriceBookPricing priceDetail in priceDetailsList)
             {
                 priceDetails.Add(GetZCRMPriceDetailAsJSON(priceDetail));
@@ -820,15 +856,16 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             return priceDetailJSON;
         }
 
-        private JArray GetTaxAsJSONArray()
+        private JArray GetTaxAsJSONArray(List<ZCRMTax> taxList)
         {
-            if (record.TaxList.Count == 0)
+            if (taxList.Count == 0)
             {
                 return null;
             }
+
             JArray taxes = new JArray();
-            List<ZCRMTax> taxList = record.TaxList;
-            if (record.ModuleAPIName.Equals("Products"))
+
+            if (record != null && record.ModuleAPIName.Equals("Products"))
             {
                 foreach (ZCRMTax tax in taxList)
                 {
@@ -840,13 +877,15 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 foreach (ZCRMTax tax in taxList)
                 {
                     JObject taxObject = new JObject
-                {
-                    { "percentage", tax.Percentage },
-                    { "name", tax.TaxName }
-                };
+                    {
+                        { "percentage", tax.Percentage },
+                        { "name", tax.TaxName }
+                    };
+
                     taxes.Add(taxObject);
                 }
             }
+
             return taxes;
         }
     }
