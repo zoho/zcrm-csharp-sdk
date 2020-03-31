@@ -79,6 +79,8 @@ namespace ZCRMSDK.CRM.Library.Api
                                 "Purchase_Orders", "Invoices", "Campaigns","Price_Books","Cases","Solutions","Tasks","Events","Calls","Notes","Attachments" };
         public static readonly List<string> PROPERTIES_AS_FILEDS = new List<string>() { "se_module", "gclid" };
 
+        public static readonly List<string> INVENTORY_MODULES = new List<string>() { "Invoices", "Sales_Orders", "Purchase_Orders", "Quotes" };
+
         public static readonly List<ResponseCode?> FaultyResponseCodes;
         public static readonly Dictionary<string, TraceLevel> LOGGER_LEVELS;
         public static readonly Dictionary<string, string> ACCESS_TYPE;

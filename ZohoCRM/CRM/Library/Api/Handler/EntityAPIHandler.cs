@@ -246,32 +246,37 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             foreach (KeyValuePair<string, JToken> token in recordJSON)
             {
                 string fieldAPIName = token.Key;
+
                 if (fieldAPIName.Equals("id"))
                 {
                     record.EntityId = Convert.ToInt64(token.Value);
                 }
-                else if (fieldAPIName.Equals("Product_Details") && token.Value.Type != JTokenType.Null)
+                else if (fieldAPIName.Equals("Product_Details") && APIConstants.INVENTORY_MODULES.Contains(this.record.ModuleAPIName) && token.Value.Type != JTokenType.Null)
                 {
                     SetInventoryLineItems(token.Value);
                 }
-                else if (fieldAPIName.Equals("Participants") && token.Value.Type != JTokenType.Null)
+                else if (fieldAPIName.Equals("Participants") && this.record.ModuleAPIName.Equals("Events") && token.Value.Type != JTokenType.Null)
                 {
                     SetParticipants(token.Value);
                 }
-                else if (fieldAPIName.Equals("Pricing_Details") && token.Value.Type != JTokenType.Null)
+                else if (fieldAPIName.Equals("Pricing_Details") && this.record.ModuleAPIName.Equals("Price_Books") && token.Value.Type != JTokenType.Null)
                 {
                     SetPriceDetails((JArray)token.Value);
                 }
                 else if (fieldAPIName.Equals("Created_By") && token.Value.Type != JTokenType.Null)
                 {
                     JObject createdObject = (JObject)token.Value;
+
                     ZCRMUser createdUser = ZCRMUser.GetInstance(Convert.ToInt64(createdObject["id"]), (string)createdObject["name"]);
+
                     record.CreatedBy = createdUser;
                 }
                 else if (fieldAPIName.Equals("Modified_By") && token.Value.Type != JTokenType.Null)
                 {
                     JObject modifiedObject = (JObject)token.Value;
+
                     ZCRMUser modifiedBy = ZCRMUser.GetInstance(Convert.ToInt64(modifiedObject["id"]), (string)modifiedObject["name"]);
+
                     record.ModifiedBy = modifiedBy;
                 }
                 else if (fieldAPIName.Equals("Created_Time"))
@@ -285,19 +290,26 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 else if (fieldAPIName.Equals("Owner") && token.Value.Type != JTokenType.Null)
                 {
                     JObject ownerObject = (JObject)token.Value;
+
                     ZCRMUser ownerUser = ZCRMUser.GetInstance(Convert.ToInt64(ownerObject["id"]), (string)ownerObject["name"]);
+
                     record.Owner = ownerUser;
                 }
                 else if (fieldAPIName.Equals("Layout") && token.Value.Type != JTokenType.Null)
                 {
                     JObject layoutObject = (JObject)token.Value;
+
                     ZCRMLayout layout = ZCRMLayout.GetInstance(Convert.ToInt64(layoutObject["id"]));
+
                     layout.Name = (string)layoutObject["name"];
                 }
                 else if (fieldAPIName.Equals("Handler") && token.Value.Type != JTokenType.Null)
                 {
+
                     JObject handlerObject = (JObject)token.Value;
+
                     ZCRMUser handler = ZCRMUser.GetInstance(Convert.ToInt64(handlerObject["id"]), (string)handlerObject["name"]);
+
                     record.SetFieldValue(fieldAPIName, handler);
                 }
 
@@ -306,6 +318,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                     if (token.Value is JObject)
                     {
                         JObject remindObject = (JObject)token.Value;
+
                         record.SetFieldValue(fieldAPIName, remindObject["ALARM"]);
                     }
                     else
@@ -316,52 +329,65 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 else if (fieldAPIName.Equals("Recurring_Activity") && token.Value.Type != JTokenType.Null)
                 {
                     JObject recurringActivityObject = (JObject)token.Value;
+
                     record.SetFieldValue(fieldAPIName, recurringActivityObject["RRULE"]);
                 }
                 else if (fieldAPIName.Equals("$line_tax") && token.Value.Type != JTokenType.Null)
                 {
                     JArray taxDetails = (JArray)token.Value;
+
                     foreach (JObject taxDetail in taxDetails)
                     {
                         ZCRMTax tax = ZCRMTax.GetInstance((string)taxDetail["name"]);
+
                         tax.Percentage = Convert.ToDouble(taxDetail["percentage"]);
+
                         tax.Value = Convert.ToDouble(taxDetail["value"]);
+
                         record.AddTax(tax);
                     }
                 }
                 else if (fieldAPIName.Equals("Tax") && token.Value.Type != JTokenType.Null)
                 {
                     var taxNames = token.Value;
+
                     foreach (string data in taxNames)
                     {
                         ZCRMTax tax = ZCRMTax.GetInstance(data);
+
                         record.AddTax(tax);
                     }
                 }
                 else if (fieldAPIName.Equals("tags") && token.Value.Type != JTokenType.Null)
                 {
                     JArray jsonArray = (JArray)token.Value;
+
                     List<string> tags = new List<string>();
+
                     foreach (string tag in jsonArray)
                     {
                         tags.Add(tag);
                     }
+
                     record.TagNames = tags;
                 }
                 else if (fieldAPIName.Equals("Tag") && token.Value.Type != JTokenType.Null)
                 {
                     JArray jsonArray = (JArray)token.Value;
+
                     foreach (JObject tag in jsonArray)
                     {
                         ZCRMTag tagIns = ZCRMTag.GetInstance(Convert.ToInt64(tag.GetValue("id")));
-                        tagIns.Name = tag.GetValue("name").ToString();
-                        record.Tags.Add(tagIns);
 
+                        tagIns.Name = tag.GetValue("name").ToString();
+
+                        record.Tags.Add(tagIns);
                     }
                 }
                 else if (fieldAPIName.StartsWith("$", StringComparison.CurrentCulture))
                 {
                     fieldAPIName = fieldAPIName.TrimStart('\\', '$');
+
                     if (APIConstants.PROPERTIES_AS_FILEDS.Contains(fieldAPIName))
                     {
                         record.SetFieldValue(fieldAPIName, token.Value);
@@ -374,8 +400,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 else if (token.Value is JObject)
                 {
                     JObject lookupDetails = (JObject)token.Value;
+
                     ZCRMRecord lookupRecord = ZCRMRecord.GetInstance(fieldAPIName, Convert.ToInt64(lookupDetails["id"]));
+
                     lookupRecord.LookupLabel = (string)lookupDetails["name"];
+
                     record.SetFieldValue(fieldAPIName, lookupRecord);
                 }
                 else if (token.Value is JArray)
@@ -523,59 +552,92 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         public ZCRMInventoryLineItem GetZCRMInventoryLineItem(JObject lineItemJSON)
         {
             JObject productDetails = (JObject)lineItemJSON["product"];
+
             long lineItemId = Convert.ToInt64(lineItemJSON["id"]);
+
             ZCRMInventoryLineItem lineItem = ZCRMInventoryLineItem.GetInstance(lineItemId);
 
             ZCRMRecord product = ZCRMRecord.GetInstance("Products", Convert.ToInt64(productDetails["id"]));
+
             product.LookupLabel = (string)productDetails["name"];
+
             if(productDetails.ContainsKey("Product_Code") && productDetails["Product_Code"].Type != JTokenType.Null)
             {
                 product.SetFieldValue("Product_Code", (string)productDetails["name"]);
             }
+
             lineItem.Product = product;
+
             lineItem.Quantity = Convert.ToDouble(lineItemJSON["quantity"]);
+
             lineItem.Discount = Convert.ToDouble(lineItemJSON["Discount"]);
+
             lineItem.TotalAfterDiscount = Convert.ToDouble(lineItemJSON["total_after_discount"]);
+
             lineItem.NetTotal = Convert.ToDouble(lineItemJSON["net_total"]);
+
             lineItem.TaxAmount = Convert.ToDouble(lineItemJSON["Tax"]);
+
             lineItem.ListPrice = Convert.ToDouble(lineItemJSON["list_price"]);
+
             if(lineItemJSON.ContainsKey("unit_price") && lineItemJSON["unit_price"].Type != JTokenType.Null)
             {
                 lineItem.UnitPrice = Convert.ToDouble(lineItemJSON["unit_price"]);
             }
+
             lineItem.QuantityInStock = Convert.ToInt32(lineItemJSON["quantity_in_stock"]);
+
             lineItem.Total = Convert.ToDouble(lineItemJSON["total"]);
+
             lineItem.Description = (string)lineItemJSON["product_description"];
+
             JArray lineTaxes = (JArray)lineItemJSON["line_tax"];
+
             foreach (JObject lineTax in lineTaxes)
             {
                 ZCRMTax tax = ZCRMTax.GetInstance((string)lineTax["name"]);
+
                 tax.Percentage = Convert.ToDouble(lineTax["percentage"]);
+
                 tax.Value = Convert.ToDouble(lineTax["value"]);
+
                 lineItem.AddLineTax(tax);
             }
+
             return lineItem;
         }
 
         private ZCRMEventParticipant GetZCRMParticipant(JObject participantDetails)
         {
             long Id = Convert.ToInt64(participantDetails["id"]);
+
             string type = (string)participantDetails["type"];
+
             ZCRMEventParticipant participant = ZCRMEventParticipant.GetInstance(type, Id);
+
             participant.Name = (string)participantDetails["name"];
+
             participant.Email = (string)participantDetails["Email"];
+
             participant.IsInvited = (bool)participantDetails["invited"];
+
             participant.Status = (string)participantDetails["status"];
+
             participant.Participant = (string)participantDetails["participant"];
+
             return participant;
         }
 
         private ZCRMPriceBookPricing GetZCRMPriceDetail(JObject priceDetail)
         {
             long id = Convert.ToInt64(priceDetail["id"]);
+
             ZCRMPriceBookPricing pricing = ZCRMPriceBookPricing.GetInstance(id);
+
             pricing.Discount = Convert.ToDouble(priceDetail["discount"]);
+
             pricing.ToRange = Convert.ToDouble(priceDetail["to_range"]);
+
             pricing.FromRange = Convert.ToDouble(priceDetail["from_range"]);
 
             return pricing;
@@ -750,28 +812,35 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             {
                 return null;
             }
+
             JArray lineItems = new JArray();
+
             foreach (ZCRMInventoryLineItem inventoryLineItem in lineItemsList)
             {
                 lineItems.Add(GetZCRMInventoryLineItemAsJSON(inventoryLineItem));
             }
+
             return lineItems;
         }
 
         private JObject GetZCRMInventoryLineItemAsJSON(ZCRMInventoryLineItem inventoryLineItem)
         {
             JObject lineItem = new JObject();
+
             if (inventoryLineItem.Id != null)
             {
                 lineItem.Add("id", inventoryLineItem.Id.ToString());
             }
+
             if (inventoryLineItem.Product != null)
             {
                 lineItem.Add("product", inventoryLineItem.Product.EntityId);
             }
 
             lineItem.Add("product_description", inventoryLineItem.Description);
+
             lineItem.Add("list_price", inventoryLineItem.ListPrice);
+
             lineItem.Add("quantity", inventoryLineItem.Quantity);
 
             if (inventoryLineItem.DiscountPercentage == null)
@@ -784,15 +853,22 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
 
             JArray lineTaxArray = new JArray();
+
             List<ZCRMTax> taxes = inventoryLineItem.LineTax;
+
             foreach (ZCRMTax tax in taxes)
             {
                 JObject lineTax = new JObject();
+
                 lineTax.Add("name", tax.TaxName);
+
                 lineTax.Add("value", tax.Value);
+
                 lineTax.Add("percentage", tax.Percentage);
+
                 lineTaxArray.Add(lineTax);
             }
+
             lineItem.Add("line_tax", lineTaxArray);
 
             return lineItem;
@@ -804,12 +880,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             {
                 return null;
             }
+
             JArray participants = new JArray();
             
             foreach (ZCRMEventParticipant participant in participantsList)
             {
                 participants.Add(GetZCRMParticipantsAsJSON(participant));
             }
+
             return participants;
         }
 
@@ -838,6 +916,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             {
                 priceDetails.Add(GetZCRMPriceDetailAsJSON(priceDetail));
             }
+
             return priceDetails;
 
         }
@@ -845,12 +924,16 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         private JObject GetZCRMPriceDetailAsJSON(ZCRMPriceBookPricing priceDetail)
         {
             JObject priceDetailJSON = new JObject();
+
             if (priceDetail.Id != null)
             {
                 priceDetailJSON.Add("id", priceDetail.Id.ToString());
             }
+
             priceDetailJSON.Add("discount", priceDetail.Discount);
+
             priceDetailJSON.Add("to_range", priceDetail.ToRange);
+
             priceDetailJSON.Add("from_range", priceDetail.FromRange);
 
             return priceDetailJSON;
