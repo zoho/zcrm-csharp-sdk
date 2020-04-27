@@ -32,19 +32,25 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.GET;
+
                 urlPath = record.ModuleAPIName + "/" + record.EntityId;
 
                 APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
 
                 JArray responseDataArray = (JArray)response.ResponseJSON[APIConstants.DATA];
+
                 JObject recordDetails = (JObject)responseDataArray[0];
+
                 SetRecordProperties(recordDetails);
+
                 response.Data = record;
+
                 return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
@@ -54,33 +60,47 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.POST;
+
                 urlPath = record.ModuleAPIName;
+
                 JObject requestBodyObject = new JObject();
+
                 JArray dataArray = new JArray();
+
                 dataArray.Add(GetZCRMRecordAsJSON());
+
                 requestBodyObject.Add(APIConstants.DATA, dataArray);
+
                 if (trigger != null && trigger.Count > 0)
                 {
                     requestBodyObject.Add("trigger", JArray.FromObject(trigger));
                 }
+
                 if (lar_id != null)
                 {
                     requestBodyObject.Add("lar_id", lar_id);
                 }
+
                 requestBody = requestBodyObject;
 
                 APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
 
                 JArray responseDataArray = (JArray)response.ResponseJSON[APIConstants.DATA];
+
                 JObject responseData = (JObject)responseDataArray[0];
+
                 JObject recordDetails = (JObject)responseData[APIConstants.DETAILS];
+
                 SetRecordProperties(recordDetails);
+
                 response.Data = record;
+
                 return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
@@ -90,30 +110,42 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.PUT;
+
                 urlPath = record.ModuleAPIName + "/" + record.EntityId;
+
                 JObject requestBodyObject = new JObject();
+
                 JArray dataArray = new JArray();
+
                 dataArray.Add(GetZCRMRecordAsJSON());
+
                 requestBodyObject.Add(APIConstants.DATA, dataArray);
+
                 if (trigger != null && trigger.Count > 0)
                 {
                     requestBodyObject.Add("trigger", JArray.FromObject(trigger));
                 }
+
                 requestBody = requestBodyObject;
 
                 APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
 
                 JArray responseDataArray = (JArray)response.ResponseJSON[APIConstants.DATA];
-                JObject responseData = (JObject)responseDataArray[0];
-                JObject responseDetails = (JObject)responseData[APIConstants.DETAILS];
-                SetRecordProperties(responseDetails);
-                response.Data = record;
-                return response;
 
+                JObject responseData = (JObject)responseDataArray[0];
+
+                JObject responseDetails = (JObject)responseData[APIConstants.DETAILS];
+
+                SetRecordProperties(responseDetails);
+
+                response.Data = record;
+
+                return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
@@ -123,6 +155,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.DELETE;
+
                 urlPath = record.ModuleAPIName + "/" + record.EntityId;
 
                 return APIRequest.GetInstance(this).GetAPIResponse();
@@ -130,6 +163,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
@@ -139,40 +173,57 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.POST;
+
                 urlPath = record.ModuleAPIName + "/" + record.EntityId + "/actions/convert";
+
                 JObject requestBodyObject = new JObject();
+
                 JArray dataArray = new JArray();
+
                 JObject dataObject = new JObject();
+
                 if (assignToUser != null)
                 {
                     dataObject.Add("assign_to", assignToUser.Id.ToString());
                 }
+
                 if (potential != null)
                 {
                     dataObject.Add(APIConstants.DEALS, GetInstance(potential).GetZCRMRecordAsJSON());
                 }
+
                 dataArray.Add(dataObject);
+
                 requestBodyObject.Add(APIConstants.DATA, dataArray);
+
                 requestBody = requestBodyObject;
+
                 APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
+
                 JArray responseJson = (JArray)response.ResponseJSON[APIConstants.DATA];
+
                 JObject convertedIdsJSON = (JObject)responseJson[0];
 
                 Dictionary<string, long> convertedIds = new Dictionary<string, long>();
+
                 convertedIds.Add(APIConstants.CONTACTS, Convert.ToInt64(convertedIdsJSON[APIConstants.CONTACTS]));
+
                 if (convertedIdsJSON[APIConstants.ACCOUNTS].Type != JTokenType.Null)
                 {
                     convertedIds.Add(APIConstants.ACCOUNTS, Convert.ToInt64(convertedIdsJSON[APIConstants.ACCOUNTS]));
                 }
+
                 if (convertedIdsJSON[APIConstants.DEALS].Type != JTokenType.Null)
                 {
                     convertedIds.Add(APIConstants.DEALS, Convert.ToInt64(convertedIdsJSON[APIConstants.DEALS]));
                 }
+
                 return convertedIds;
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
@@ -182,17 +233,21 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 CommonUtil.CheckIsPhotoSupported(record.ModuleAPIName);
+
                 CommonUtil.ValidateFile(filePath);
 
                 requestMethod = APIConstants.RequestMethod.POST;
+
                 urlPath = record.ModuleAPIName + "/" + record.EntityId + "/photo";
 
                 FileInfo fileInfo = new FileInfo(filePath);
+
                 return APIRequest.GetInstance(this).UploadFile(fileInfo.OpenRead(), fileInfo.Name);
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
@@ -204,6 +259,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 CommonUtil.CheckIsPhotoSupported(record.ModuleAPIName);
 
                 requestMethod = APIConstants.RequestMethod.GET;
+
                 urlPath = record.ModuleAPIName + "/" + record.EntityId + "/photo";
 
                 return APIRequest.GetInstance(this).DownloadFile();
@@ -211,6 +267,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
@@ -222,6 +279,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 CommonUtil.CheckIsPhotoSupported(record.ModuleAPIName);
 
                 requestMethod = APIConstants.RequestMethod.DELETE;
+
                 urlPath = record.ModuleAPIName + "/" + record.EntityId + "/photo";
 
                 return APIRequest.GetInstance(this).GetAPIResponse();
@@ -229,6 +287,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
@@ -843,7 +902,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
             lineItem.Add("quantity", inventoryLineItem.Quantity);
 
-            if (inventoryLineItem.DiscountPercentage == null)
+            if (inventoryLineItem.DiscountPercentage == null || inventoryLineItem.DiscountPercentage == 0)
             {
                 lineItem.Add("Discount", inventoryLineItem.Discount);
             }
