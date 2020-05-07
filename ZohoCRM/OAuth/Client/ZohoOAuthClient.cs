@@ -3,9 +3,6 @@ using ZCRMSDK.OAuth.Contract;
 using ZCRMSDK.OAuth.Common;
 using Newtonsoft.Json.Linq;
 using ZCRMSDK.CRM.Library.CRMException;
-using System.Net;
-using ZCRMSDK.CRM.Library.Common;
-using ZCRMSDK.CRM.Library.Setup.RestClient;
 
 namespace ZCRMSDK.OAuth.Client
 {
@@ -14,6 +11,7 @@ namespace ZCRMSDK.OAuth.Client
         //TODO: Get Logger
 
         private static ZohoOAuthClient client = null;
+
         private ZohoOAuthParams oAuthParams;
 
         public ZohoOAuthClient(ZohoOAuthParams oAuthParams)
@@ -21,12 +19,15 @@ namespace ZCRMSDK.OAuth.Client
             this.oAuthParams = oAuthParams;
         }
 
-        public static ZohoOAuthClient GetInstance(ZohoOAuthParams oAuthParams){
+        public static ZohoOAuthClient GetInstance(ZohoOAuthParams oAuthParams)
+        {
             client = new ZohoOAuthClient(oAuthParams);
+
             return client;
         }
 
-        public static ZohoOAuthClient GetInstance(){
+        public static ZohoOAuthClient GetInstance()
+        {
             return client;
         }
 
@@ -34,20 +35,25 @@ namespace ZCRMSDK.OAuth.Client
         public static void Initialize() { }
 
 
-        public string GetAccessToken(string userMailId) {
+        public string GetAccessToken(string userMailId)
+        {
             IZohoPersistenceHandler persistenceHandler = ZohoOAuth.GetPersistenceHandlerInstance();
 
             ZohoOAuthTokens tokens;
+
             try
             {
                 ZCRMLogger.LogInfo("Retreiving access token..");
+
                 tokens = persistenceHandler.GetOAuthTokens(userMailId);
             }
             catch (Exception e)when(!(e is ZohoOAuthException))
             {
                 ZCRMLogger.LogError("Exception while fetching tokens from persistence" + e);
+
                 throw new ZohoOAuthException(e); 
             }
+
             try
             {
                 return tokens.AccessToken;
@@ -55,8 +61,10 @@ namespace ZCRMSDK.OAuth.Client
             catch (ZohoOAuthException)
             {
                 ZCRMLogger.LogInfo("Access Token expired, Refreshing Access token");
+
                 tokens = RefreshAccessToken(tokens.RefreshToken, userMailId);
             }
+
             return tokens.AccessToken;
          }
 
@@ -75,8 +83,11 @@ namespace ZCRMSDK.OAuth.Client
             try
             {
                 var conn = GetZohoConnector(ZohoOAuth.GetTokenURL());
+
                 conn.AddParam(ZohoOAuthConstants.GRANT_TYPE, ZohoOAuthConstants.GRANT_TYPE_AUTH_CODE);
+
                 conn.AddParam(ZohoOAuthConstants.CODE, grantToken);
+
                 string response = conn.Post();
 
                 JObject responseJSON = JObject.Parse(response);
@@ -84,15 +95,20 @@ namespace ZCRMSDK.OAuth.Client
                 if (responseJSON.ContainsKey(ZohoOAuthConstants.ACCESS_TOKEN))
                 {
                     ZohoOAuthTokens tokens = GetTokensFromJSON(responseJSON);
+
                     tokens.UserMaiilId = GetUserMailId(tokens.AccessToken);
+
                     ZohoOAuth.GetPersistenceHandlerInstance().SaveOAuthTokens(tokens);
+
                     return tokens;
                 }
+
                 throw new ZohoOAuthException("Exception while fetching Access Token from grant token" + response);
             }
-            catch (WebException e)
+            catch (Exception e) when (!(e is ZohoOAuthException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZohoOAuthException(e);
             }
         }
@@ -109,26 +125,43 @@ namespace ZCRMSDK.OAuth.Client
         }
 
         //TODO: Create ZohoOAuthException class and change the throw exception class;
-        private ZohoOAuthTokens RefreshAccessToken(string refreshToken, string userMailId){
-            if(refreshToken == null){
+        private ZohoOAuthTokens RefreshAccessToken(string refreshToken, string userMailId)
+        {
+            if(refreshToken == null)
+            {
                 throw new ZohoOAuthException("Refresh token is not provided");
             }
-            try{
+            try
+            {
                 ZohoHTTPConnector conn = GetZohoConnector(ZohoOAuth.GetRefreshTokenURL());
+
                 conn.AddParam(ZohoOAuthConstants.GRANT_TYPE, ZohoOAuthConstants.REFRESH_TOKEN);
+
                 conn.AddParam(ZohoOAuthConstants.REFRESH_TOKEN, refreshToken);
+
                 string response = conn.Post();
+
                 JObject responseJSON = JObject.Parse(response);
-                if(responseJSON.ContainsKey(ZohoOAuthConstants.ACCESS_TOKEN)){
+
+                if(responseJSON.ContainsKey(ZohoOAuthConstants.ACCESS_TOKEN))
+                {
                     ZohoOAuthTokens tokens = GetTokensFromJSON(responseJSON);
+
                     tokens.RefreshToken = refreshToken;
+
                     tokens.UserMaiilId = userMailId;
+
                     ZohoOAuth.GetPersistenceHandlerInstance().SaveOAuthTokens(tokens);
+
                     return tokens;
                 }
+
                 throw new ZohoOAuthException("Exception while fetching access tokens from Refresh Token" + response);
-            }catch(WebException e){
+            }
+            catch (Exception e) when (!(e is ZohoOAuthException))
+            {
                 ZCRMLogger.LogError(e);
+
                 throw new ZohoOAuthException(e);
             }
         }
@@ -140,29 +173,44 @@ namespace ZCRMSDK.OAuth.Client
             try
             {
                 ZohoHTTPConnector conn = new ZohoHTTPConnector() { Url = ZohoOAuth.GetUserInfoURL() };
+
                 conn.AddHeader("Authorization", ZohoOAuthConstants.AuthHeaderPrefix + accessToken);
+
                 string response = conn.Get();
+
                 JObject responseJSON = JObject.Parse(response);
 
                 return responseJSON["Email"].ToString();
             }
-            catch (WebException) { throw; }
+            catch (Exception ex)
+            {
+                ZCRMLogger.LogError(ex);
+
+                throw new ZohoOAuthException("Exception while fetching User email from access token, Make sure AAAserver.profile.Read scope is included while generating the Grant token.");
+            }
         }
 
         private ZohoHTTPConnector GetZohoConnector(string url)
         {
             ZohoHTTPConnector conn = new ZohoHTTPConnector() { Url = url };
+
             conn.AddParam(ZohoOAuthConstants.CLIENT_ID, oAuthParams.ClientId);
+
             conn.AddParam(ZohoOAuthConstants.CLIENT_SECRET, oAuthParams.ClientSecret);
+
             conn.AddParam(ZohoOAuthConstants.REDIRECT_URL, oAuthParams.RedirectURL);
+
             return conn;
         }
 
-        private ZohoOAuthTokens GetTokensFromJSON(JObject responseJSON){
+        private ZohoOAuthTokens GetTokensFromJSON(JObject responseJSON)
+        {
             try
             {
                 ZohoOAuthTokens tokens = new ZohoOAuthTokens();
+
                 long expiresIn = 0;
+
                 if (!responseJSON.ContainsKey("expires_in_sec"))
                 {
                     expiresIn = Convert.ToInt64(responseJSON[ZohoOAuthConstants.EXPIRES_IN]) * 1000;
@@ -171,17 +219,24 @@ namespace ZCRMSDK.OAuth.Client
                 {
                     expiresIn = Convert.ToInt64(responseJSON[ZohoOAuthConstants.EXPIRES_IN]);
                 }
+
                 tokens.ExpiryTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + expiresIn - 600000;
+
                 tokens.AccessToken = (string)responseJSON[ZohoOAuthConstants.ACCESS_TOKEN];
+
                 if (responseJSON.ContainsKey(ZohoOAuthConstants.REFRESH_TOKEN))
                 {
                     tokens.RefreshToken = (string)responseJSON[ZohoOAuthConstants.REFRESH_TOKEN];
                 }
+
                 //CRM.Library.Common.ZCRMConfigUtil.ConfigProperties["apiBaseUrl"] = (string)responseJSON["api_domain"];
+
                 return tokens;
             }
-            catch (Exception) { throw; }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
-
 }
