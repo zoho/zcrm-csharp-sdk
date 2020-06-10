@@ -1039,7 +1039,12 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <returns>BulkAPIResponse&lt;ZCRMTrashRecord&gt; class instance.</returns>
         public BulkAPIResponse<ZCRMTrashRecord> GetAllDeletedRecords()
         {
-            return MassEntityAPIHandler.GetInstance(this).GetAllDeletedRecords();
+            return MassEntityAPIHandler.GetInstance(this).GetAllDeletedRecords(null, null);
+        }
+
+        public BulkAPIResponse<ZCRMTrashRecord> GetAllDeletedRecords(Dictionary<string, string> methodParams, Dictionary<string, string> methodHeader)
+        {
+            return MassEntityAPIHandler.GetInstance(this).GetAllDeletedRecords(methodParams, methodHeader);
         }
 
         /// <summary>
@@ -1048,7 +1053,12 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <returns>BulkAPIResponse&lt;ZCRMTrashRecord&gt; class instance.</returns>
         public BulkAPIResponse<ZCRMTrashRecord> GetRecycleBinRecords()
         {
-            return MassEntityAPIHandler.GetInstance(this).GetRecycleBinRecords();
+            return MassEntityAPIHandler.GetInstance(this).GetRecycleBinRecords(null, null);
+        }
+
+        public BulkAPIResponse<ZCRMTrashRecord> GetRecycleBinRecords(Dictionary<string, string> methodParams, Dictionary<string, string> methodHeader)
+        {
+            return MassEntityAPIHandler.GetInstance(this).GetRecycleBinRecords(methodParams, methodHeader);
         }
 
         /// <summary>
@@ -1057,7 +1067,12 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <returns>BulkAPIResponse&lt;ZCRMTrashRecord&gt; class instance.</returns>
         public BulkAPIResponse<ZCRMTrashRecord> GetPermanentlyDeletedRecords()
         {
-            return MassEntityAPIHandler.GetInstance(this).GetPermanentlyDeletedRecords();
+            return MassEntityAPIHandler.GetInstance(this).GetPermanentlyDeletedRecords(null, null);
+        }
+
+        public BulkAPIResponse<ZCRMTrashRecord> GetPermanentlyDeletedRecords(Dictionary<string, string> methodParams, Dictionary<string, string> methodHeader)
+        {
+            return MassEntityAPIHandler.GetInstance(this).GetPermanentlyDeletedRecords(methodParams, methodHeader);
         }
 
         /// <summary>

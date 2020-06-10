@@ -379,49 +379,75 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
         }
 
-        public BulkAPIResponse<ZCRMTrashRecord> GetAllDeletedRecords()
+        public BulkAPIResponse<ZCRMTrashRecord> GetAllDeletedRecords(Dictionary<string, string> methodParams, Dictionary<string, string> methodHeaders)
         {
-            return GetDeletedRecords("all");
+            return GetDeletedRecords("all", methodParams, methodHeaders);
         }
 
-        public BulkAPIResponse<ZCRMTrashRecord> GetRecycleBinRecords()
+        public BulkAPIResponse<ZCRMTrashRecord> GetRecycleBinRecords(Dictionary<string, string> methodParams, Dictionary<string, string> methodHeaders)
         {
-            return GetDeletedRecords("recycle");
+            return GetDeletedRecords("recycle", methodParams, methodHeaders);
         }
 
-        public BulkAPIResponse<ZCRMTrashRecord> GetPermanentlyDeletedRecords()
+        public BulkAPIResponse<ZCRMTrashRecord> GetPermanentlyDeletedRecords(Dictionary<string, string> methodParams, Dictionary<string, string> methodHeaders)
         {
-            return GetDeletedRecords("permanent");
+            return GetDeletedRecords("permanent", methodParams, methodHeaders);
         }
 
-        private BulkAPIResponse<ZCRMTrashRecord> GetDeletedRecords(string type)
+        private BulkAPIResponse<ZCRMTrashRecord> GetDeletedRecords(string type, Dictionary<string, string> methodParams, Dictionary<string, string> methodHeaders)
         {
             try
             {
                 requestMethod = APIConstants.RequestMethod.GET;
+
                 urlPath = module.ApiName + "/deleted";
+
+                if(methodParams !=  null)
+                {
+                    foreach(KeyValuePair<string,string> methodParam in methodParams)
+                    {
+                        requestQueryParams.Add(methodParam.Key, methodParam.Value);
+                    }
+                }
+
+                if (methodHeaders != null)
+                {
+                    foreach (KeyValuePair<string, string> methodHeader in methodHeaders)
+                    {
+                        requestQueryParams.Add(methodHeader.Key, methodHeader.Value);
+                    }
+                }
+
                 requestQueryParams.Add("type", type);
 
                 BulkAPIResponse<ZCRMTrashRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMTrashRecord>();
 
                 List<ZCRMTrashRecord> trashRecordList = new List<ZCRMTrashRecord>();
+
                 JObject responseJSON = response.ResponseJSON;
+
                 if (responseJSON.ContainsKey(APIConstants.DATA))
                 {
                     JArray trashRecordsArray = (JArray)responseJSON[APIConstants.DATA];
+
                     foreach (JObject trashRecordDetails in trashRecordsArray)
                     {
                         trashRecord = ZCRMTrashRecord.GetInstance((string)trashRecordDetails["type"], Convert.ToInt64(trashRecordDetails["id"]));
+
                         SetTrashRecordProperties(trashRecordDetails);
+
                         trashRecordList.Add(trashRecord);
                     }
                 }
+
                 response.BulkData = trashRecordList;
+
                 return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
