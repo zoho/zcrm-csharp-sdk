@@ -414,7 +414,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     foreach (KeyValuePair<string, string> methodHeader in methodHeaders)
                     {
-                        requestQueryParams.Add(methodHeader.Key, methodHeader.Value);
+                        requestHeaders.Add(methodHeader.Key, methodHeader.Value);
                     }
                 }
 
