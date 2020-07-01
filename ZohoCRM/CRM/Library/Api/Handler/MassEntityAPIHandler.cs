@@ -1,11 +1,19 @@
 ﻿using System;
+
 using System.Collections.Generic;
+
 using Newtonsoft.Json.Linq;
+
 using ZCRMSDK.CRM.Library.Api.Response;
+
 using ZCRMSDK.CRM.Library.Common;
+
 using ZCRMSDK.CRM.Library.CRMException;
+
 using ZCRMSDK.CRM.Library.CRUD;
+
 using ZCRMSDK.CRM.Library.Setup.Users;
+
 using Newtonsoft.Json;
 
 namespace ZCRMSDK.CRM.Library.Api.Handler
@@ -13,6 +21,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
     public class MassEntityAPIHandler : CommonAPIHandler, IAPIHandler
     {
         private ZCRMModule module;
+
         private ZCRMTrashRecord trashRecord = null;
 
 
@@ -35,10 +44,15 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
                 }
+
                 requestMethod = APIConstants.RequestMethod.POST;
+
                 urlPath = module.ApiName;
+
                 JObject requestBodyObject = new JObject();
+
                 JArray dataArray = new JArray();
+
                 foreach (ZCRMRecord record in records)
                 {
                     if (record.EntityId == null)
@@ -50,32 +64,45 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                         throw new ZCRMException("Entity ID Must be null/empty for CreateRecords operation.");
                     }
                 }
+
                 requestBodyObject.Add(APIConstants.DATA, dataArray);
+
                 if (trigger != null && trigger.Count > 0)
                 {
                     requestBodyObject.Add("trigger", JArray.FromObject(trigger));
                 }
+
                 if (lar_id != null)
                 {
                     requestBodyObject.Add("lar_id", lar_id);
                 }
+
                 requestBody = requestBodyObject;
 
                 BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
 
                 List<ZCRMRecord> createdRecords = new List<ZCRMRecord>();
+
                 List<EntityResponse> responses = response.BulkEntitiesResponse;
+
                 int responseSize = responses.Count;
+
                 for (int i = 0; i < responseSize; i++)
                 {
                     EntityResponse entityResponse = responses[i];
+
                     if (entityResponse.Status.Equals(APIConstants.CODE_SUCCESS))
                     {
                         JObject responseData = entityResponse.ResponseJSON;
+
                         JObject recordDetails = (JObject)responseData[APIConstants.DETAILS];
+
                         ZCRMRecord newRecord = records[i];
+
                         EntityAPIHandler.GetInstance(newRecord).SetRecordProperties(recordDetails);
+
                         createdRecords.Add(newRecord);
+
                         entityResponse.Data = newRecord;
                     }
                     else
@@ -83,12 +110,15 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                         entityResponse.Data = null;
                     }
                 }
+
                 response.BulkData = createdRecords;
+
                 return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
@@ -101,52 +131,75 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
                 }
+
                 requestMethod = APIConstants.RequestMethod.PUT;
+
                 urlPath = module.ApiName;
+
                 JObject requestBodyObject = new JObject();
+
                 JArray dataArray = new JArray();
+
                 foreach (ZCRMRecord record in records)
                 {
                     if (record.GetFieldValue("id") == null || (long)record.GetFieldValue("id") <= 0)
                     {
                         throw new ZCRMException("Entity ID Must Not be null/empty for UpdateRecords operation.");
                     }
+
                     dataArray.Add(EntityAPIHandler.GetInstance(record).GetZCRMRecordAsJSON());
                 }
+
                 requestBodyObject.Add(APIConstants.DATA, dataArray);
+
                 if (trigger != null && trigger.Count > 0)
                 {
                     requestBodyObject.Add("trigger", JArray.FromObject(trigger));
                 }
+
                 requestBody = requestBodyObject;
 
                 BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
+
                 List<ZCRMRecord> updatedRecords = new List<ZCRMRecord>();
+
                 List<EntityResponse> responses = response.BulkEntitiesResponse;
+
                 int responseSize = responses.Count;
+
                 for (int i = 0; i < responseSize; i++)
                 {
                     EntityResponse entityResponse = responses[i];
+
                     if (entityResponse.Status.Equals(APIConstants.CODE_SUCCESS))
                     {
                         JObject responseData = entityResponse.ResponseJSON;
+
                         JObject recordDetails = (JObject)responseData[APIConstants.DETAILS];
+
                         ZCRMRecord newRecord = records[i];
+
                         EntityAPIHandler.GetInstance(newRecord).SetRecordProperties(recordDetails);
+
                         updatedRecords.Add(newRecord);
+
                         entityResponse.Data = newRecord;
                     }
+
                     else
                     {
                         entityResponse.Data = null;
                     }
                 }
+
                 response.BulkData = updatedRecords;
+
                 return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
@@ -231,45 +284,65 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
                 }
+
                 requestMethod = APIConstants.RequestMethod.POST;
+
                 urlPath = module.ApiName + "/upsert";
+
                 JObject requestBodyObject = new JObject();
+
                 JArray dataArray = new JArray();
+
                 foreach (ZCRMRecord record in records)
                 {
                     JObject recordJSON = EntityAPIHandler.GetInstance(record).GetZCRMRecordAsJSON();
+
                     dataArray.Add(recordJSON);
                 }
+
                 requestBodyObject.Add(APIConstants.DATA, dataArray);
+
                 if (trigger != null && trigger.Count > 0)
                 {
                     requestBodyObject.Add("trigger", JArray.FromObject(trigger));
                 }
+
                 if (lar_id != null)
                 {
                     requestBodyObject.Add("lar_id", lar_id);
                 }
+
                 if (duplicate_check_fields != null && duplicate_check_fields.Count > 0)
                 {
                     requestBodyObject.Add("duplicate_check_fields", JArray.FromObject(duplicate_check_fields));
                 }
+
                 requestBody = requestBodyObject;
 
                 BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
 
                 List<ZCRMRecord> upsertedRecords = new List<ZCRMRecord>();
+
                 List<EntityResponse> responses = response.BulkEntitiesResponse;
+
                 int responseSize = responses.Count;
+
                 for (int i = 0; i < responseSize; i++)
                 {
                     EntityResponse entityResponse = responses[i];
+
                     if (entityResponse.Status.Equals(APIConstants.CODE_SUCCESS))
                     {
                         JObject responseData = entityResponse.ResponseJSON;
+
                         JObject recordDetails = (JObject)responseData[APIConstants.DETAILS];
+
                         ZCRMRecord record = records[i];
+
                         EntityAPIHandler.GetInstance(record).SetRecordProperties(recordDetails);
+
                         upsertedRecords.Add(record);
+
                         entityResponse.Data = record;
                     }
                     else
@@ -277,12 +350,15 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                         entityResponse.Data = null;
                     }
                 }
+
                 response.BulkData = upsertedRecords;
+
                 return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
@@ -292,33 +368,43 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.GET;
+
                 urlPath = module.ApiName;
+
                 if (cvId != null)
                 {
                     requestQueryParams.Add("cvid", cvId.ToString());
                 }
+
                 if (sortByField != null)
                 {
                     requestQueryParams.Add("sort_by", sortByField);
                 }
+
                 if (sortOrder != null)
                 {
                     requestQueryParams.Add("sort_order", sortOrder.ToString());
                 }
+
                 requestQueryParams.Add(APIConstants.PAGE, page.ToString());
+
                 requestQueryParams.Add(APIConstants.PER_PAGE, perPage.ToString());
+
                 if (isApproved != null && isApproved != "")
                 {
                     requestQueryParams.Add("approved", isApproved);
                 }
+
                 if (isConverted != null && isConverted != "")
                 {
                     requestQueryParams.Add("converted", isConverted);
                 }
+
                 if (fields != null)
                 {
                     requestQueryParams.Add("fields", CommonUtil.CollectionToCommaDelimitedString(fields));
                 }
+
                 if (modifiedSince != null && modifiedSince != "")
                 {
                     requestHeaders.Add("If-Modified-Since", modifiedSince);
@@ -327,23 +413,31 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
 
                 List<ZCRMRecord> records = new List<ZCRMRecord>();
+
                 JObject responseJSON = response.ResponseJSON;
+
                 if (responseJSON.ContainsKey(APIConstants.DATA))
                 {
                     JArray recordsArray = (JArray)responseJSON[APIConstants.DATA];
+
                     foreach (JObject recordDetails in recordsArray)
                     {
                         ZCRMRecord record = ZCRMRecord.GetInstance(module.ApiName, Convert.ToInt64(recordDetails["id"]));
+
                         EntityAPIHandler.GetInstance(record).SetRecordProperties(recordDetails);
+
                         records.Add(record);
                     }
                 }
+
                 response.BulkData = records;
+
                 return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
@@ -356,25 +450,34 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 {
                     throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
                 }
+
                 requestMethod = APIConstants.RequestMethod.DELETE;
+
                 urlPath = module.ApiName;
+
                 requestQueryParams.Add("ids", CommonUtil.CollectionToCommaDelimitedString(entityIds));
 
                 BulkAPIResponse<ZCRMEntity> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMEntity>();
 
                 List<EntityResponse> responses = response.BulkEntitiesResponse;
+
                 foreach (EntityResponse entityResponse in responses)
                 {
                     JObject entityResponseJSON = entityResponse.ResponseJSON;
+
                     JObject recordJSON = (JObject)entityResponseJSON[APIConstants.DETAILS];
+
                     ZCRMRecord record = ZCRMRecord.GetInstance(module.ApiName, Convert.ToInt64(recordJSON["id"]));
+
                     entityResponse.Data = record;
                 }
+
                 return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
@@ -479,8 +582,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.GET;
+
                 urlPath = module.ApiName + "/search";
+
                 requestQueryParams.Add(searchKey, searchValue);
+
                 foreach (KeyValuePair<string, string> methodParam in methodParams)
                 {
                     requestQueryParams.Add(methodParam.Key, methodParam.Value);
@@ -489,23 +595,31 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
 
                 List<ZCRMRecord> recordsList = new List<ZCRMRecord>();
+
                 JObject responseJSON = response.ResponseJSON;
+
                 if (responseJSON.ContainsKey(APIConstants.DATA))
                 {
                     JArray recordsArray = (JArray)responseJSON[APIConstants.DATA];
+
                     foreach (JObject recordDetails in recordsArray)
                     {
                         ZCRMRecord record = ZCRMRecord.GetInstance(module.ApiName, Convert.ToInt64(recordDetails["id"]));
+
                         EntityAPIHandler.GetInstance(record).SetRecordProperties(recordDetails);
+
                         recordsList.Add(record);
                     }
                 }
+
                 response.BulkData = recordsList;
+
                 return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
+
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
             }
         }
@@ -515,16 +629,21 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             foreach (KeyValuePair<string, JToken> trashRecordDetail in trashRecordDetails)
             {
                 string fieldAPIName = Convert.ToString(trashRecordDetail.Key);
+
                 if (fieldAPIName.Equals("created_by") && trashRecordDetail.Value.Type != JTokenType.Null)
                 {
                     JObject createdByObject = (JObject)trashRecordDetail.Value;
+
                     ZCRMUser createdUser = ZCRMUser.GetInstance(Convert.ToInt64(createdByObject["id"]), (string)createdByObject["name"]);
+
                     trashRecord.CreatedBy = createdUser;
                 }
                 else if (fieldAPIName.Equals("deleted_by") && trashRecordDetail.Value.Type != JTokenType.Null)
                 {
                     JObject modifiedByObject = (JObject)trashRecordDetail.Value;
+
                     ZCRMUser DeletedByUser = ZCRMUser.GetInstance(Convert.ToInt64(modifiedByObject["id"]), (string)modifiedByObject["name"]);
+
                     trashRecord.DeletedBy = DeletedByUser;
                 }
                 else if (fieldAPIName.Equals("display_name"))

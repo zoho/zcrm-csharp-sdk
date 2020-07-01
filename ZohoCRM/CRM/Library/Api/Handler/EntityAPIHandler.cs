@@ -1,12 +1,21 @@
 ﻿using System;
+
 using System.Collections.Generic;
+
 using Newtonsoft.Json.Linq;
+
 using ZCRMSDK.CRM.Library.CRUD;
+
 using ZCRMSDK.CRM.Library.Setup.Users;
+
 using ZCRMSDK.CRM.Library.Api.Response;
+
 using ZCRMSDK.CRM.Library.CRMException;
+
 using ZCRMSDK.CRM.Library.Common;
+
 using Newtonsoft.Json;
+
 using System.IO;
 
 namespace ZCRMSDK.CRM.Library.Api.Handler
@@ -526,54 +535,67 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             {
                 files.Extn = file["extn"].ToString();
             }
+
             if (file.ContainsKey("is_Preview_Available") && file["is_Preview_Available"].Type != JTokenType.Null)
             {
                 files.IsPreviewAvailable = (bool)file["is_Preview_Available"];
             }
+
             if (file.ContainsKey("download_Url") && file["download_Url"].Type != JTokenType.Null)
             {
                 files.DownloadUrl = file["download_Url"].ToString();
             }
+
             if (file.ContainsKey("delete_Url") && file["delete_Url"].Type != JTokenType.Null)
             {
                 files.DeleteUrl = file["delete_Url"].ToString();
             }
+
             if (file.ContainsKey("entity_Id") && file["entity_Id"].Type != JTokenType.Null)
             {
                 files.EntityId = Convert.ToInt64(file["entity_Id"]);
             }
+
             if (file.ContainsKey("mode") && file["mode"].Type != JTokenType.Null)
             {
                 files.Mode = file["mode"].ToString();
             }
+
             if (file.ContainsKey("original_Size_Byte") && file["original_Size_Byte"].Type != JTokenType.Null)
             {
                 files.OriginalSizeByte = Convert.ToInt64(file["original_Size_Byte"]);
             }
+
             if (file.ContainsKey("preview_Url") && file["preview_Url"].Type != JTokenType.Null)
             {
                 files.PreviewUrl = file["preview_Url"].ToString();
             }
+
             if (file.ContainsKey("file_Name") && file["file_Name"].Type != JTokenType.Null)
             {
                 files.FileName = file["file_Name"].ToString();
             }
+
             if (file.ContainsKey("file_Id") && file["file_Id"].Type != JTokenType.Null)
             {
                 files.FileId = file["file_Id"].ToString();
             }
+
             if (file.ContainsKey("attachment_Id") && file["attachment_Id"].Type != JTokenType.Null)
             {
                 files.AttachmentId = file["attachment_Id"].ToString();
             }
+
             if (file.ContainsKey("file_Size") && file["file_Size"].Type != JTokenType.Null)
             {
                 files.FileSize = file["file_Size"].ToString();
             }
+
             if (file.ContainsKey("creator_Id") && file["creator_Id"].Type != JTokenType.Null)
             {
                 files.CreatorId = Convert.ToInt64(file["creator_Id"]);
             }
+
             if (file.ContainsKey("link_Docs") && file["link_Docs"].Type != JTokenType.Null)
             {
                 files.LinkDocs = (int)file["link_Docs"];
@@ -721,27 +743,27 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
             MapAsJSON(recordData, recordJSON);
 
-            if (record.LineItems != null)
+            if (record.LineItems != null && record.LineItems.Count > 0)
             {
                 recordJSON.Add("Product_Details", GetLineItemsAsJSONArray(record.LineItems));
             }
                 
-            if (record.Participants != null)
+            if (record.Participants != null && record.Participants.Count > 0)
             {
                 recordJSON.Add("Participants", GetParticipantsAsJSONArray(record.Participants));
             }
 
-            if (record.PriceDetails != null)
+            if (record.PriceDetails != null && record.PriceDetails.Count > 0)
             {
                 recordJSON.Add("Pricing_Details", GetPriceDetailsAsJSONArray(record.PriceDetails));
             }
 
-            if (record.TaxList != null && record.ModuleAPIName.Equals("Products"))
+            if ((record.TaxList != null && record.TaxList.Count > 0) && record.ModuleAPIName.Equals("Products"))
             {
                 recordJSON.Add("Tax", GetTaxAsJSONArray(record.TaxList));
             }
 
-            if (record.TaxList != null)
+            if (record.TaxList != null && record.TaxList.Count > 0)
             {
                 recordJSON.Add("$line_tax", GetTaxAsJSONArray(record.TaxList));
             }
