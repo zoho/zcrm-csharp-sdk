@@ -17,7 +17,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <PackageId>ZCRMSDK</PackageId>
-    <PackageVersion>2.2.1</PackageVersion>
+    <PackageVersion>2.2.2</PackageVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Authors>Zoho CRM API Team</Authors>
     <Description>Provides C# SDK support for Zoho CRM APIs.</Description>
@@ -26,7 +26,7 @@
     <Summary>C# SDK offers a way to create client C# applications that can be integrated with Zoho CRM. This SDK makes the access and use of necessary CRM APIs with ease.</Summary>
     <PackageTags>ZCRMSDK,zohocrm,sdk,zcrmsdk,zoho</PackageTags>
     <Title>ZCRMSDK</Title>
-    <PackageReleaseNotes>Fixed improper header processing in GetAllDeletedRecords method.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added extra validation before adding data to the request body.</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <Optimize>true</Optimize>
