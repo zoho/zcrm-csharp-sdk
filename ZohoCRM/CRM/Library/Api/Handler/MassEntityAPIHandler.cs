@@ -36,7 +36,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         }
 
 
-        public BulkAPIResponse<ZCRMRecord> CreateRecords(List<ZCRMRecord> records, List<string> trigger, string lar_id)
+        public BulkAPIResponse<ZCRMRecord> CreateRecords(List<ZCRMRecord> records, List<string> trigger, string lar_id, List<string> process)
         {
             try
             {
@@ -75,6 +75,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 if (lar_id != null)
                 {
                     requestBodyObject.Add("lar_id", lar_id);
+                }
+
+                if (process != null && process.Count > 0)
+                {
+                    requestBodyObject.Add("process", JArray.FromObject(process));
                 }
 
                 requestBody = requestBodyObject;
@@ -123,7 +128,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
         }
 
-        public BulkAPIResponse<ZCRMRecord> UpdateRecords(List<ZCRMRecord> records, List<string> trigger)
+        public BulkAPIResponse<ZCRMRecord> UpdateRecords(List<ZCRMRecord> records, List<string> trigger, List<string> process)
         {
             try
             {
@@ -155,6 +160,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 if (trigger != null && trigger.Count > 0)
                 {
                     requestBodyObject.Add("trigger", JArray.FromObject(trigger));
+                }
+
+                if (process != null && process.Count > 0)
+                {
+                    requestBodyObject.Add("process", JArray.FromObject(process));
                 }
 
                 requestBody = requestBodyObject;

@@ -794,13 +794,13 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <returns>BulkAPIResponse&lt;ZCRMRecord&gt; class instance.</returns>
         /// <param name="records">List of ZCRMRecord class instances</param>
-        public BulkAPIResponse<ZCRMRecord> CreateRecords(List<ZCRMRecord> records, List<string> trigger = null, string lar_id = null)
+        public BulkAPIResponse<ZCRMRecord> CreateRecords(List<ZCRMRecord> records, List<string> trigger = null, string lar_id = null, List<string> process = null)
         {
             if (records == null || records.Count == 0)
             {
                 throw new ZCRMException(" Records list MUST NOT be null for Create operation");
             }
-            return MassEntityAPIHandler.GetInstance(this).CreateRecords(records, trigger, lar_id);
+            return MassEntityAPIHandler.GetInstance(this).CreateRecords(records, trigger, lar_id, process);
         }
 
         /// <summary>
@@ -824,13 +824,13 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <returns>BulkAPIResponse&lt;ZCRMRecord&gt; class instance.</returns>
         /// <param name="records">List of ZCRMRecord class instance</param>
-        public BulkAPIResponse<ZCRMRecord> UpdateRecords(List<ZCRMRecord> records, List<string> trigger = null)
+        public BulkAPIResponse<ZCRMRecord> UpdateRecords(List<ZCRMRecord> records, List<string> trigger = null, List<string> process = null)
         {
             if (records == null || records.Count == 0)
             {
                 throw new ZCRMException("Entity ID list MUST NOT be null/empty for update operation");
             }
-            return MassEntityAPIHandler.GetInstance(this).UpdateRecords(records, trigger);
+            return MassEntityAPIHandler.GetInstance(this).UpdateRecords(records, trigger, process);
         }
 
         /// <summary>

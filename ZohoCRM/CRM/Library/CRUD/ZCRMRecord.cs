@@ -478,20 +478,20 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// To create the record.
         /// </summary>
         /// <returns>APIResponse class instance</returns>
-        public APIResponse Create(List<string> trigger = null, string lar_id = null)
+        public APIResponse Create(List<string> trigger = null, string lar_id = null, List<string> process = null)
         {
             if (EntityId != null) { throw new ZCRMException("Entity ID MUST be NUL for Create Operation"); }
-            return EntityAPIHandler.GetInstance(this).CreateRecord(trigger, lar_id);
+            return EntityAPIHandler.GetInstance(this).CreateRecord(trigger, lar_id, process);
         }
 
         /// <summary>
         /// To update the record.
         /// </summary>
         /// <returns>APIResponse class instance.</returns>
-        public APIResponse Update(List<string> trigger = null)
+        public APIResponse Update(List<string> trigger = null, List<string> process = null)
         {
             if (EntityId == null) { throw new ZCRMException("Entity ID MUST NOT be NULl for update operation"); }
-            return EntityAPIHandler.GetInstance(this).UpdateRecord(trigger);
+            return EntityAPIHandler.GetInstance(this).UpdateRecord(trigger, process);
         }
 
         /// <summary>
