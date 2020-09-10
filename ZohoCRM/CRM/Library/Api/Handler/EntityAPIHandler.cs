@@ -960,8 +960,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 lineTaxArray.Add(lineTax);
             }
 
-            lineItem.Add("line_tax", lineTaxArray);
-
+            if(lineTaxArray.Count > 0)
+            {
+                lineItem.Add("line_tax", lineTaxArray);
+            }
+            
             return lineItem;
         }
 
