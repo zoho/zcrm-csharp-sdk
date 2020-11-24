@@ -115,6 +115,8 @@ namespace ZCRMSDK.CRM.Library.CRMException
             if (Trace.Listeners.Count > 1 && defaultTrace != null)
             {
                 defaultTrace.WriteLine(message, timestamp + " [" + messageHeader + "]");
+
+                defaultTrace.Flush();
             }
             else
             {
