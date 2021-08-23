@@ -21,11 +21,11 @@ Setting Up
 C# SDK is available as a `Nuget` Package. The `ZCRMSDK` Assembly can be installed through `Nuget Package Manager` and through the following options:
 Package Manager:
 
-	>Install-Package ZCRMSDK --version 2.2.2/
+	>Install-Package ZCRMSDK --version 2.2.4/
 
 .NET CLI:
 
-	>dotnet add package ZCRMSDK --version 2.2.2/
+	>dotnet add package ZCRMSDK --version 2.2.4/
 
 >**Note:** The C# SDK is built against .net framework v4.6.1.
 
@@ -251,23 +251,23 @@ The class relations and hierarchy of the SDK follows the entity hierarchy inside
     -ZCRMRestClient
      -ZCRMOrganization
        -ZCRMUser
-       -ZCRMRole  
-       -ZCRMProfile 
-     -ZCRMModule    
-       -ZCRMLayout   
-         -ZCRMSection     
-           -ZCRMField          
-           -ZCRMPickListValue     
+       -ZCRMRole 
+       -ZCRMProfile
+     -ZCRMModule   
+       -ZCRMLayout  
+         -ZCRMSection    
+           -ZCRMField         
+           -ZCRMPickListValue    
        -ZCRMCustomView
-		   -ZCRMTag  
-       -ZCRMModuleRelation  
-         -ZCRMJunctionRecord   
-       -ZCRMRecord   
-         -ZCRMInventoryLineItem   
-           -ZCRMTax      
-         -ZCRMPriceBookPricing  
-         -ZCRMEventParticipant  
-         -ZCRMNote       
+		   -ZCRMTag 
+       -ZCRMModuleRelation 
+         -ZCRMJunctionRecord  
+       -ZCRMRecord  
+         -ZCRMInventoryLineItem  
+           -ZCRMTax     
+         -ZCRMPriceBookPricing 
+         -ZCRMEventParticipant 
+         -ZCRMNote      
          -ZCRMAttachment
        -ZCRMTrashRecord
        

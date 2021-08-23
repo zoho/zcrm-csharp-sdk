@@ -659,40 +659,70 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
             lineItem.Product = product;
 
-            lineItem.Quantity = Convert.ToDouble(lineItemJSON["quantity"]);
+            if (lineItemJSON.ContainsKey("quantity") && lineItemJSON["quantity"].Type != JTokenType.Null)
+            {
+                lineItem.Quantity = Convert.ToDouble(lineItemJSON["quantity"]);
+            }
 
-            lineItem.Discount = Convert.ToDouble(lineItemJSON["Discount"]);
+            if (lineItemJSON.ContainsKey("Discount") && lineItemJSON["Discount"].Type != JTokenType.Null)
+            {
+                lineItem.Discount = Convert.ToDouble(lineItemJSON["Discount"]);
+            }
 
-            lineItem.TotalAfterDiscount = Convert.ToDouble(lineItemJSON["total_after_discount"]);
+            if (lineItemJSON.ContainsKey("total_after_discount") && lineItemJSON["total_after_discount"].Type != JTokenType.Null)
+            {
+                lineItem.TotalAfterDiscount = Convert.ToDouble(lineItemJSON["total_after_discount"]);
+            }
 
-            lineItem.NetTotal = Convert.ToDouble(lineItemJSON["net_total"]);
+            if (lineItemJSON.ContainsKey("net_total") && lineItemJSON["net_total"].Type != JTokenType.Null)
+            {
+                lineItem.NetTotal = Convert.ToDouble(lineItemJSON["net_total"]);
+            }
 
-            lineItem.TaxAmount = Convert.ToDouble(lineItemJSON["Tax"]);
+            if (lineItemJSON.ContainsKey("Tax") && lineItemJSON["Tax"].Type != JTokenType.Null)
+            {
+                lineItem.TaxAmount = Convert.ToDouble(lineItemJSON["Tax"]);
+            }
 
-            lineItem.ListPrice = Convert.ToDouble(lineItemJSON["list_price"]);
+            if (lineItemJSON.ContainsKey("list_price") && lineItemJSON["list_price"].Type != JTokenType.Null)
+            {
+                lineItem.ListPrice = Convert.ToDouble(lineItemJSON["list_price"]);
+            }
 
             if(lineItemJSON.ContainsKey("unit_price") && lineItemJSON["unit_price"].Type != JTokenType.Null)
             {
                 lineItem.UnitPrice = Convert.ToDouble(lineItemJSON["unit_price"]);
             }
 
-            lineItem.QuantityInStock = Convert.ToInt32(lineItemJSON["quantity_in_stock"]);
-
-            lineItem.Total = Convert.ToDouble(lineItemJSON["total"]);
-
-            lineItem.Description = (string)lineItemJSON["product_description"];
-
-            JArray lineTaxes = (JArray)lineItemJSON["line_tax"];
-
-            foreach (JObject lineTax in lineTaxes)
+            if (lineItemJSON.ContainsKey("quantity_in_stock") && lineItemJSON["quantity_in_stock"].Type != JTokenType.Null)
             {
-                ZCRMTax tax = ZCRMTax.GetInstance((string)lineTax["name"]);
+                lineItem.QuantityInStock = Convert.ToInt32(lineItemJSON["quantity_in_stock"]);
+            }
 
-                tax.Percentage = Convert.ToDouble(lineTax["percentage"]);
+            if (lineItemJSON.ContainsKey("total") && lineItemJSON["total"].Type != JTokenType.Null)
+            {
+                lineItem.Total = Convert.ToDouble(lineItemJSON["total"]);
+            }
 
-                tax.Value = Convert.ToDouble(lineTax["value"]);
+            if (lineItemJSON.ContainsKey("product_description") && lineItemJSON["product_description"].Type != JTokenType.Null)
+            {
+                lineItem.Description = (string)lineItemJSON["product_description"];
+            }
 
-                lineItem.AddLineTax(tax);
+            if (lineItemJSON.ContainsKey("line_tax") && lineItemJSON["line_tax"].Type != JTokenType.Null)
+            {
+                JArray lineTaxes = (JArray)lineItemJSON["line_tax"];
+
+                foreach (JObject lineTax in lineTaxes)
+                {
+                    ZCRMTax tax = ZCRMTax.GetInstance((string)lineTax["name"]);
+
+                    tax.Percentage = Convert.ToDouble(lineTax["percentage"]);
+
+                    tax.Value = Convert.ToDouble(lineTax["value"]);
+
+                    lineItem.AddLineTax(tax);
+                }
             }
 
             return lineItem;
