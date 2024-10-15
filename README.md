@@ -2,14 +2,7 @@
 # Archival Notice:
 
 This SDK is archived. You can continue to use it, but no new features or support requests will be accepted. For the new version, refer to
-
-ZOHO CRM v2 API SDK :
-- [GitHub Repository](https://github.com/zoho/zohocrm-csharp-sdk-2.0)
-- [Help Doc](https://www.zoho.com/crm/developer/docs/csharp-sdk/v2/overview.html)
-
-ZOHO CRM v2.1 API SDK :
-- [GitHub Repository](https://github.com/zoho/zohocrm-csharp-sdk-2.1)
-- [Help Doc](https://www.zoho.com/crm/developer/docs/api2.1/csharp-sdk/v1/overview.html)
+https://www.zoho.com/crm/developer/docs/sdk/server-side/csharp-sdk.html
 
 # C# SDK for Zoho CRM
 ----------------------
