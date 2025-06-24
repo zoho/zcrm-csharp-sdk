@@ -23,27 +23,65 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <value>The display name of the pick list.</value>
         /// <returns>String</returns>
-        public string DisplayName { get => displayName; set => displayName = value; }
+        public string DisplayName
+        {
+            get
+            {
+                return displayName;
+            }
+            set
+            {
+                displayName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the actual name of/for the pick list.
         /// </summary>
         /// <value>The actual name of the pick list.</value>
         /// <returns>String</returns>
-        public string ActualName { get => actualName; set => actualName = value; }
+        public string ActualName
+        {
+            get
+            {
+                return actualName;
+            }
+            set
+            {
+                actualName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the sequence number of/for the pick list.
         /// </summary>
         /// <value>The sequence number of the pick list.</value>
         /// <returns>Integer</returns>
-        public int SequenceNumber { get => sequenceNumber; set => sequenceNumber = value; }
+        public int SequenceNumber { get
+            {
+                return sequenceNumber;
+            }
+            set
+            {
+                sequenceNumber = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the maps of/for the pick list.
         /// </summary>
         /// <value>The maps of the pick list.</value>
         /// <returns>JSON Array(JArray)</returns>
-        public JArray Maps { get => maps; set => maps = value; }
+        public JArray Maps
+        {
+            get
+            {
+                return maps;
+            }
+            set
+            {
+                maps = value;
+            }
+        }
     }
 }

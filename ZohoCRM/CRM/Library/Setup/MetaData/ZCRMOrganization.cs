@@ -20,7 +20,7 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
         private string mobile;
         private string phone;
         private string fax;
-        private int employeeCount;
+        private long employeeCount;
         private string description;
         private string timezone;
         private string isoCode;
@@ -34,6 +34,17 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
         private string countryCode;
         private bool mcStatus;
         private bool gappsEnabled;
+
+        private string photoId;
+        private string currency;
+        private string ziaPortalId;
+        private bool privacySettings;
+        private bool paidAccount;
+        private string paidExpiry;
+        private int usersLicensePurchased;
+        private string trialType;
+        private string trialExpiry;
+        private string paidType;
 
 
         private ZCRMOrganization(string orgName, long? orgId)
@@ -67,168 +78,541 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
         /// </summary>
         /// <value>The company name of the Organization.</value>
         /// <returns>String</returns>
-        public string CompanyName { get => companyName; private set => companyName = value; }
+        public string CompanyName
+        {
+            get
+            {
+                return companyName;
+            }
+            private set
+            {
+                companyName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the alias name of/for the Organization.
         /// </summary>
         /// <value>The alias name of the Organization.</value>
         /// <returns>String</returns>
-        public string Alias { get => alias; set => alias = value; }
+        public string Alias
+        {
+            get
+            {
+                return alias;
+            }
+            set
+            {
+                alias = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the Id of/for the Organization.
         /// </summary>
         /// <value>The Id of the Organization.</value>
         /// <returns>Long</returns>
-        public long? OrgId { get => orgId; set => orgId = value; }
+        public long? OrgId
+        {
+            get
+            {
+                return orgId;
+            }
+            set
+            {
+                orgId = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the primary Zoho Unique Id of/for the Organization.
         /// </summary>
         /// <value>The primary Zoho Unique Id of the Organization.</value>
         /// <returns>Long</returns>
-        public long PrimaryZuid { get => primaryZuid; set => primaryZuid = value; }
+        public long PrimaryZuid
+        {
+            get
+            {
+                return primaryZuid;
+            }
+            set
+            {
+                primaryZuid = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the ZGID of/for the Organization.
         /// </summary>
         /// <value>The ZGID of the Organization.</value>
         /// <returns>Long</returns>
-        public long Zgid { get => zgid; set => zgid = value; }
+        public long Zgid
+        {
+            get
+            {
+                return zgid;
+            }
+            set
+            {
+                zgid = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the primary email of/for the Organization.
         /// </summary>
         /// <value>The primary emai of the Organization.</value>
         /// <returns>String</returns>
-        public string PrimaryEmail { get => primaryEmail; set => primaryEmail = value; }
+        public string PrimaryEmail
+        {
+            get
+            {
+                return primaryEmail;
+            }
+            set
+            {
+                primaryEmail = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the website of/for the Organization.
         /// </summary>
         /// <value>The website of the Organization.</value>
         /// <returns>String</returns>
-        public string Website { get => website; set => website = value; }
+        public string Website
+        {
+            get
+            {
+                return website;
+            }
+            set
+            {
+                website = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the mobile number of/for the Organization.
         /// </summary>
         /// <value>The mobile number of the Organization.</value>
         /// <returns>String</returns>
-        public string Mobile { get => mobile; set => mobile = value; }
+        public string Mobile
+        {
+            get
+            {
+                return mobile;
+            }
+            set
+            {
+                mobile = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the phone number of/for the Organization.
         /// </summary>
         /// <value>The phone number of the Organization.</value>
         /// <returns>String</returns>
-        public string Phone { get => phone; set => phone = value; }
+        public string Phone
+        {
+            get
+            {
+                return phone;
+            }
+            set
+            {
+                phone = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the fax of/for the Organization.
         /// </summary>
         /// <value>The fax of the Organization.</value>
         /// <returns>String</returns>
-        public string Fax { get => fax; set => fax = value; }
+        public string Fax
+        {
+            get
+            {
+                return fax;
+            }
+            set
+            {
+                fax = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the employee count of/for the Organization.
         /// </summary>
         /// <value>The employee count of the Organization.</value>
         /// <returns>Integer</returns>
-        public int EmployeeCount { get => employeeCount; set => employeeCount = value; }
+        public int EmployeeCount
+        {
+            get
+            {
+                return (int)employeeCount;
+            }
+            set
+            {
+                employeeCount = value;
+            }
+        }
 
+        public long EmployeeCountLong
+        {
+            get
+            {
+                return employeeCount;
+            }
+            set
+            {
+                employeeCount = value;
+            }
+        }
+        
         /// <summary>
         /// Gets or sets the description of/for the Organization.
         /// </summary>
         /// <value>The description of the Organization.</value>
         /// <returns>String</returns>
-        public string Description { get => description; set => description = value; }
+        public string Description
+        {
+            get
+            {
+                return description;
+            }
+            set
+            {
+                description = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the timezone of/for the Organization.
         /// </summary>
         /// <value>The timezone of the Organization.</value>
         /// <returns>String</returns>
-        public string Timezone { get => timezone; set => timezone = value; }
+        public string Timezone
+        {
+            get
+            {
+                return timezone;
+            }
+            set
+            {
+                timezone = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the iso code of/for the Organization.
         /// </summary>
         /// <value>The iso code of the Organization.</value>
         /// <returns>String</returns>
-        public string IsoCode { get => isoCode; set => isoCode = value; }
+        public string IsoCode
+        {
+            get
+            {
+                return isoCode;
+            }
+            set
+            {
+                isoCode = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the street of/for the Organization.
         /// </summary>
         /// <value>The street of the Organization.</value>
         /// <returns>String</returns>
-        public string Street { get => street; set => street = value; }
+        public string Street
+        {
+            get
+            {
+                return street;
+            }
+            set
+            {
+                street = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the state of/for the Organization.
         /// </summary>
         /// <value>The state of the Organization. </value>
         /// <returns>String</returns>
-        public string State { get => state; set => state = value; }
+        public string State
+        {
+            get
+            {
+                return state;
+            }
+            set
+            {
+                state = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the city of/for the Organization.
         /// </summary>
         /// <value>The city of the Organization.</value>
         /// <returns>String</returns>
-        public string City { get => city; set => city = value; }
+        public string City
+        {
+            get
+            {
+                return city;
+            }
+            set
+            {
+                city = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the country of/for the Organization.
         /// </summary>
         /// <value>The country of the Organization.</value>
         /// <returns>String</returns>
-        public string Country { get => country; set => country = value; }
+        public string Country
+        {
+            get
+            {
+                return country;
+            }
+            set
+            {
+                country = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the zip code of/for the Organization.
         /// </summary>
         /// <value>The zip code of the Organization.</value>
         /// <returns>String</returns>
-        public string ZipCode { get => zipCode; set => zipCode = value; }
+        public string ZipCode
+        {
+            get
+            {
+                return zipCode;
+            }
+            set
+            {
+                zipCode = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the country code of the Organization.
         /// </summary>
         /// <value>The country code of the Organization.</value>
         /// <returns>String</returns>
-        public string CountryCode { get => countryCode; set => countryCode = value; }
+        public string CountryCode
+        {
+            get
+            {
+                return countryCode;
+            }
+            set
+            {
+                countryCode = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this Organization mc status.
         /// </summary>
         /// <value><c>true</c> if mc status; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool McStatus { get => mcStatus; set => mcStatus = value; }
+        public bool McStatus
+        {
+            get
+            {
+                return mcStatus;
+            }
+            set
+            {
+                mcStatus = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this Organization gapps enabled.
         /// </summary>
         /// <value><c>true</c> if gapps enabled; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool GappsEnabled { get => gappsEnabled; set => gappsEnabled = value; }
+        public bool GappsEnabled
+        {
+            get
+            {
+                return gappsEnabled;
+            }
+            set
+            {
+                gappsEnabled = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the currency locale of/for the Organization.
         /// </summary>
         /// <value>The currency locale of the Organization.</value>
         /// <returns>String</returns>
-        public string CurrencyLocale { get => currencyLocale; set => currencyLocale = value; }
+        public string CurrencyLocale
+        {
+            get
+            {
+                return currencyLocale;
+            }
+
+            set
+            {
+                currencyLocale = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the currency symbol of/for the Organization.
         /// </summary>
         /// <value>The currency symbol of the Organization.</value>
         /// <returns>String</returns>
-        public string CurrencySymbol { get => currencySymbol; set => currencySymbol = value; }
+        public string CurrencySymbol
+        {
+            get
+            {
+                return currencySymbol;
+            }
+            set
+            {
+                currencySymbol = value;
+            }
+        }
+
+        public string PhotoId
+        {
+            get
+            {
+                return photoId;
+            }
+            set
+            {
+                photoId = value;
+            }
+        }
+
+        public string Currency
+        {
+            get
+            {
+                return currency;
+            }
+            set
+            {
+                currency = value;
+            }
+        }
+
+        public string ZiaPortalId
+        {
+            get
+            {
+                return ziaPortalId;
+            }
+            set
+            {
+                ziaPortalId = value;
+            }
+        }
+
+        public bool PrivacySettings
+        {
+            get
+            {
+                return privacySettings;
+            }
+            set
+            {
+                privacySettings = value;
+            }
+        }
+
+        public bool PaidAccount
+        {
+            get
+            {
+                return paidAccount;
+            }
+            set
+            {
+                paidAccount = value;
+            }
+        }
+
+        public string PaidExpiry
+        {
+            get
+            {
+                return paidExpiry;
+            }
+            set
+            {
+                paidExpiry = value;
+            }
+        }
+
+        public int UsersLicensePurchased
+        {
+            get
+            {
+                return usersLicensePurchased;
+            }
+            set
+            {
+                usersLicensePurchased = value;
+            }
+        }
+
+        public string TrialType
+        {
+            get
+            {
+                return trialType;
+            }
+            set
+            {
+                trialType = value;
+            }
+        }
+
+        public string TrialExpiry
+        {
+            get
+            {
+                return trialExpiry;
+            }
+            set
+            {
+                trialExpiry = value;
+            }
+        }
+
+        public string PaidType
+        {
+            get
+            {
+                return paidType;
+            }
+            set
+            {
+                paidType = value;
+            }
+        }
 
         /// <summary>
         /// Gets all users of the Organization.
@@ -327,7 +711,7 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
         /// <returns>BulkAPIResponse&lt;ZCRMUser&gt; class instance.</returns>
         public BulkAPIResponse<ZCRMUser> GetAllActiveConfirmedUsers()
         {
-            return OrganizationAPIHandler.GetInstance().GetAllActiveConfirmedUsers(1, 200);
+            return GetAllActiveConfirmedUsers(1, 200);
         }
 
         /// <summary>
@@ -347,7 +731,7 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
         /// <returns>BulkAPIResponse&lt;ZCRMUser&gt; class instance.</returns>
         public BulkAPIResponse<ZCRMUser> GetAllAdminUsers()
         {
-            return OrganizationAPIHandler.GetInstance().GetAllAdminUsers(1, 200);
+            return GetAllAdminUsers(1, 200);
         }
 
         /// <summary>
@@ -367,7 +751,7 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
         /// <returns>BulkAPIResponse&lt;ZCRMUser&gt; class instance.</returns>
         public BulkAPIResponse<ZCRMUser> GetAllActiveUsers()
         {
-            return OrganizationAPIHandler.GetInstance().GetAllActiveUsers(1, 200);
+            return GetAllActiveUsers(1, 200);
         }
 
         /// <summary>
@@ -387,7 +771,7 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
         /// <returns>BulkAPIResponse&lt;ZCRMUser&gt; class instance.</returns>
         public BulkAPIResponse<ZCRMUser> GetAllInActiveUsers()
         {
-            return OrganizationAPIHandler.GetInstance().GetAllDeactivatedUsers(1, 200);
+            return GetAllInActiveUsers(1, 200);
         }
 
         /// <summary>
@@ -543,6 +927,36 @@ namespace ZCRMSDK.CRM.Library.Setup.MetaData
                 throw new ZCRMException("Tax ID list MUST NOT be null/empty for delete operation");
             }
             return OrganizationAPIHandler.GetInstance().DeleteTaxes(taxIds);
+        }
+
+        /// <summary>
+        /// Creates the user.
+        /// </summary>
+        /// <returns>The user instance.</returns>
+        /// <param name="userInstance">User instance.</param>
+        public APIResponse CreateUser(ZCRMUser userInstance)
+        {
+            return OrganizationAPIHandler.GetInstance().CreateUser(userInstance);
+        }
+
+        /// <summary>
+        /// Updates the user.
+        /// </summary>
+        /// <returns>The user instance.</returns>
+        /// <param name="userInstance">User instance.</param>
+        public APIResponse UpdateUser(ZCRMUser userInstance)
+        {
+            return OrganizationAPIHandler.GetInstance().UpdateUser(userInstance);
+        }
+
+        /// <summary>
+        /// Deletes the user.
+        /// </summary>
+        /// <returns>The user identifier.</returns>
+        /// <param name="userId">User identifier.</param>
+        public APIResponse DeleteUser(long userId)
+        {
+            return OrganizationAPIHandler.GetInstance().DeleteUser(userId);
         }
 
     }

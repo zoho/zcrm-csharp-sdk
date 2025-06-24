@@ -1,6 +1,9 @@
-﻿using ZCRMSDK.CRM.Library.Api.Handler;
+﻿using System.Collections.Generic;
+using ZCRMSDK.CRM.Library.Api.Handler;
 using ZCRMSDK.CRM.Library.Api.Response;
 using ZCRMSDK.CRM.Library.Common;
+using ZCRMSDK.CRM.Library.CRMException;
+using ZCRMSDK.CRM.Library.CRUD;
 
 namespace ZCRMSDK.CRM.Library.Setup.Users
 {
@@ -40,11 +43,34 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
         private string modifiedTime;
         private ZCRMUser reportingTo;
 
+        private bool microsoft;
+        private int number;
+        private long offset;
+        private string signature;
+        private ZCRMUserCustomizeInfo customizeInfo;
+        private bool isPersonalAccount;
+        private string defaultTabGroup;
+        private ZCRMUserTheme theme;
+        private string zip;
+        private string decimalSeparator;
+        private List<ZCRMTerritory> territories;
+        private bool isOnline;
+        private string currency;
+        private Dictionary<string, object> fieldNameVsValue = new Dictionary<string, object>();
+        public static List<string> defaultKeys = new List<string>() { "Reporting_To", "Currency", "Modified_Time", "created_time", "territories", "reporting_to", "Isonline", "created_by", "Modified_By", "country", "id", "name", "role", "customize_info", "city", "signature", "name_format", "language", "locale", "personal_account", "default_tab_group", "alias", "street", "theme", "state", "country_locale", "fax", "first_name", "email", "zip", "decimal_separator", "website", "time_format", "profile", "mobile", "last_name", "time_zone", "zuid", "confirm", "full_name", "phone", "dob", "date_format", "status", "microsoft" };
+
+        private ZCRMUser() { }
 
         private ZCRMUser(long userId, string fullName)
         {
             Id = userId;
             FullName = fullName;
+
+        }
+        private ZCRMUser(string last_name, string email)
+        {
+            LastName = last_name;
+            EmailId = email;
 
         }
 
@@ -60,6 +86,15 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
         }
 
         /// <summary>
+        /// To get ZohoCRM user instance
+        /// </summary>
+        /// <returns>ZCRMUser class instance.</returns>
+        public static ZCRMUser GetInstance()
+        {
+            return new ZCRMUser();
+        }
+
+        /// <summary>
         /// To get ZohoCRM user instance by passing user Id.
         /// </summary>
         /// <returns>ZCRMUser class instance.</returns>
@@ -70,229 +105,808 @@ namespace ZCRMSDK.CRM.Library.Setup.Users
         }
 
         /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        /// <returns>The instance.</returns>
+        /// <param name="last_name">Last name.</param>
+        /// <param name="email">Email.</param>
+        public static ZCRMUser GetInstance(string last_name, string email)
+        {
+            return new ZCRMUser(last_name, email);
+        }
+
+        /// <summary>
         /// Gets the user Id.
         /// </summary>
         /// <value>Id of the user.</value>
         /// <returns>Long</returns>
-        public long Id { get => id; private set => id = value; }
+        public long Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the Zoho Unique Id of/for the user.
         /// </summary>
         /// <value>The Zoho Unique Id of the user.</value>
         /// <returns>Long</returns>
-        public long? ZuId { get => zuId; set => zuId = value; }
+        public long? ZuId
+        {
+            get
+            {
+                return zuId;
+            }
+            set
+            {
+                zuId = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the first name of/for the user.
         /// </summary>
         /// <value>the first name for the user.</value>
         /// <returns>String</returns>
-        public string FirstName { get => firstName; set => firstName = value; }
+        public string FirstName
+        {
+            get
+            {
+                return firstName;
+            }
+            set
+            {
+                firstName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the last name of/for the user.
         /// </summary>
         /// <value>The last name of the user.</value>
         /// <returns>String</returns>
-        public string LastName { get => lastName; set => lastName = value; }
+        public string LastName
+        {
+            get
+            {
+                return lastName;
+            }
+            set
+            {
+                lastName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the full name of/for the user.
         /// </summary>
         /// <value>The full name of the user.</value>
         /// <returns>String</returns>
-        public string FullName { get => fullName; set => fullName = value; }
+        public string FullName
+        {
+            get
+            {
+                return fullName;
+            }
+            set
+            {
+                fullName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the email Id of/for the user.
         /// </summary>
         /// <value>The email Id of the user.</value>
         /// <returns>String</returns>
-        public string EmailId { get => emailId; set => emailId = value; }
+        public string EmailId
+        {
+            get
+            {
+                return emailId;
+            }
+            set
+            {
+                emailId = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the mobile number of/for the user.
         /// </summary>
         /// <value>The mobile number of the user.</value>
         /// <returns>String</returns>
-        public string Mobile { get => mobile; set => mobile = value; }
+        public string Mobile
+        {
+            get
+            {
+                return mobile;
+            }
+            set
+            {
+                mobile = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the language of/for the user.
         /// </summary>
         /// <value>The language of the user.</value>
         /// <returns>String</returns>
-        public string Language { get => language; set => language = value; }
+        public string Language
+        {
+            get
+            {
+                return language;
+            }
+            set
+            {
+                language = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the alias name of/for the user.
         /// </summary>
         /// <value>The alias name of the user.</value>
         /// <returns>String</returns>
-        public string Alias { get => alias; set => alias = value; }
+        public string Alias
+        {
+            get
+            {
+                return alias;
+            }
+            set
+            {
+                alias = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the city of/for the user.
         /// </summary>
         /// <value>The city of the user.</value>
         /// <returns>String</returns>
-        public string City { get => city; set => city = value; }
+        public string City
+        {
+            get
+            {
+                return city;
+            }
+            set
+            {
+                city = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the country of/for the user.
         /// </summary>
         /// <value>The country of the user.</value>
         /// <returns>String</returns>
-        public string Country { get => country; set => country = value; }
+        public string Country
+        {
+            get
+            {
+                return country;
+            }
+            set
+            {
+                country = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the country locale of/for the user .
         /// </summary>
         /// <value>The country locale of the user.</value>
         /// <returns>String</returns>
-        public string CountryLocale { get => countryLocale; set => countryLocale = value; }
+        public string CountryLocale
+        {
+            get
+            {
+                return countryLocale;
+            }
+            set
+            {
+                countryLocale = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the fax of/for the user.
         /// </summary>
         /// <value>The fax of the user.</value>
         /// <returns>String</returns>
-        public string Fax { get => fax; set => fax = value; }
+        public string Fax
+        {
+            get
+            {
+                return fax;
+            }
+            set
+            {
+                fax = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the date format of/for the user.
         /// </summary>
         /// <value>The date format of the user.</value>
         /// <returns>String</returns>
-        public string DateFormat { get => dateFormat; set => dateFormat = value; }
+        public string DateFormat
+        {
+            get
+            {
+                return dateFormat;
+            }
+            set
+            {
+                dateFormat = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the time format of/for the user.
         /// </summary>
         /// <value>The time format of the user.</value>
         /// <returns>String</returns>
-        public string TimeFormat { get => timeFormat; set => timeFormat = value; }
+        public string TimeFormat
+        {
+            get
+            {
+                return timeFormat;
+            }
+            set
+            {
+                timeFormat = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the date of birth of/for the user.
         /// </summary>
         /// <value>The date of birth of the user.</value>
         /// <returns>String</returns>
-        public string DateOfBirth { get => dateOfBirth; set => dateOfBirth = value; }
+        public string DateOfBirth
+        {
+            get
+            {
+                return dateOfBirth;
+            }
+            set
+            {
+                dateOfBirth = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the locale of/for the user.
         /// </summary>
         /// <value>The locale of the user.</value>
         /// <returns>String</returns>
-        public string Locale { get => locale; set => locale = value; }
+        public string Locale
+        {
+            get
+            {
+                return locale;
+            }
+            set
+            {
+                locale = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the name format of/for the user.
         /// </summary>
         /// <value>The name format of the user.</value>
         /// <returns>String</returns>
-        public string NameFormat { get => nameFormat; set => nameFormat = value; }
+        public string NameFormat
+        {
+            get
+            {
+                return nameFormat;
+            }
+            set
+            {
+                nameFormat = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the phone number of/for the user.
         /// </summary>
         /// <value>The phone number of the user.</value>
         /// <returns>String</returns>
-        public string Phone { get => phone; set => phone = value; }
+        public string Phone
+        {
+            get
+            {
+                return phone;
+            }
+            set
+            {
+                phone = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the state of/for the user.
         /// </summary>
         /// <value>The state of the user.</value>
         /// <returns>String</returns>
-        public string State { get => state; set => state = value; }
+        public string State
+        {
+            get
+            {
+                return state;
+            }
+            set
+            {
+                state = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this user is confirm.
         /// </summary>
         /// <value><c>true</c> if confirm; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool Confirm { get => confirm; set => confirm = value; }
+        public bool Confirm
+        {
+            get
+            {
+                return confirm;
+            }
+            set
+            {
+                confirm = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the street of/for the user.
         /// </summary>
         /// <value>The street of the user.</value>
         /// <returns>String</returns>
-        public string Street { get => street; set => street = value; }
+        public string Street
+        {
+            get
+            {
+                return street;
+            }
+            set
+            {
+                street = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the time zone of/for the user.
         /// </summary>
         /// <value>The time zone of the user.</value>
         /// <returns>String</returns>
-        public string TimeZone { get => timeZone; set => timeZone = value; }
+        public string TimeZone
+        {
+            get
+            {
+                return timeZone;
+            }
+            set
+            {
+                timeZone = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the website of/for the user.
         /// </summary>
         /// <value>The website of the user.</value>
         /// <returns>String</returns>
-        public string Website { get => website; set => website = value; }
+        public string Website
+        {
+            get
+            {
+                return website;
+            }
+            set
+            {
+                website = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the status of/for the user.
         /// </summary>
         /// <value>The status of the user.</value>
         /// <returns>String</returns>
-        public string Status { get => status; set => status = value; }
+        public string Status
+        {
+            get
+            {
+                return status;
+            }
+            set
+            {
+                status = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the profile of/for the user.
         /// </summary>
         /// <value>The profile of the user.</value>
         /// <returns>ZCRMProfile class instance</returns>
-        public ZCRMProfile Profile { get => profile; set => profile = value; }
+        public ZCRMProfile Profile
+        {
+            get
+            {
+                return profile;
+            }
+            set
+            {
+                profile = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the role of/for the user.
         /// </summary>
         /// <value>The role of the user.</value>
         /// <returns>ZCRMRole class instance</returns>
-        public ZCRMRole Role { get => role; set => role = value; }
+        public ZCRMRole Role
+        {
+            get
+            {
+                return role;
+            }
+            set
+            {
+                role = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user to which the current user created.
         /// </summary>
         /// <value>The user to which the current user created.</value>
         /// <returns>ZCRMUser class instance</returns>
-        public ZCRMUser CreatedBy { get => createdBy; set => createdBy = value; }
+        public ZCRMUser CreatedBy
+        {
+            get
+            {
+                return createdBy;
+            }
+            set
+            {
+                createdBy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the created time of/for the user.
         /// </summary>
         /// <value>The created time of the user.</value>
         /// <returns>String</returns>
-        public string CreatedTime { get => createdTime; set => createdTime = value; }
+        public string CreatedTime
+        {
+            get
+            {
+                return createdTime;
+            }
+            set
+            {
+                createdTime = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user to which the current user modified.
         /// </summary>
         /// <value>The user to which the current user modified.</value>
         /// <returns>ZCRMUser class instance</returns>
-        public ZCRMUser ModifiedBy { get => modifiedBy; set => modifiedBy = value; }
+        public ZCRMUser ModifiedBy
+        {
+            get
+            {
+                return modifiedBy;
+            }
+            set
+            {
+                modifiedBy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the modified time of/for the user.
         /// </summary>
         /// <value>The modified time of the user.</value>
         /// <returns>String</returns>
-        public string ModifiedTime { get => modifiedTime; set => modifiedTime = value; }
+        public string ModifiedTime
+        {
+            get
+            {
+                return modifiedTime;
+            }
+            set
+            {
+                modifiedTime = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user to which the current user reporting to.
         /// </summary>
         /// <value>The user to which the current user reporting to.</value>
         /// <value>ZCRMUser class instance</value>
-        public ZCRMUser ReportingTo { get => reportingTo; set => reportingTo = value; }
+        public ZCRMUser ReportingTo
+        {
+            get
+            {
+                return reportingTo;
+            }
+            set
+            {
+                reportingTo = value;
+            }
+        }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:ZCRMSDK.CRM.Library.Setup.Users.ZCRMUser"/> is microsoft.
+        /// </summary>
+        /// <value><c>true</c> if microsoft; otherwise, <c>false</c>.</value>
+        public bool MicrosoftAppUser
+        {
+            get
+            {
+                return microsoft;
+            }
+            set
+            {
+                microsoft = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the signature.
+        /// </summary>
+        /// <value>The signature.</value>
+        public string Signature
+        {
+            get
+            {
+                return signature;
+            }
+            set
+            {
+                signature = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the customize info.
+        /// </summary>
+        /// <value>The customize info.</value>
+        public ZCRMUserCustomizeInfo CustomizeInfo
+        {
+            get
+            {
+                return customizeInfo;
+            }
+            set
+            {
+                customizeInfo = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:ZCRMSDK.CRM.Library.Setup.Users.ZCRMUser"/> is
+        /// personal account.
+        /// </summary>
+        /// <value><c>true</c> if is personal account; otherwise, <c>false</c>.</value>
+        public bool IsPersonalAccount
+        {
+            get
+            {
+                return isPersonalAccount;
+            }
+            set
+            {
+                isPersonalAccount = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the default tab group.
+        /// </summary>
+        /// <value>The default tab group.</value>
+        public string DefaultTabGroup
+        {
+            get
+            {
+                return defaultTabGroup;
+            }
+            set
+            {
+                defaultTabGroup = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the theme.
+        /// </summary>
+        /// <value>The theme.</value>
+        public ZCRMUserTheme Theme
+        {
+            get
+            {
+                return theme;
+            }
+            set
+            {
+                theme = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the zip.
+        /// </summary>
+        /// <value>The zip.</value>
+        public string Zip
+        {
+            get
+            {
+                return zip;
+            }
+            set
+            {
+                zip = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the decimal separator.
+        /// </summary>
+        /// <value>The decimal separator.</value>
+        public string DecimalSeparator
+        {
+            get
+            {
+                return decimalSeparator;
+            }
+            set
+            {
+                decimalSeparator = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the territories.
+        /// </summary>
+        /// <value>The territories.</value>
+        public List<ZCRMTerritory> Territories
+        {
+            get
+            {
+                return territories;
+            }
+            set
+            {
+                territories = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:ZCRMSDK.CRM.Library.Setup.Users.ZCRMUser"/> is online.
+        /// </summary>
+        /// <value><c>true</c> if is online; otherwise, <c>false</c>.</value>
+        public bool IsOnline
+        {
+            get
+            {
+                return isOnline;
+            }
+            set
+            {
+                isOnline = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the currency.
+        /// </summary>
+        /// <value>The currency.</value>
+        public string Currency
+        {
+            get
+            {
+                return currency;
+            }
+            set
+            {
+                currency = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the data.
+        /// </summary>
+        /// <value>The data.</value>
+        public Dictionary<string, object> Data
+        {
+            get
+            {
+                return fieldNameVsValue;
+            }
+            set
+            {
+                fieldNameVsValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the number.
+        /// </summary>
+        /// <value>The number.</value>
+        public int Number
+        {
+            get
+            {
+                return number;
+            }
+            set
+            {
+                number = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the off set.
+        /// </summary>
+        /// <value>The off set.</value>
+        public long OffSet
+        {
+            get
+            {
+                return offset;
+            }
+            set
+            {
+                offset = value;
+            }
+        }
+        /// <summary>
+        /// Sets the field value.
+        /// </summary>
+        /// <param name="fieldAPIName">Field APIN ame.</param>
+        /// <param name="value">Value.</param>
+        public void SetFieldValue(string fieldAPIName, object value)
+        {
+            Data.Add(fieldAPIName, value);
+        }
+
+        /// <summary>
+        /// Gets the field value.
+        /// </summary>
+        /// <returns>The field value.</returns>
+        /// <param name="fieldAPIName">Field APIN ame.</param>
+        public object GetFieldValue(string fieldAPIName)
+        {
+            if (Data.ContainsKey(fieldAPIName))
+            {
+                if (Data[fieldAPIName] == null) { return null; }
+                return Data[fieldAPIName];
+            }
+            throw new ZCRMException("The given field is not present in this user record - " + fieldAPIName);
+        }
         /// <summary>
         /// To downloads the profile pic of the user.
         /// </summary>

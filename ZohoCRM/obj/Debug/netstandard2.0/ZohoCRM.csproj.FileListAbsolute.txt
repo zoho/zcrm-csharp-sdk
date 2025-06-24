@@ -1,9 +1,0 @@
-/Users/test/Projects/ZohoCRM/ZohoCRM/bin/Debug/netstandard2.0/ZohoCRM.deps.json
-/Users/test/Projects/ZohoCRM/ZohoCRM/bin/Debug/netstandard2.0/ZohoCRM.dll
-/Users/test/Projects/ZohoCRM/ZohoCRM/bin/Debug/netstandard2.0/ZohoCRM.pdb
-/Users/test/Projects/ZohoCRM/ZohoCRM/obj/Debug/netstandard2.0/ZohoCRM.csproj.CoreCompileInputs.cache
-/Users/test/Projects/ZohoCRM/ZohoCRM/obj/Debug/netstandard2.0/ZohoCRM.AssemblyInfoInputs.cache
-/Users/test/Projects/ZohoCRM/ZohoCRM/obj/Debug/netstandard2.0/ZohoCRM.AssemblyInfo.cs
-/Users/test/Projects/ZohoCRM/ZohoCRM/obj/Debug/netstandard2.0/ZohoCRM.dll
-/Users/test/Projects/ZohoCRM/ZohoCRM/obj/Debug/netstandard2.0/ZohoCRM.pdb
-/Users/test/Projects/ZohoCRM/ZohoCRM/obj/Debug/netstandard2.0/ZohoCRM.csprojResolveAssemblyReference.cache

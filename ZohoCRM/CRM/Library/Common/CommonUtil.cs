@@ -129,6 +129,13 @@ namespace ZCRMSDK.CRM.Library.Common
             }
             return dictString.TrimEnd(',', ' ')+"}";
         }
+        public static string RemoveEscaping(string input)
+        {
+            input = input.Replace("\\", "");
+            input = input.Replace("\"", "");
+            return input;
+        }
+
 
     }
 }

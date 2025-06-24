@@ -10,8 +10,28 @@ namespace ZCRMSDK.OAuth.Common
 
         //TODO: Inspect this class and learn about Exception class;
 
-        public new string Message { get => message; set => message = value; }
-        public Exception OriginalException { get => originalException; set => originalException = value; }
+        public new string Message
+        {
+            get
+            {
+                return message;
+            }
+            set
+            {
+                message = value;
+            }
+        }
+        public Exception OriginalException
+        {
+            get
+            {
+                return originalException;
+            }
+            set
+            {
+                originalException = value;
+            }
+        }
 
         public ZohoOAuthException(string errorMessage){
             Message = errorMessage;

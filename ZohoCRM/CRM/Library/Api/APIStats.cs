@@ -30,7 +30,7 @@ namespace ZCRMSDK.CRM.Library.Api
             catch(KeyNotFoundException e)
             {
                 ZCRMLogger.LogError(e);
-                throw new ZCRMException("Stats not set!.", e);
+                throw new ZCRMException(true, "Stats not set!.", e);
             }
         }
 
@@ -43,7 +43,7 @@ namespace ZCRMSDK.CRM.Library.Api
             catch (KeyNotFoundException e)
             {
                 ZCRMLogger.LogError(e);
-                throw new ZCRMException("Stats not set!.", e);
+                throw new ZCRMException(true, "Stats not set!.", e);
             }
 
         }
@@ -56,7 +56,7 @@ namespace ZCRMSDK.CRM.Library.Api
             catch (KeyNotFoundException e)
             {
                 ZCRMLogger.LogError(e);
-                throw new ZCRMException("Stats not set!.", e);
+                throw new ZCRMException(true, "Stats not set!.", e);
             }
         }
     }

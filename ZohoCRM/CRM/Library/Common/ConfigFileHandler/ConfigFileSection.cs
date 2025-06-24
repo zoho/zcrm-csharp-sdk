@@ -17,7 +17,7 @@ namespace ZCRMSDK.CRM.Library.Common.ConfigFileHandler
                 return configFileCollection;
             }
 
-            set
+            set  
             {
                 base["settings"] = value;
             }

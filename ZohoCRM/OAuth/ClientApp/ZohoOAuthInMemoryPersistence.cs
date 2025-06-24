@@ -47,10 +47,50 @@ namespace ZCRMSDK.OAuth.ClientApp
 
             private InMemoryStorage() { }
 
-            internal string UserIdentifier { get => userIdentifier; set => userIdentifier = value; }
-            public string AccessToken { get => accessToken; set => accessToken = value; }
-            public string RefreshToken { get => refreshToken; set => refreshToken = value; }
-            public string ExpiryTime { get => expiryTime; set => expiryTime = value; }
+            internal string UserIdentifier
+            {
+                get
+                {
+                    return userIdentifier;
+                }
+                set
+                {
+                    userIdentifier = value;
+                }
+            }
+            public string AccessToken
+            {
+                get
+                {
+                    return accessToken;
+                }
+                set
+                {
+                    accessToken = value;
+                }
+            }
+            public string RefreshToken
+            {
+                get
+                {
+                    return refreshToken;
+                }
+                set
+                {
+                    refreshToken = value;
+                }
+            }
+            public string ExpiryTime
+            {
+                get
+                {
+                    return expiryTime;
+                }
+                set
+                {
+                    expiryTime = value;
+                }
+            }
 
             internal static InMemoryStorage GetInstance()
             {

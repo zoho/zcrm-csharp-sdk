@@ -31,27 +31,67 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <value>The price book Id.</value>
         /// <returns>Long</returns>
-        public long? Id { get => id; set => id = value; }
+        public long? Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets to range of/for the price book.
         /// </summary>
         /// <value>To range of the price book</value>
         /// <returns>Double</returns>
-        public double ToRange { get => toRange; set => toRange = value; }
+        public double ToRange
+        {
+            get
+            {
+                return toRange;
+            }
+            set
+            {
+                toRange = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets from range of/for the price book.
         /// </summary>
         /// <value>From range of the price book.</value>
         /// <returns>Double</returns>
-        public double FromRange { get => fromRange; set => fromRange = value; }
+        public double FromRange
+        {
+            get
+            {
+                return fromRange;
+            }
+            set
+            {
+                fromRange = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the discount of/for the price book.
         /// </summary>
         /// <value>The discount of the price book.</value>
         /// <returns>Double</returns>
-        public double Discount { get => discount; set => discount = value; }
+        public double Discount
+        {
+            get
+            {
+                return discount;
+            }
+            set
+            {
+                discount = value;
+            }
+        }
     }
 }

@@ -28,20 +28,50 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <value>The name of the tax.</value>
         /// <returns>String</returns>
-        public string TaxName { get => taxName; set => taxName = value; }
+        public string TaxName
+        {
+            get
+            {
+                return taxName;
+            }
+            set
+            {
+                taxName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the percentage of/for the tax.
         /// </summary>
         /// <value>The percentage of the tax.</value>
         /// <returns>Double</returns>
-        public double Percentage { get => percentage; set => percentage = value; }
+        public double Percentage
+        {
+            get
+            {
+                return percentage;
+            }
+            set
+            {
+                percentage = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the value of/for the tax.
         /// </summary>
         /// <value>The value of the tax.</value>
         /// <returns>Double</returns>
-        public double Value { get => value; set => this.value = value; }
+        public double Value
+        {
+            get
+            {
+                return value;
+            }
+            set
+            {
+                this.value = value;
+            }
+        }
     }
 }

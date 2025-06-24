@@ -16,11 +16,41 @@ namespace ZCRMSDK.CRM.Library.Api.Response
 
         public APIResponse() { }
 
-        public APIResponse(HttpWebResponse response) : base(response) { }
+        public APIResponse(int statusCode, string responseString, WebHeaderCollection headers) : base(statusCode, responseString, headers) { }
 
-        public ZCRMEntity Data { get => data; set => data = value; }
-        public string Message { get => message; private set => message = value; }
-        public string Status { get => status; internal set => status = value; }
+        public ZCRMEntity Data
+        {
+            get
+            {
+                return data;
+            }
+            set
+            {
+                data = value;
+            }
+        }
+        public string Message
+        {
+            get
+            {
+                return message;
+            }
+            private set
+            {
+                message = value;
+            }
+        }
+        public string Status
+        {
+            get
+            {
+                return status;
+            }
+            internal set
+            {
+                status = value;
+            }
+        }
 
 
         protected override void ProcessDataResponse()
@@ -33,8 +63,13 @@ namespace ZCRMSDK.CRM.Library.Api.Response
             }
             if (msgJSON.ContainsKey(APIConstants.TAGS))
             {
-                JArray recordsArray = (JArray)ResponseJSON.GetValue(APIConstants.TAGS);
-                msgJSON = (JObject)recordsArray[0];
+                JArray tagsArray = (JArray)ResponseJSON.GetValue(APIConstants.TAGS);
+                msgJSON = (JObject)tagsArray[0];
+            }
+            if (msgJSON.ContainsKey(APIConstants.USERS))
+            {
+                JArray usersArray = (JArray)ResponseJSON.GetValue(APIConstants.USERS);
+                msgJSON = (JObject)usersArray[0];
             }
             if (msgJSON.ContainsKey(APIConstants.MESSAGE))
             {
@@ -49,33 +84,47 @@ namespace ZCRMSDK.CRM.Library.Api.Response
                     if(msgJSON.ContainsKey(APIConstants.DETAILS))
                     {
                         //TODO: Inspect the working of this part;
-                        throw new ZCRMException(msgJSON.GetValue(APIConstants.CODE).ToString(), Message, msgJSON.GetValue(APIConstants.DETAILS) as JObject);
+                        throw new ZCRMException(true, (int)HttpStatusCode.Value, msgJSON.ContainsKey(APIConstants.CODE) ? msgJSON.GetValue(APIConstants.CODE).ToString():null, Message, msgJSON.GetValue(APIConstants.DETAILS) as JObject);
                     }
-                    throw new ZCRMException(msgJSON.GetValue(APIConstants.CODE).ToString(), Message);
+                    throw new ZCRMException(true, (int)HttpStatusCode.Value, msgJSON.GetValue(APIConstants.CODE).ToString(), Message);
                 }
             }
             //NOTE: For the user photo download method.
             else if(msgJSON.ContainsKey("status_code"))
             {
                 Status = msgJSON["status_code"].ToString();
-                if(msgJSON.ContainsKey("errors"))
+                if (msgJSON.ContainsKey("errors"))
                 {
                     JArray errorDetails = (JArray)msgJSON["errors"];
-                    throw new ZCRMException("Status_code :" + (string)msgJSON["status_code"] + ", Error details: " + errorDetails[0]["code"] + ", Resource :" + errorDetails[0]["resource"]);
+                    throw new ZCRMException(true, (int)HttpStatusCode.Value, HttpStatusCode.Value.ToString(), "Status_code :" + (string)msgJSON["status_code"] + ", Error details: " + errorDetails[0]["code"] + ", Resource :" + errorDetails[0]["resource"]);
                 }
-                throw new ZCRMException("Status_code :" + (string)msgJSON["status_code"] + msgJSON.ToString());
-
+                throw new ZCRMException(true, (int)HttpStatusCode.Value, HttpStatusCode.Value.ToString(), "Status_code :" + (string)msgJSON["status_code"] + msgJSON.ToString());
+            }
+            //NOTE : while uploading the file if the org id is wrong the below else-if block will handle it.
+            else if(msgJSON.ContainsKey("x-error"))
+            {
+                ZCRMLogger.LogInfo(ToString());
+                JToken infoMessageToken = msgJSON.GetValue("info");
+                string infoMessage = null;
+                if(infoMessageToken != null && infoMessageToken.Type != JTokenType.Null)
+                {
+                    infoMessage = infoMessageToken.ToString();
+                }
+                throw new ZCRMException(true, (int)HttpStatusCode.Value, HttpStatusCode.Value.ToString(), infoMessage , msgJSON);
             }
         }
 
         protected override void HandleFaultyResponse()
         {
-            if(HttpStatusCode == APIConstants.ResponseCode.NO_CONTENT)
+            string code = null, message = null;
+            if ((HttpStatusCode == APIConstants.ResponseCode.NO_CONTENT) || (HttpStatusCode == APIConstants.ResponseCode.NOT_MODIFIED))
             {
-                throw new ZCRMException(APIConstants.INVALID_DATA, APIConstants.INVALID_ID_MSG);
+                throw new ZCRMException(true, (int)HttpStatusCode.Value, HttpStatusCode.Value.ToString());
             }
-            ZCRMLogger.LogError(ResponseJSON[APIConstants.CODE] + " " + ResponseJSON[APIConstants.MESSAGE]);
-            throw new ZCRMException(ResponseJSON.GetValue(APIConstants.CODE).ToString(), ResponseJSON.GetValue(APIConstants.MESSAGE).ToString());
+            code = ResponseJSON.ContainsKey(APIConstants.CODE) ? ResponseJSON[APIConstants.CODE].ToString() : "ERROR";
+            message = ResponseJSON.ContainsKey(APIConstants.MESSAGE) ? ResponseJSON[APIConstants.MESSAGE].ToString() : "Empty response";
+            ZCRMLogger.LogError(code + " " + message);
+            throw new ZCRMException(true, (int)HttpStatusCode.Value, code, message, ResponseJSON);
         }
     }
 }

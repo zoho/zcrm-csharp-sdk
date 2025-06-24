@@ -20,6 +20,15 @@ namespace ZCRMSDK.CRM.Library.CRUD
         private int favourite;
         private bool isdefault;
 
+        private string sharedType;
+        private string sharedDetails;
+        private bool isOffline;
+        private bool isSystemDefined;
+        private string criteriaPattern;
+        private string criteriaCondition;
+        private ZCRMCriteria criteria;
+        private List<ZCRMCustomViewCategory> categoriesList;
+
         private ZCRMCustomView(string moduleAPIName, long customViewId)
         {
             ModuleAPIName = moduleAPIName;
@@ -42,77 +51,312 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// </summary>
         /// <value>The modules' API name.</value>
         /// <returns>String</returns>
-        public string ModuleAPIName { get => moduleAPIName; private set => moduleAPIName = value; }
+        public string ModuleAPIName
+        {
+            get
+            {
+                return moduleAPIName;
+            }
+            private set
+            {
+                moduleAPIName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the custom view Id.
         /// </summary>
         /// <value>The custom view Id.</value>
         /// <returns>Long</returns>
-        public long Id { get => id; set => id = value; }
+        public long Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the name of/for the custom view.
         /// </summary>
         /// <value>The name of custom view.</value>
         /// <returns>String</returns>
-        public string Name { get => name; set => name = value; }
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the system name of/for the custom view.
         /// </summary>
         /// <value>The system name of the custom view.</value>
         /// <returns>String</returns>
-        public string SystemName { get => systemName; set => systemName = value; }
+        public string SystemName
+        {
+            get
+            {
+                return systemName;
+            }
+            set
+            {
+                systemName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the display name of/for the custom view.
         /// </summary>
         /// <value>The display name of the custom view.</value>
         /// <returns>String</returns>
-        public string DisplayName { get => displayName; set => displayName = value; }
+        public string DisplayName
+        {
+            get
+            {
+                return displayName;
+            }
+            set
+            {
+                displayName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the fields of/for the custom view.
         /// </summary>
         /// <value>The fields of the custom view.</value>
         /// <returns>List of string</returns>
-        public List<string> Fields { get => fields; set => fields = value; }
+        public List<string> Fields
+        {
+            get
+            {
+                return fields;
+            }
+            set
+            {
+                fields = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the sort order of/for the custom view.
         /// </summary>
         /// <value>The sort order preference - asc/desc.</value>
         /// <returns>CommonUtil.SortOrder(asc, desc) response </returns>
-        public CommonUtil.SortOrder SortOrder { get => sortOrder; set => sortOrder = value; }
+        public CommonUtil.SortOrder SortOrder
+        {
+            get
+            {
+                return sortOrder;
+            }
+            set
+            {
+                sortOrder = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the sort value of/for custom view.
         /// </summary>
         /// <value>The sort value of/for custom view.</value>
         /// <returns>String</returns>
-        public string SortBy { get => sortBy; set => sortBy = value; }
+        public string SortBy
+        {
+            get
+            {
+                return sortBy;
+            }
+            set
+            {
+                sortBy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the category of/for the custom view.
         /// </summary>
         /// <value>The category of the custom view.</value>
         /// <returns>String</returns>
-        public string Category { get => category; set => category = value; }
+        public string Category
+        {
+            get
+            {
+                return category;
+            }
+            set
+            {
+                category = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this custom view is default.
         /// </summary>
         /// <value><c>true</c> if isdefault; otherwise, <c>false</c>.</value>
         /// <returns>Boolean</returns>
-        public bool Isdefault { get => isdefault; set => isdefault = value; }
+        public bool Isdefault
+        {
+            get
+            {
+                return isdefault;
+            }
+            set
+            {
+                isdefault = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the favourite of/for the custom view.
         /// </summary>
         /// <value>The favourite of the custom view.</value>
         /// <returns>Integer</returns>
-        public int Favourite { get => favourite; set => favourite = value; }
+        public int Favourite
+        {
+            get
+            {
+                return favourite;
+            }
+            set
+            {
+                favourite = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the type of the shared.
+        /// </summary>
+        /// <value>The type of the shared.</value>
+        public string SharedType
+        {
+            get
+            {
+                return sharedType;
+            }
+            set
+            {
+                sharedType = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the shared details.
+        /// </summary>
+        /// <value>The shared details.</value>
+        public string SharedDetails
+        {
+            get
+            {
+                return sharedDetails;
+            }
+            set
+            {
+                sharedDetails = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:ZCRMSDK.CRM.Library.CRUD.ZCRMCustomView"/> is offline.
+        /// </summary>
+        /// <value><c>true</c> if is offline; otherwise, <c>false</c>.</value>
+        public bool IsOffline
+        {
+            get
+            {
+                return isOffline;
+            }
+            set
+            {
+                isOffline = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:ZCRMSDK.CRM.Library.CRUD.ZCRMCustomView"/> is
+        /// system defined.
+        /// </summary>
+        /// <value><c>true</c> if is system defined; otherwise, <c>false</c>.</value>
+        public bool IsSystemDefined
+        {
+            get
+            {
+                return isSystemDefined;
+            }
+            set
+            {
+                isSystemDefined = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the criteria pattern.
+        /// </summary>
+        /// <value>The criteria pattern.</value>
+        public string CriteriaPattern
+        {
+            get
+            {
+                return criteriaPattern;
+            }
+            set
+            {
+                criteriaPattern = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the criteria.
+        /// </summary>
+        /// <value>The criteria.</value>
+        public ZCRMCriteria Criteria
+        {
+            get
+            {
+                return criteria;
+            }
+            set
+            {
+                criteria = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the categories list.
+        /// </summary>
+        /// <value>The categories list.</value>
+        public List<ZCRMCustomViewCategory> CategoriesList
+        {
+            get
+            {
+                return categoriesList;
+            }
+            set
+            {
+                categoriesList = value;
+            }
+        }
+
+        public string CriteriaCondition
+        {
+            get
+            {
+                return criteriaCondition;
+            }
+            set
+            {
+                criteriaCondition = value;
+            }
+        }
 
         /// <summary>
         /// To get records of the custom view.
@@ -142,7 +386,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <param name="recordFields">List of field API names (String)</param>
         public BulkAPIResponse<ZCRMRecord> GetRecords(int page, int perPage, List<string> recordFields)
         {
-            return GetRecords(null, null, page, perPage, null, recordFields);   
+            return GetRecords(null, null, page, perPage, null, recordFields);
         }
 
         /// <summary>
@@ -169,7 +413,7 @@ namespace ZCRMSDK.CRM.Library.CRUD
         /// <param name="recordFields">List of field API names (String)</param>
         public BulkAPIResponse<ZCRMRecord> GetRecords(string sortByField, CommonUtil.SortOrder? sortOrder, int page, int perPage, string modifiedSince, List<string> recordFields)
         {
-            return ZCRMModule.GetInstance(moduleAPIName).GetRecords(Convert.ToInt64(Id), sortByField, sortOrder, page, perPage, modifiedSince, recordFields);   
+            return ZCRMModule.GetInstance(moduleAPIName).GetRecords(Convert.ToInt64(Id), sortByField, sortOrder, page, perPage, modifiedSince, recordFields);
         }
     }
 }

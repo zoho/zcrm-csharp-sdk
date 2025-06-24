@@ -1,0 +1,7 @@
+ZohoCRM/packages/
+ZohoCRM/bin/
+ZohoCRM/obj/
+ZohoCRM/.vs/
+ZohoCRM/.DS_Store
+ZohoCRM/obj/Debug/
+ZohoCRM/obj/Debug/project.razor.json

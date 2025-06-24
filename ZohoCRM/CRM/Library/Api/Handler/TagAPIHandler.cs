@@ -5,10 +5,12 @@ using ZCRMSDK.CRM.Library.Api.Response;
 using ZCRMSDK.CRM.Library.CRMException;
 using ZCRMSDK.CRM.Library.CRUD;
 using ZCRMSDK.CRM.Library.Setup.Users;
+using Newtonsoft.Json;
+using ZCRMSDK.CRM.Library.Common;
 
 namespace ZCRMSDK.CRM.Library.Api.Handler
 {
-    public class TagAPIHandler:CommonAPIHandler, IAPIHandler
+    public class TagAPIHandler : CommonAPIHandler, IAPIHandler
     {
         private ZCRMModule module;
 
@@ -16,7 +18,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
         {
             module = zcrmModule;
         }
-        public static TagAPIHandler GetInstance(ZCRMModule zcrmModule=null)
+        public static TagAPIHandler GetInstance(ZCRMModule zcrmModule = null)
         {
             return new TagAPIHandler(zcrmModule);
         }
@@ -26,7 +28,8 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.GET;
-                urlPath = "settings/tags?module="+module.ApiName+"";
+                urlPath = "settings/tags";
+                requestQueryParams.Add("module", module.ApiName);
                 BulkAPIResponse<ZCRMTag> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMTag>();
                 List<ZCRMTag> tags = new List<ZCRMTag>();
                 JObject responseJSON = response.ResponseJSON;
@@ -36,14 +39,14 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                     foreach (JObject tagDetails in tagsArray)
                     {
                         ZCRMTag tag = ZCRMTag.GetInstance(Convert.ToInt64(tagDetails["id"]));
-                        SetTagProperties(tag,tagDetails);
+                        SetTagProperties(tag, tagDetails);
                         tags.Add(tag);
                     }
                 }
                 response.BulkData = tags;
                 return response;
             }
-            catch (Exception e) when ((e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
@@ -55,13 +58,13 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.GET;
-                urlPath = "settings/tags/"+tagId+"/actions/records_count?module="+module.ApiName+"";
-
+                urlPath = "settings/tags/" + tagId + "/actions/records_count";
+                requestQueryParams.Add("module", module.ApiName);
                 APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
 
                 JObject responseJSON = response.ResponseJSON;
                 ZCRMTag tag = ZCRMTag.GetInstance(Convert.ToInt64(tagId));
-                SetTagProperties(tag,responseJSON);
+                SetTagProperties(tag, responseJSON);
                 response.Data = tag;
                 return response;
             }
@@ -74,26 +77,24 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public BulkAPIResponse<ZCRMTag> CreateTags(List<ZCRMTag> tags)
         {
-            if (tags.Count > 50)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_TAGS_MSG);
-            }
             try
             {
+                if (tags.Count > 50)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_TAGS_MSG);
+                }
                 requestMethod = APIConstants.RequestMethod.POST;
-                urlPath = "settings/tags?module="+module.ApiName;
+                urlPath = "settings/tags";
+                requestQueryParams.Add("module", module.ApiName);
                 JObject requestBodyObject = new JObject();
                 JArray dataArray = new JArray();
                 foreach (ZCRMTag tag in tags)
                 {
-                    if (tag.Id == null)
+                    if (tag.Id != null)
                     {
-                        dataArray.Add(GetZCRMTagAsJSON(tag));
+                        throw new ZCRMException("Tag ID MUST be null for CreateTags operation."); 
                     }
-                    else
-                    {
-                        throw new ZCRMException("Tag ID MUST be null for CreateTags operation.");
-                    }
+                    dataArray.Add(GetZCRMTagAsJSON(tag));
                 }
                 requestBodyObject.Add(APIConstants.TAGS, dataArray);
                 requestBody = requestBodyObject;
@@ -109,7 +110,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                         JObject responseData = entityResponse.ResponseJSON;
                         JObject tagDetails = (JObject)responseData[APIConstants.DETAILS];
                         ZCRMTag newTag = tags[i];
-                        SetTagProperties(newTag,tagDetails);
+                        SetTagProperties(newTag, tagDetails);
                         createtags.Add(newTag);
                         entityResponse.Data = newTag;
                     }
@@ -121,7 +122,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 response.BulkData = createtags;
                 return response;
             }
-            catch (Exception e) when ((e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
@@ -130,14 +131,15 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public BulkAPIResponse<ZCRMTag> UpdateTags(List<ZCRMTag> tags)
         {
-            if (tags.Count > 50)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_TAGS_MSG);
-            }
             try
             {
+                if (tags.Count > 50)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_TAGS_MSG);
+                }
                 requestMethod = APIConstants.RequestMethod.PUT;
-                urlPath = "settings/tags?module=" + module.ApiName + "";
+                urlPath = "settings/tags";
+                requestQueryParams.Add("module", module.ApiName);
                 JObject requestBodyObject = new JObject();
                 JArray dataArray = new JArray();
                 foreach (ZCRMTag tag in tags)
@@ -170,7 +172,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 response.BulkData = updatetags;
                 return response;
             }
-            catch (Exception e) when ((e is ZCRMException))
+            catch (Exception e) when (!(e is ZCRMException))
             {
                 ZCRMLogger.LogError(e);
                 throw new ZCRMException(APIConstants.SDK_ERROR, e);
@@ -182,7 +184,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.DELETE;
-                urlPath = "settings/tags/"+ tagid;
+                urlPath = "settings/tags/" + tagid;
                 return APIRequest.GetInstance(this).GetAPIResponse();
             }
             catch (Exception e) when (!(e is ZCRMException))
@@ -192,12 +194,12 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
         }
 
-        public APIResponse Merge(long? tagId,long? mergetagId)
+        public APIResponse Merge(long? tagId, long? mergetagId)
         {
             try
             {
                 requestMethod = APIConstants.RequestMethod.POST;
-                urlPath = "settings/tags/"+mergetagId+ "/actions/merge";
+                urlPath = "settings/tags/" + mergetagId + "/actions/merge";
 
                 JObject requestBodyObject = new JObject();
                 JArray dataArray = new JArray();
@@ -212,7 +214,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 JObject responseData = (JObject)responseDataArray[0];
                 JObject tagDetails = (JObject)responseData[APIConstants.DETAILS];
                 ZCRMTag mergetag = ZCRMTag.GetInstance(Convert.ToInt64(tagDetails["id"]));
-                SetTagProperties(mergetag,tagDetails);
+                SetTagProperties(mergetag, tagDetails);
                 response.Data = mergetag;
                 return response;
             }
@@ -228,8 +230,8 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             try
             {
                 requestMethod = APIConstants.RequestMethod.PUT;
-                urlPath = "settings/tags/" + tag.Id + "?module=" + tag.ModuleApiName;
-
+                urlPath = "settings/tags/" + tag.Id;
+                requestQueryParams.Add("module", tag.ModuleApiName);
                 JObject requestBodyObject = new JObject();
                 JArray dataArray = new JArray();
                 JObject TagJSON = new JObject();
@@ -254,28 +256,24 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
         }
 
-        public APIResponse AddTags(ZCRMRecord record,List<string> tagNames)
+        public APIResponse AddTags(ZCRMRecord record, List<string> tagNames)
         {
-            if (tagNames.Count > 10)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
-            }
             try
             {
-                string tagname = "";
-                requestMethod = APIConstants.RequestMethod.POST;
-                foreach(string name in tagNames)
+                if (tagNames.Count > 10)
                 {
-                    tagname += name + ",";
+                    throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
                 }
-                urlPath = ""+record.ModuleAPIName+"/"+record.EntityId+"/actions/add_tags?tag_names="+ tagname+"";
+                requestMethod = APIConstants.RequestMethod.POST;
+                urlPath = record.ModuleAPIName + "/" + record.EntityId + "/actions/add_tags";
+                requestQueryParams.Add("tag_names", string.Join(",", JToken.FromObject(tagNames)));
                 APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
                 JArray responseDataArray = (JArray)response.ResponseJSON[APIConstants.DATA];
                 JObject responseData = (JObject)responseDataArray[0];
                 JObject recordDetails = (JObject)responseData[APIConstants.DETAILS];
-                ZCRMRecord tag = record;
-                EntityAPIHandler.GetInstance(tag).SetRecordProperties(recordDetails);
-                response.Data = tag;
+                ZCRMRecord recordIns = record;
+                EntityAPIHandler.GetInstance(recordIns).SetRecordProperties(recordDetails);
+                response.Data = recordIns;
                 return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
@@ -287,47 +285,40 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public BulkAPIResponse<ZCRMRecord> AddTagsToRecords(List<long> recordId, List<string> tagNames)
         {
-            if (tagNames.Count > 10)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
-            }
-            if (recordId.Count > 100)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
-            }
             try
             {
-                string tagname = "",recordid = "";
+                if (tagNames.Count > 10)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
+                }
+                if (recordId.Count > 100)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
+                }
                 requestMethod = APIConstants.RequestMethod.POST;
-                foreach (long id in recordId)
-                {
-                    recordid += id + ",";
-                }
-                foreach (string tag in tagNames)
-                {
-                    tagname += tag + ",";
-                }
-                urlPath = ""+module.ApiName+"/actions/add_tags?ids="+recordid+"&tag_names="+tagname+"";
+                urlPath = module.ApiName + "/actions/add_tags";
+                requestQueryParams.Add("ids", string.Join(",", JToken.FromObject(recordId)));
+                requestQueryParams.Add("tag_names", string.Join(",", JToken.FromObject(tagNames)));
                 BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
-                List<ZCRMRecord> addtags = new List<ZCRMRecord>();
+                List<ZCRMRecord> recordList = new List<ZCRMRecord>();
                 List<EntityResponse> responses = response.BulkEntitiesResponse;
                 foreach (EntityResponse entityResponse in responses)
                 {
                     if (entityResponse.Status.Equals(APIConstants.CODE_SUCCESS))
                     {
                         JObject responseData = entityResponse.ResponseJSON;
-                        JObject tagDetails = (JObject)responseData[APIConstants.DETAILS];
-                        ZCRMRecord addTag = ZCRMRecord.GetInstance(module.ApiName,Convert.ToInt64(tagDetails["id"]));
-                        EntityAPIHandler.GetInstance(addTag).SetRecordProperties(tagDetails);
-                        addtags.Add(addTag);
-                        entityResponse.Data = addTag;
+                        JObject recordDetails = (JObject)responseData[APIConstants.DETAILS];
+                        ZCRMRecord addRecordIns = ZCRMRecord.GetInstance(module.ApiName, Convert.ToInt64(recordDetails["id"]));
+                        EntityAPIHandler.GetInstance(addRecordIns).SetRecordProperties(recordDetails);
+                        recordList.Add(addRecordIns);
+                        entityResponse.Data = addRecordIns;
                     }
                     else
                     {
                         entityResponse.Data = null;
                     }
                 }
-                response.BulkData = addtags;
+                response.BulkData = recordList;
                 return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
@@ -339,26 +330,22 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public APIResponse RemoveTags(ZCRMRecord record, List<string> tagNames)
         {
-            if (tagNames.Count > 10)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
-            }
             try
             {
-                string tagname = "";
-                requestMethod = APIConstants.RequestMethod.POST;
-                foreach (string name in tagNames)
+                if (tagNames.Count > 10)
                 {
-                    tagname += name + ",";
+                    throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
                 }
-                urlPath = "" + record.ModuleAPIName + "/" + record.EntityId + "/actions/remove_tags?tag_names=" + tagname + "";
+                requestMethod = APIConstants.RequestMethod.POST;
+                urlPath = "" + record.ModuleAPIName + "/" + record.EntityId + "/actions/remove_tags";
+                requestQueryParams.Add("tag_names",string.Join(",", JToken.FromObject(tagNames)));
                 APIResponse response = APIRequest.GetInstance(this).GetAPIResponse();
                 JArray responseDataArray = (JArray)response.ResponseJSON[APIConstants.DATA];
                 JObject responseData = (JObject)responseDataArray[0];
                 JObject recordDetails = (JObject)responseData[APIConstants.DETAILS];
-                ZCRMRecord tag = record;
-                EntityAPIHandler.GetInstance(tag).SetRecordProperties(recordDetails);
-                response.Data = tag;
+                ZCRMRecord recordIns = record;
+                EntityAPIHandler.GetInstance(recordIns).SetRecordProperties(recordDetails);
+                response.Data = recordIns;
                 return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
@@ -370,47 +357,40 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
 
         public BulkAPIResponse<ZCRMRecord> RemoveTagsFromRecords(List<long> recordId, List<string> tagNames)
         {
-            if (tagNames.Count > 10)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
-            }
-            if (recordId.Count > 100)
-            {
-                throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
-            }
             try
             {
-                string tagname = "", recordid = "";
+                if (tagNames.Count > 10)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_RECORD_TAGS_MSG);
+                }
+                if (recordId.Count > 100)
+                {
+                    throw new ZCRMException(APIConstants.API_MAX_RECORDS_MSG);
+                }
                 requestMethod = APIConstants.RequestMethod.POST;
-                foreach (long id in recordId)
-                {
-                    recordid += id + ",";
-                }
-                foreach (string tag in tagNames)
-                {
-                    tagname += tag + ",";
-                }
-                urlPath = "" + module.ApiName + "/actions/remove_tags?ids=" + recordid + "&tag_names=" + tagname + "";
+                urlPath = "" + module.ApiName + "/actions/remove_tags";
+                requestQueryParams.Add("ids", string.Join(",", JToken.FromObject(recordId)));
+                requestQueryParams.Add("tag_names", string.Join(",", JToken.FromObject(tagNames)));
                 BulkAPIResponse<ZCRMRecord> response = APIRequest.GetInstance(this).GetBulkAPIResponse<ZCRMRecord>();
-                List<ZCRMRecord> removetags = new List<ZCRMRecord>();
+                List<ZCRMRecord> recordList = new List<ZCRMRecord>();
                 List<EntityResponse> responses = response.BulkEntitiesResponse;
                 foreach (EntityResponse entityResponse in responses)
                 {
                     if (entityResponse.Status.Equals(APIConstants.CODE_SUCCESS))
                     {
                         JObject responseData = entityResponse.ResponseJSON;
-                        JObject tagDetails = (JObject)responseData[APIConstants.DETAILS];
-                        ZCRMRecord removeTag = ZCRMRecord.GetInstance(module.ApiName, Convert.ToInt64(tagDetails["id"]));
-                        EntityAPIHandler.GetInstance(removeTag).SetRecordProperties(tagDetails);
-                        removetags.Add(removeTag);
-                        entityResponse.Data = removeTag;
+                        JObject recordDetails = (JObject)responseData[APIConstants.DETAILS];
+                        ZCRMRecord removeRecordIns = ZCRMRecord.GetInstance(module.ApiName, Convert.ToInt64(recordDetails["id"]));
+                        EntityAPIHandler.GetInstance(removeRecordIns).SetRecordProperties(recordDetails);
+                        recordList.Add(removeRecordIns);
+                        entityResponse.Data = removeRecordIns;
                     }
                     else
                     {
                         entityResponse.Data = null;
                     }
                 }
-                response.BulkData = removetags;
+                response.BulkData = recordList;
                 return response;
             }
             catch (Exception e) when (!(e is ZCRMException))
@@ -447,11 +427,11 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
                 }
                 else if (fieldAPIName.Equals("created_time"))
                 {
-                    tag.CreatedTime = Convert.ToString(token.Value);
+                    tag.CreatedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(token.Value));
                 }
                 else if (fieldAPIName.Equals("modified_time"))
                 {
-                    tag.ModifiedTime = Convert.ToString(token.Value);
+                    tag.ModifiedTime = CommonUtil.RemoveEscaping((string)JsonConvert.SerializeObject(token.Value));
                 }
                 else if (fieldAPIName.Equals("count"))
                 {
@@ -460,7 +440,6 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             }
         }
 
-
         public JObject GetZCRMTagAsJSON(ZCRMTag tagvalue)
         {
             JObject TagJSON = new JObject();
@@ -468,7 +447,7 @@ namespace ZCRMSDK.CRM.Library.Api.Handler
             {
                 TagJSON.Add("name", tagvalue.Name);
             }
-            if(tagvalue.Id != 0)
+            if (tagvalue.Id != 0 && tagvalue.Id != null)
             {
                 TagJSON.Add("id", tagvalue.Id);
             }
